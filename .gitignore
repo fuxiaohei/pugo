@@ -19,3 +19,6 @@
 
 # sample site
 /sample
+
+# editor
+.vscode/

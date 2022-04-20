@@ -12,14 +12,9 @@ var (
 	version                 = "dev"
 	commands []*cli.Command = []*cli.Command{
 		command.NewInitCommand(),
-		{
-			Name:  "build",
-			Usage: "build all contents of the site",
-		},
-		{
-			Name:  "serve",
-			Usage: "serve the site, rebuild and reload on changes",
-		},
+		command.NewBuildCommand(),
+		command.NewServeCommand(),
+		command.NewCreateCommand(),
 		{
 			Name:  "version",
 			Usage: "print the version of hai",

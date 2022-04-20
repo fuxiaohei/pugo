@@ -23,11 +23,18 @@ type (
 		Slug        string `toml:"slug"`
 	}
 	BuildConfig struct {
-		BuildDir        string `toml:"build_dir"`
+		OutputDir       string `toml:"output_dir"`
 		StaticAssetsDir string `toml:"static_assets_dir"`
+		PostLinkFormat  string `toml:"post_link_format"`
+	}
+	// Theme is the theme of the site.
+	Theme struct {
+		Directory  string `toml:"directory"`
+		ConfigFile string `toml:"config_file"`
 	}
 )
 
+// NewDefaultConfig returns a new default config.
 func NewDefaultConfig() *Config {
 	return &Config{
 		Site: &SiteConfig{
@@ -48,13 +55,13 @@ func NewDefaultConfig() *Config {
 			},
 		},
 		Theme: &Theme{
-			Name:         "default",
-			Descripition: "default theme",
-			Directory:    "/themes/default",
+			Directory:  "./theme/default",
+			ConfigFile: "theme_config.toml",
 		},
 		BuildConfig: &BuildConfig{
-			BuildDir:        "./build",
+			OutputDir:       "./build",
 			StaticAssetsDir: "./assets",
+			PostLinkFormat:  "/{.Year}/{.Month}/{.Slug}/",
 		},
 	}
 }

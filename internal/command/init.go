@@ -89,6 +89,7 @@ func createDirectories(topDir string) error {
 			zlog.Warn("failed to create directory", "dir", realDir, "err", err)
 			return err
 		}
+		zlog.Debug("create directory", "dir", realDir)
 	}
 	return nil
 }
