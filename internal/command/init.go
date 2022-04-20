@@ -2,11 +2,11 @@ package command
 
 import (
 	"bytes"
-	"haisite/internal/model"
-	"haisite/internal/utils"
-	"haisite/internal/zlog"
 	"io/ioutil"
 	"path/filepath"
+	"pugo/internal/model"
+	"pugo/internal/utils"
+	"pugo/internal/zlog"
 
 	"github.com/BurntSushi/toml"
 	"github.com/urfave/cli/v2"

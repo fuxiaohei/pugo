@@ -1,7 +1,7 @@
 package command
 
 import (
-	"haisite/internal/zlog"
+	"pugo/internal/zlog"
 
 	"github.com/urfave/cli/v2"
 )

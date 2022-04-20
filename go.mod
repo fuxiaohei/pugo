@@ -1,4 +1,4 @@
-module haisite
+module pugo
 
 go 1.18
 

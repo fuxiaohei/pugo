@@ -1,7 +1,7 @@
 package command
 
 import (
-	"haisite/internal/server"
+	"pugo/internal/server"
 
 	"github.com/urfave/cli/v2"
 )

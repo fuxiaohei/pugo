@@ -4,4 +4,4 @@ LDFLAGS=-ldflags "-s -w -X=main.version=$(VERSION)"
 
 .PHONY: build
 build:
-	go build -v $(LDFLAGS) ./cmd/hai
+	go build -v $(LDFLAGS) ./cmd/pugo

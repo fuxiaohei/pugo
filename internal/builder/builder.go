@@ -2,9 +2,8 @@ package builder
 
 import (
 	"fmt"
-	"haisite/internal/model"
-	"haisite/internal/zlog"
 	"io/ioutil"
+	"pugo/internal/zlog"
 
 	"github.com/BurntSushi/toml"
 )
@@ -12,10 +11,9 @@ import (
 // Builder is the instance for building a site.
 type Builder struct {
 	configFile string
-	config     *model.Config
 
-	render     *Render
-	parsedData *ParsedData
+	render *Render
+	source *SourceData
 
 	outputDir string
 }
@@ -35,9 +33,8 @@ type Option struct {
 func NewBuilder(opt *Option) *Builder {
 	return &Builder{
 		configFile: opt.ConfigFile,
-		config:     model.NewDefaultConfig(),
 		outputDir:  opt.OutputDir,
-		parsedData: new(ParsedData),
+		source:     NewDefaultSourceData(),
 	}
 }
 
@@ -66,13 +63,13 @@ func (b *Builder) parseConfig() error {
 	if err != nil {
 		return fmt.Errorf("failed to read config file: %s", err)
 	}
-	if err = toml.Unmarshal(fileBytes, b.config); err != nil {
+	if err = toml.Unmarshal(fileBytes, b.source.Config); err != nil {
 		return fmt.Errorf("failed to parse config file: %s", err)
 	}
 
 	// override output directory if empty
 	if b.outputDir == "" {
-		b.outputDir = b.config.BuildConfig.OutputDir
+		b.outputDir = b.source.Config.BuildConfig.OutputDir
 	}
 	if b.outputDir == "" {
 		return fmt.Errorf("output directory is empty")
@@ -85,7 +82,7 @@ func (b *Builder) parseConfig() error {
 }
 
 func (b *Builder) parseTheme() error {
-	r, err := NewRender(b.config.Theme.Directory, b.config.Theme.ConfigFile)
+	r, err := NewRender(b.source.Config.Theme)
 	if err != nil {
 		return err
 	}

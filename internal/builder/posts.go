@@ -1,10 +1,10 @@
 package builder
 
 import (
-	"haisite/internal/model"
-	"haisite/internal/zlog"
 	"os"
 	"path/filepath"
+	"pugo/internal/model"
+	"pugo/internal/zlog"
 )
 
 var (
@@ -31,7 +31,7 @@ func (b *Builder) buildPosts() error {
 		}
 
 		// save post into parsed data
-		b.parsedData.Posts = append(b.parsedData.Posts, post)
+		b.source.Posts = append(b.source.Posts, post)
 		zlog.Info("posts: parsed ok", "path", path, "title", post.Title)
 
 		return nil

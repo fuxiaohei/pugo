@@ -2,13 +2,14 @@ package builder
 
 import (
 	"fmt"
-	"haisite/internal/utils"
-	"haisite/internal/zlog"
 	"html/template"
 	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"pugo/internal/model"
+	"pugo/internal/utils"
+	"pugo/internal/zlog"
 	"regexp"
 	"sync"
 
@@ -47,10 +48,10 @@ type Render struct {
 	cache     []*namedTemplateFile
 }
 
-func NewRender(dir, cfgFile string) (*Render, error) {
+func NewRender(cfg *model.Theme) (*Render, error) {
 	r := &Render{
-		dir:        dir,
-		configFile: cfgFile,
+		dir:        cfg.Directory,
+		configFile: cfg.ConfigFile,
 		funcMap:    make(template.FuncMap),
 	}
 	r.initDefaultFuncMap()

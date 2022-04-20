@@ -1,8 +1,8 @@
 package main
 
 import (
-	"haisite/internal/command"
 	"os"
+	"pugo/internal/command"
 	"strings"
 
 	"github.com/urfave/cli/v2"
@@ -17,14 +17,14 @@ var (
 		command.NewCreateCommand(),
 		{
 			Name:  "version",
-			Usage: "print the version of hai",
+			Usage: "print the version of PuGo",
 		},
 	}
 )
 
 func main() {
 	app := &cli.App{
-		Name:     "hai",
+		Name:     "PuGo",
 		Usage:    "a simple static site generator with markdown support",
 		Version:  version,
 		Commands: commands,
