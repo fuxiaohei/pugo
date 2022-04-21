@@ -12,7 +12,7 @@ var (
 	ContentPagesDirectory = "./content/pages"
 )
 
-func (b *Builder) buildPages() error {
+func (b *Builder) parsePages() error {
 	err := filepath.Walk(ContentPagesDirectory, func(path string, info os.FileInfo, err error) error {
 		// skip directory
 		if info.IsDir() {

@@ -58,6 +58,11 @@ func NewRender(cfg *model.Theme) (*Render, error) {
 	return r, r.Parse()
 }
 
+// GetIndexTemplate gets index template
+func (r *Render) GetIndexTemplate() string {
+	return r.config.IndexTemplate
+}
+
 func (r *Render) initDefaultFuncMap() {
 	r.funcMap["HTML"] = func(v interface{}) template.HTML {
 		if str, ok := v.(string); ok {
@@ -97,12 +102,10 @@ func (r *Render) parseThemeConfig() error {
 		return err
 	}
 
-	var config ThemeConfig
-	if err = toml.Unmarshal(fileBytes, &config); err != nil {
+	if err = toml.Unmarshal(fileBytes, r.config); err != nil {
 		zlog.Warn("theme: failed to parse theme config", "err", err, "file", configFile)
 		return err
 	}
-	r.config = &config
 
 	return nil
 }
@@ -221,4 +224,13 @@ func (r *Render) Execute(w io.Writer, name string, data interface{}) error {
 		return fmt.Errorf("template '%s' is missing", name)
 	}
 	return tpl.ExecuteTemplate(w, name, data)
+}
+
+func (b *Builder) parseTheme() error {
+	r, err := NewRender(b.source.Config.Theme)
+	if err != nil {
+		return err
+	}
+	b.render = r
+	return nil
 }

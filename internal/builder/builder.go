@@ -2,18 +2,21 @@ package builder
 
 import (
 	"fmt"
-	"io/ioutil"
 	"pugo/internal/zlog"
 
-	"github.com/BurntSushi/toml"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer/html"
 )
 
 // Builder is the instance for building a site.
 type Builder struct {
 	configFile string
 
-	render *Render
-	source *SourceData
+	render   *Render
+	source   *SourceData
+	markdown goldmark.Markdown
 
 	outputDir string
 }
@@ -35,57 +38,52 @@ func NewBuilder(opt *Option) *Builder {
 		configFile: opt.ConfigFile,
 		outputDir:  opt.OutputDir,
 		source:     NewDefaultSourceData(),
+		markdown: goldmark.New(
+			goldmark.WithExtensions(extension.GFM),
+			goldmark.WithParserOptions(
+				parser.WithAutoHeadingID(),
+			),
+			goldmark.WithRendererOptions(
+				html.WithHardWraps(),
+				html.WithXHTML(),
+			),
+		),
 	}
 }
 
 // Build builds the site.
 func (b *Builder) Build() {
-	if err := b.parseConfig(); err != nil {
-		zlog.Warn("config: failed to parse", "err", err)
+	if err := b.parseSource(); err != nil {
+		zlog.Error("failed to parse source", "err", err)
 		return
 	}
-	if err := b.parseTheme(); err != nil {
-		zlog.Warn("theme: failed to parse", "err", err)
+	ctx, err := b.buildContents()
+	if err != nil {
+		zlog.Error("failed to build contents", "err", err)
 		return
 	}
-	if err := b.buildPosts(); err != nil {
+	if err = b.Output(ctx); err != nil {
+		zlog.Error("failed to output", "err", err)
+		return
+	}
+}
+
+func (b *Builder) buildContents() (*buildContext, error) {
+	ctx := newBuildContext(b.source)
+	if ctx == nil {
+		return nil, fmt.Errorf("failed to build contents context")
+	}
+	if err := b.buildPosts(ctx); err != nil {
 		zlog.Warn("posts: failed to build", "err", err)
-		return
+		return nil, err
 	}
-	if err := b.buildPages(); err != nil {
-		zlog.Warn("pages: failed to build", "err", err)
-		return
+	if err := b.buildPostLists(ctx); err != nil {
+		zlog.Warn("posts: failed to build lists", "err", err)
+		return nil, err
 	}
-}
-
-func (b *Builder) parseConfig() error {
-	fileBytes, err := ioutil.ReadFile(b.configFile)
-	if err != nil {
-		return fmt.Errorf("failed to read config file: %s", err)
+	if err := b.buildIndex(ctx); err != nil {
+		zlog.Warn("posts: failed to build index", "err", err)
+		return nil, err
 	}
-	if err = toml.Unmarshal(fileBytes, b.source.Config); err != nil {
-		return fmt.Errorf("failed to parse config file: %s", err)
-	}
-
-	// override output directory if empty
-	if b.outputDir == "" {
-		b.outputDir = b.source.Config.BuildConfig.OutputDir
-	}
-	if b.outputDir == "" {
-		return fmt.Errorf("output directory is empty")
-	}
-
-	// zlog.Debug("parsed config", "config", b.config)
-
-	zlog.Info("config: parsed ok", "output", b.outputDir)
-	return nil
-}
-
-func (b *Builder) parseTheme() error {
-	r, err := NewRender(b.source.Config.Theme)
-	if err != nil {
-		return err
-	}
-	b.render = r
-	return nil
+	return ctx, nil
 }

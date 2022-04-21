@@ -1,15 +1,20 @@
 package builder
 
 import (
+	"fmt"
+	"io/ioutil"
 	"pugo/internal/model"
 	"pugo/internal/zlog"
+
+	"github.com/BurntSushi/toml"
 )
 
 // SourceData is the parsed source data.
 type SourceData struct {
-	Posts  []*model.Post
-	Pages  []*model.Page
-	Config *model.Config
+	Posts      []*model.Post
+	PostsPager *model.Pager
+	Pages      []*model.Page
+	Config     *model.Config
 }
 
 // NewDefaultSourceData returns a new default source data.
@@ -21,6 +26,33 @@ func NewDefaultSourceData() *SourceData {
 	}
 }
 
+func (b *Builder) parseConfig() error {
+	fileBytes, err := ioutil.ReadFile(b.configFile)
+	if err != nil {
+		return fmt.Errorf("failed to read config file: %s", err)
+	}
+	if err = toml.Unmarshal(fileBytes, b.source.Config); err != nil {
+		return fmt.Errorf("failed to parse config file: %s", err)
+	}
+
+	// override output directory if empty
+	if b.outputDir == "" {
+		b.outputDir = b.source.Config.BuildConfig.OutputDir
+	}
+	if b.outputDir == "" {
+		return fmt.Errorf("output directory is empty")
+	}
+
+	if err = b.source.Config.Check(); err != nil {
+		return err
+	}
+
+	// zlog.Debug("parsed config", "config", b.config)
+
+	zlog.Info("config: parsed ok", "output", b.outputDir)
+	return nil
+}
+
 func (b *Builder) parseSource() error {
 	if err := b.parseConfig(); err != nil {
 		zlog.Warn("config: failed to parse", "err", err)
@@ -30,13 +62,42 @@ func (b *Builder) parseSource() error {
 		zlog.Warn("theme: failed to parse", "err", err)
 		return err
 	}
-	if err := b.buildPosts(); err != nil {
+	if err := b.parsePosts(); err != nil {
 		zlog.Warn("posts: failed to build", "err", err)
 		return err
 	}
-	if err := b.buildPages(); err != nil {
+	if err := b.parsePages(); err != nil {
 		zlog.Warn("pages: failed to build", "err", err)
 		return err
 	}
+
+	// make relative data available
+	b.source.FulFill()
+
 	return nil
+}
+
+// FulFill makes relative data available in source data
+func (s *SourceData) FulFill() {
+
+	// set post author data
+	for _, post := range s.Posts {
+		post.Author = s.assignAuthor(post.AuthorName)
+	}
+
+}
+
+func (s *SourceData) assignAuthor(name string) *model.Author {
+	if name == "" {
+		return s.Config.Author[0]
+	}
+	author := s.Config.GetAuthor(name)
+	if author == nil {
+		author = model.NewDemoAuthor(name)
+	}
+	return author
+}
+
+func (s *SourceData) postPageList(p *model.PagerItem) []*model.Post {
+	return s.Posts[p.Begin:p.End]
 }
