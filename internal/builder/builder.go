@@ -8,6 +8,7 @@ import (
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer/html"
+	"github.com/yuin/goldmark/util"
 )
 
 // Builder is the instance for building a site.
@@ -42,6 +43,9 @@ func NewBuilder(opt *Option) *Builder {
 			goldmark.WithExtensions(extension.GFM),
 			goldmark.WithParserOptions(
 				parser.WithAutoHeadingID(),
+				parser.WithASTTransformers(
+					util.Prioritized(newAstTransformer(), 10000),
+				),
 			),
 			goldmark.WithRendererOptions(
 				html.WithHardWraps(),
