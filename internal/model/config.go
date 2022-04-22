@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"net/url"
+	"strings"
 )
 
 var (
@@ -40,6 +41,11 @@ type (
 	}
 )
 
+// FullURL returns the full url after the base.
+func (sc *SiteConfig) FullURL(url string) string {
+	return strings.TrimSuffix(sc.Base, "/") + "/" + strings.TrimPrefix(url, "/")
+}
+
 // NewDemoAuthor return a new author with demo fulfilled information.
 func NewDemoAuthor(name string) *Author {
 	return &Author{
@@ -74,7 +80,7 @@ func NewDefaultConfig() *Config {
 		Site: &SiteConfig{
 			Title:       "PuGo",
 			SubTitle:    "a simple static site generator",
-			Base:        "/",
+			Base:        "http://localhost:18080",
 			Description: "a simple static site generator with markdown support",
 			Keywords:    []string{"site", "generator", "markdown"},
 		},

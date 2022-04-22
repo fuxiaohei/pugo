@@ -81,8 +81,16 @@ func (b *Builder) buildContents() (*buildContext, error) {
 		zlog.Warn("posts: failed to build lists", "err", err)
 		return nil, err
 	}
+	if err := b.buildTags(ctx); err != nil {
+		zlog.Warn("posts: failed to build tags", "err", err)
+		return nil, err
+	}
 	if err := b.buildIndex(ctx); err != nil {
 		zlog.Warn("posts: failed to build index", "err", err)
+		return nil, err
+	}
+	if err := b.buildFeedAtom(ctx); err != nil {
+		zlog.Warn("posts: failed to build feed atom", "err", err)
 		return nil, err
 	}
 	return ctx, nil

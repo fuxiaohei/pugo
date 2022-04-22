@@ -46,6 +46,14 @@ func newBuildContext(s *SourceData) *buildContext {
 	ctx.globalTemplateData["site"] = s.Config.Site
 	ctx.globalTemplateData["menu"] = s.Config.Menu
 
+	// update tag data
+	var tagTemplateData []*model.TagLink
+	for _, tagData := range s.Tags {
+		ctx.updatTagLink(tagData.Tag)
+		tagTemplateData = append(tagTemplateData, tagData.Tag)
+	}
+	ctx.globalTemplateData["tags"] = tagTemplateData
+
 	return ctx
 }
 
@@ -61,7 +69,7 @@ func (bc *buildContext) getOutputs() map[string]*bytes.Buffer {
 	return bc.outputs
 }
 
-func (bc *buildContext) buildPostSlug(p *model.Post) (string, error) {
+func (bc *buildContext) buildPostLink(p *model.Post) (string, string, error) {
 	slugData := map[string]interface{}{
 		"Slug": p.Slug,
 		"Date": map[string]interface{}{
@@ -72,23 +80,18 @@ func (bc *buildContext) buildPostSlug(p *model.Post) (string, error) {
 	}
 	var buf bytes.Buffer
 	err := bc.postSlugTemplate.Execute(&buf, slugData)
-	return buf.String(), err
+	return buf.String(), model.FormatIndexHTML(buf.String()), err
 }
 
-func (bc *buildContext) buildTagSlug(tags []string) []model.TagLink {
-	var slugs []model.TagLink
-	for _, t := range tags {
-		data := map[string]interface{}{
-			"Tag": t,
-		}
-		var buf bytes.Buffer
-		bc.tagLinkTemplate.Execute(&buf, data)
-		slugs = append(slugs, model.TagLink{
-			Name: t,
-			Link: buf.String(),
-		})
+func (bc *buildContext) updatTagLink(t *model.TagLink) {
+	data := map[string]interface{}{
+		"Tag": t.Name,
 	}
-	return slugs
+	var buf bytes.Buffer
+	bc.tagLinkTemplate.Execute(&buf, data)
+
+	t.Link = buf.String()
+	t.LocalFile = model.FormatIndexHTML(buf.String())
 }
 
 func (bc *buildContext) buildTemplateData(data map[string]interface{}) map[string]interface{} {

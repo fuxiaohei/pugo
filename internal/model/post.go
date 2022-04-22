@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"net/url"
 	"os"
+	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -66,9 +68,9 @@ type Post struct {
 	Draft        bool     `toml:"draft" yaml:"draft"`
 	AuthorName   string   `toml:"author" yaml:"author"`
 
-	Author   *Author   `toml:"-" yaml:"-"`
-	Link     string    `toml:"-" yaml:"-"`
-	TagLinks []TagLink `toml:"-" yaml:"-"`
+	Author   *Author    `toml:"-" yaml:"-"`
+	Link     string     `toml:"-" yaml:"-"`
+	TagLinks []*TagLink `toml:"-" yaml:"-"`
 
 	localFile   string
 	rawContent  []byte
@@ -76,12 +78,6 @@ type Post struct {
 	rawBrief    []byte
 	htmlBrief   string
 	dateTime    time.Time
-}
-
-// TagLink returns the tag link of the post.
-type TagLink struct {
-	Name string
-	Link string
 }
 
 func (p *Post) Content() string {
@@ -216,4 +212,59 @@ func NewPostFromFile(path string) (*Post, error) {
 	}
 
 	return p, nil
+}
+
+// FormatIndexHTML append index.html to the end of the post.
+func FormatIndexHTML(slug string) string {
+	if strings.HasSuffix(slug, ".html") {
+		return slug
+	}
+	return filepath.Join(slug, "index.html")
+}
+
+type (
+	// TagLink returns the tag link of the post.
+	TagLink struct {
+		Name      string
+		Link      string
+		LocalFile string
+		PostCount int
+	}
+
+	// TagPosts is posts categorized by tag.
+	TagPosts struct {
+		Tag   *TagLink
+		Posts []*Post
+	}
+)
+
+// BuildTagPosts returns the tag posts.
+func BuildTagPosts(posts []*Post) []*TagPosts {
+	tagData := make(map[string]*TagPosts)
+	for _, p := range posts {
+		/*if len(p.Tags) != len(p.TagLinks) {
+			zlog.Warn("posts: invalid tag links", "title", p.Title, "tags", p.Tags)
+			continue
+		}*/
+		for _, t := range p.TagLinks {
+			t2 := t
+			if _, ok := tagData[t.Name]; !ok {
+				tagData[t.Name] = &TagPosts{
+					Tag: t2,
+				}
+			}
+			tagData[t.Name].Posts = append(tagData[t.Name].Posts, p)
+		}
+	}
+	result := make([]*TagPosts, 0, len(tagData))
+	for _, tag := range tagData {
+		tag.Tag.PostCount = len(tag.Posts)
+		result = append(result, tag)
+	}
+
+	// aplhabetical sort
+	sort.Slice(result, func(i, j int) bool {
+		return result[i].Tag.Name < result[j].Tag.Name
+	})
+	return result
 }

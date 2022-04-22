@@ -53,6 +53,7 @@ func (b *Builder) buildPosts(ctx *buildContext) error {
 	var (
 		err        error
 		dstFile    string
+		link       string
 		buf        *bytes.Buffer
 		tplData    map[string]interface{}
 		descGetter = func(post *model.Post) string {
@@ -66,16 +67,13 @@ func (b *Builder) buildPosts(ctx *buildContext) error {
 	// build each post
 	for _, p := range b.source.Posts {
 
-		// build tag links
-		p.TagLinks = ctx.buildTagSlug(p.Tags)
-
 		// build link
-		dstFile, err = ctx.buildPostSlug(p)
+		link, dstFile, err = ctx.buildPostLink(p)
 		if err != nil {
 			zlog.Warn("failed to build post slug dstFile", "title", p.Title, "path", p.LocalFile(), "slug", p.Slug, "err", err)
 			continue
 		}
-		p.Link = dstFile
+		p.Link = link
 
 		// convert markdown
 		if err := p.Convert(b.markdown); err != nil {
@@ -121,7 +119,7 @@ func (b *Builder) buildPostLists(ctx *buildContext) error {
 			zlog.Warn("failed to render post list", "page", i, "err", err)
 			return err
 		}
-		dstFile := pageItem.Link
+		dstFile := pageItem.LocalFile
 		ctx.setBuffer(dstFile, buf)
 		zlog.Info("posts: rendered page list ok", "page", i, "dst", dstFile, "size", buf.Len())
 	}
@@ -131,7 +129,7 @@ func (b *Builder) buildPostLists(ctx *buildContext) error {
 func (b *Builder) buildPostListTemplateData(ctx *buildContext, page int) (map[string]interface{}, *model.PagerItem) {
 	pageItem := b.source.PostsPager.Page(page, b.source.Config.BuildConfig.PostPageLinkFormat)
 	tplData := ctx.buildTemplateData(map[string]interface{}{
-		"posts": b.source.postPageList(pageItem),
+		"posts": model.PostsPageList(b.source.Posts, pageItem),
 		"pager": pageItem,
 		"current": map[string]interface{}{
 			"Title": b.source.Config.Site.Title,

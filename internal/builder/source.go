@@ -13,6 +13,7 @@ import (
 type SourceData struct {
 	Posts      []*model.Post
 	PostsPager *model.Pager
+	Tags       []*model.TagPosts
 	Pages      []*model.Page
 	Config     *model.Config
 }
@@ -83,8 +84,14 @@ func (s *SourceData) FulFill() {
 	// set post author data
 	for _, post := range s.Posts {
 		post.Author = s.assignAuthor(post.AuthorName)
+		for _, t := range post.Tags {
+			post.TagLinks = append(post.TagLinks, &model.TagLink{Name: t})
+		}
 	}
 
+	// build tag posts
+	s.Tags = model.BuildTagPosts(s.Posts)
+	zlog.Info("posts: parsed tags ok", "tags", len(s.Tags))
 }
 
 func (s *SourceData) assignAuthor(name string) *model.Author {
@@ -96,8 +103,4 @@ func (s *SourceData) assignAuthor(name string) *model.Author {
 		author = model.NewDemoAuthor(name)
 	}
 	return author
-}
-
-func (s *SourceData) postPageList(p *model.PagerItem) []*model.Post {
-	return s.Posts[p.Begin:p.End]
 }

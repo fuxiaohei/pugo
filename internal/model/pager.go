@@ -14,17 +14,18 @@ type (
 	}
 	// PagerItem is pager item model.
 	PagerItem struct {
-		Begin   int
-		End     int
-		Prev    int
-		Next    int
-		Current int
-		Total   int
-		AllSize int
-		HasPrev bool
-		HasNext bool
-		Link    string
-		IsFirst bool
+		Begin     int
+		End       int
+		Prev      int
+		Next      int
+		Current   int
+		Total     int
+		AllSize   int
+		HasPrev   bool
+		HasNext   bool
+		Link      string
+		LocalFile string
+		IsFirst   bool
 
 		layout string
 	}
@@ -76,7 +77,7 @@ func (pg *Pager) Page(i int, layout string) *PagerItem {
 	pager.HasPrev = pager.Prev > 0
 	pager.HasNext = pager.Next > 0
 	pager.IsFirst = pager.Current == 1
-	pager.Link = pager.linkFormat(pager.Current)
+	pager.Link, pager.LocalFile = pager.linkFormat(pager.Current)
 	return pager
 }
 
@@ -91,7 +92,8 @@ func (pi *PagerItem) PrevLink(i ...int) string {
 	if prev < 1 {
 		prev = 1
 	}
-	return pi.linkFormat(pi.Current - prev)
+	link, _ := pi.linkFormat(pi.Current - prev)
+	return link
 }
 
 func (pi *PagerItem) NextLink(i ...int) string {
@@ -105,10 +107,25 @@ func (pi *PagerItem) NextLink(i ...int) string {
 	if next < 1 {
 		next = 1
 	}
-	return pi.linkFormat(pi.Current + next)
+	link, _ := pi.linkFormat(pi.Current + next)
+	return link
 }
 
-func (pi *PagerItem) linkFormat(i int) string {
+func (pi *PagerItem) linkFormat(i int) (string, string) {
 	// FIXME: use template
-	return strings.ReplaceAll(pi.layout, "{{.Page}}", strconv.Itoa(i))
+	link := strings.ReplaceAll(pi.layout, "{{.Page}}", strconv.Itoa(i))
+	return link, FormatIndexHTML(link)
+}
+
+// PostsPageList returns the posts page list.
+func PostsPageList(posts []*Post, p *PagerItem) []*Post {
+	if len(posts) < p.Begin {
+		return nil
+	}
+	begin := p.Begin
+	end := p.End
+	if len(posts) < end {
+		end = len(posts)
+	}
+	return posts[begin:end]
 }
