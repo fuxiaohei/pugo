@@ -16,6 +16,8 @@ type SourceData struct {
 	Tags       []*model.TagPosts
 	Pages      []*model.Page
 	Config     *model.Config
+
+	// for theme
 }
 
 // NewDefaultSourceData returns a new default source data.
@@ -92,6 +94,11 @@ func (s *SourceData) FulFill() {
 	// build tag posts
 	s.Tags = model.BuildTagPosts(s.Posts)
 	zlog.Info("posts: parsed tags ok", "tags", len(s.Tags))
+
+	// set page author
+	for _, page := range s.Pages {
+		page.Author = s.assignAuthor(page.AuthorName)
+	}
 }
 
 func (s *SourceData) assignAuthor(name string) *model.Author {

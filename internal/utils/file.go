@@ -36,3 +36,36 @@ func WriteFile(path string, data []byte) error {
 	}
 	return ioutil.WriteFile(path, data, os.ModePerm)
 }
+
+// CopyFile copies a file
+func CopyFile(src, dst string) error {
+	r, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer r.Close()
+
+	// create subdir if necessary
+	dir := filepath.Dir(dst)
+	if !IsDirExist(dir) {
+		if err := MkdirAll(dir); err != nil {
+			return err
+		}
+	}
+
+	// if exist, remove it
+	if IsFileExist(dst) {
+		if err := os.Remove(dst); err != nil {
+			return err
+		}
+	}
+
+	w, err := os.Create(dst)
+	if err != nil {
+		panic(err)
+	}
+	defer w.Close()
+	w.ReadFrom(r)
+
+	return nil
+}

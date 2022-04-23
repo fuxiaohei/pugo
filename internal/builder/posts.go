@@ -83,8 +83,7 @@ func (b *Builder) buildPosts(ctx *buildContext) error {
 
 		buf = bytes.NewBuffer(nil)
 		extData := map[string]interface{}{
-			"posts": b.source.Posts,
-			"post":  p,
+			"post": p,
 			"current": map[string]interface{}{
 				"Title":       p.Title + " - " + b.source.Config.Site.Title,
 				"Description": descGetter(p),

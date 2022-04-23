@@ -13,15 +13,29 @@ type buildContext struct {
 	lock               sync.RWMutex
 	outputs            map[string]*bytes.Buffer
 	globalTemplateData map[string]interface{}
+	copingDirs         []*copyDir
 
 	postSlugTemplate *template.Template
 	tagLinkTemplate  *template.Template
+}
+
+type copyDir struct {
+	SourceDir string
+	DstDir    string
 }
 
 func newBuildContext(s *SourceData) *buildContext {
 	ctx := &buildContext{
 		outputs:            make(map[string]*bytes.Buffer),
 		globalTemplateData: map[string]interface{}{},
+		copingDirs:         make([]*copyDir, 0),
+	}
+
+	for _, dir := range s.Config.BuildConfig.StaticAssetsDir {
+		ctx.copingDirs = append(ctx.copingDirs, &copyDir{
+			SourceDir: dir,
+			DstDir:    dir,
+		})
 	}
 
 	// build post slug template
@@ -69,6 +83,10 @@ func (bc *buildContext) getOutputs() map[string]*bytes.Buffer {
 	return bc.outputs
 }
 
+func (bc *buildContext) appendCopyDir(srcDir, dstDir string) {
+	bc.copingDirs = append(bc.copingDirs, &copyDir{srcDir, dstDir})
+}
+
 func (bc *buildContext) buildPostLink(p *model.Post) (string, string, error) {
 	slugData := map[string]interface{}{
 		"Slug": p.Slug,
@@ -105,4 +123,9 @@ func (bc *buildContext) buildTemplateData(data map[string]interface{}) map[strin
 		}
 	}
 	return data
+}
+
+// outputLength returns the length of the output buffer
+func (bc *buildContext) outputLength() int {
+	return len(bc.outputs)
 }

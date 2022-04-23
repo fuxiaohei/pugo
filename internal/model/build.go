@@ -7,9 +7,9 @@ const (
 
 // BuildConfig is configuration for building site
 type BuildConfig struct {
-	OutputDir       string `toml:"output_dir"`
-	StaticAssetsDir string `toml:"static_assets_dir"`
-	PostLinkFormat  string `toml:"post_link_format"`
+	OutputDir       string   `toml:"output_dir"`
+	StaticAssetsDir []string `toml:"static_assets_dir"`
+	PostLinkFormat  string   `toml:"post_link_format"`
 
 	TagLinkFormat     string `toml:"tag_link_format"`
 	TagPageLinkFormat string `toml:"tag_page_link_format"`
@@ -24,7 +24,7 @@ type BuildConfig struct {
 func NewDefaultBuildConfig() *BuildConfig {
 	return &BuildConfig{
 		OutputDir:       "./build",
-		StaticAssetsDir: "./assets",
+		StaticAssetsDir: []string{"./assets"},
 		PostLinkFormat:  "/{{.Date.Year}}/{{.Date.Month}}/{{.Slug}}/",
 
 		TagLinkFormat:     "/tag/{{.Tag}}/",

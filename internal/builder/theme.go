@@ -25,6 +25,7 @@ type ThemeConfig struct {
 	Name          string   `toml:"name"`
 	IndexTemplate string   `toml:"index_template"`
 	Extension     []string `toml:"extension"`
+	StaticDirs    []string `toml:"static_dirs"`
 }
 
 // NewDefaultThemeConfig returns default theme config
@@ -33,11 +34,12 @@ func NewDefaultThemeConfig() *ThemeConfig {
 		Name:          "theme",
 		Extension:     []string{".html"},
 		IndexTemplate: "post-list.html",
+		StaticDirs:    []string{"static"},
 	}
 }
 
-// Render renders the parsed data to static files.
-type Render struct {
+// ThemeRender renders the parsed data to static files.
+type ThemeRender struct {
 	dir        string
 	configFile string
 	config     *ThemeConfig
@@ -48,8 +50,8 @@ type Render struct {
 	cache     []*namedTemplateFile
 }
 
-func NewRender(cfg *model.Theme) (*Render, error) {
-	r := &Render{
+func NewRender(cfg *model.Theme) (*ThemeRender, error) {
+	r := &ThemeRender{
 		dir:        cfg.Directory,
 		configFile: cfg.ConfigFile,
 		funcMap:    make(template.FuncMap),
@@ -59,11 +61,21 @@ func NewRender(cfg *model.Theme) (*Render, error) {
 }
 
 // GetIndexTemplate gets index template
-func (r *Render) GetIndexTemplate() string {
+func (r *ThemeRender) GetIndexTemplate() string {
 	return r.config.IndexTemplate
 }
 
-func (r *Render) initDefaultFuncMap() {
+// GetDir gets theme dir
+func (r *ThemeRender) GetDir() string {
+	return r.dir
+}
+
+// GetStaticDirs gets static directories
+func (r *ThemeRender) GetStaticDirs() []string {
+	return r.config.StaticDirs
+}
+
+func (r *ThemeRender) initDefaultFuncMap() {
 	r.funcMap["HTML"] = func(v interface{}) template.HTML {
 		if str, ok := v.(string); ok {
 			return template.HTML(str)
@@ -76,7 +88,7 @@ func (r *Render) initDefaultFuncMap() {
 }
 
 // Parse parses theme config and template files.
-func (r *Render) Parse() error {
+func (r *ThemeRender) Parse() error {
 	if err := r.parseThemeConfig(); err != nil {
 		return err
 	}
@@ -87,7 +99,7 @@ func (r *Render) Parse() error {
 	return nil
 }
 
-func (r *Render) parseThemeConfig() error {
+func (r *ThemeRender) parseThemeConfig() error {
 	r.config = NewDefaultThemeConfig()
 
 	// if no config file, use empty config
@@ -110,7 +122,7 @@ func (r *Render) parseThemeConfig() error {
 	return nil
 }
 
-func (r *Render) loadTemplates() error {
+func (r *ThemeRender) loadTemplates() error {
 	r.lock.Lock()
 	defer r.lock.Unlock()
 
@@ -173,7 +185,7 @@ type namedTemplateFile struct {
 	Src  string
 }
 
-func (r *Render) loadOneTemplate(path, rel string) error {
+func (r *ThemeRender) loadOneTemplate(path, rel string) error {
 	// already loaded in cache
 	for _, t := range r.cache {
 		if t.Name == rel {
@@ -210,7 +222,7 @@ func (r *Render) loadOneTemplate(path, rel string) error {
 }
 
 // Template gets template by name
-func (r *Render) GetTemplate(name string) *template.Template {
+func (r *ThemeRender) GetTemplate(name string) *template.Template {
 	r.lock.Lock()
 	defer r.lock.Unlock()
 
@@ -218,12 +230,19 @@ func (r *Render) GetTemplate(name string) *template.Template {
 }
 
 // Execute executes template by name with data, and write into a Writer
-func (r *Render) Execute(w io.Writer, name string, data interface{}) error {
+func (r *ThemeRender) Execute(w io.Writer, name string, data interface{}) error {
 	tpl := r.GetTemplate(name)
 	if tpl == nil {
 		return fmt.Errorf("template '%s' is missing", name)
 	}
 	return tpl.ExecuteTemplate(w, name, data)
+}
+
+func (r *ThemeRender) updateCopyDirs(ctx *buildContext) error {
+	for _, dir := range r.config.StaticDirs {
+		ctx.appendCopyDir(filepath.Join(r.dir, dir), dir)
+	}
+	return nil
 }
 
 func (b *Builder) parseTheme() error {

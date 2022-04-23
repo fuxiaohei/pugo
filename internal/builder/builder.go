@@ -3,6 +3,7 @@ package builder
 import (
 	"fmt"
 	"pugo/internal/zlog"
+	"time"
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
@@ -15,7 +16,7 @@ import (
 type Builder struct {
 	configFile string
 
-	render   *Render
+	render   *ThemeRender
 	source   *SourceData
 	markdown goldmark.Markdown
 
@@ -57,6 +58,7 @@ func NewBuilder(opt *Option) *Builder {
 
 // Build builds the site.
 func (b *Builder) Build() {
+	st := time.Now()
 	if err := b.parseSource(); err != nil {
 		zlog.Error("failed to parse source", "err", err)
 		return
@@ -70,6 +72,7 @@ func (b *Builder) Build() {
 		zlog.Error("failed to output", "err", err)
 		return
 	}
+	zlog.Info("build: finished", "files", ctx.outputLength(), "duration", time.Since(st).Milliseconds())
 }
 
 func (b *Builder) buildContents() (*buildContext, error) {
@@ -77,6 +80,14 @@ func (b *Builder) buildContents() (*buildContext, error) {
 	if ctx == nil {
 		return nil, fmt.Errorf("failed to build contents context")
 	}
+
+	// set theme copy dir
+	if err := b.render.updateCopyDirs(ctx); err != nil {
+		zlog.Warn("theme: failed to update copy dirs", "err", err)
+		return nil, err
+	}
+
+	// build files
 	if err := b.buildPosts(ctx); err != nil {
 		zlog.Warn("posts: failed to build", "err", err)
 		return nil, err
@@ -97,5 +108,10 @@ func (b *Builder) buildContents() (*buildContext, error) {
 		zlog.Warn("posts: failed to build feed atom", "err", err)
 		return nil, err
 	}
+	if err := b.buildPages(ctx); err != nil {
+		zlog.Warn("pages: failed to build", "err", err)
+		return nil, err
+	}
+
 	return ctx, nil
 }

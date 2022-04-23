@@ -1,10 +1,12 @@
 package builder
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"pugo/internal/model"
 	"pugo/internal/zlog"
+	"strings"
 )
 
 var (
@@ -39,6 +41,50 @@ func (b *Builder) parsePages() error {
 
 	if err != nil {
 		return err
+	}
+	return nil
+}
+
+func (b *Builder) buildPages(ctx *buildContext) error {
+	var (
+		err        error
+		dstFile    string
+		buf        *bytes.Buffer
+		tplData    map[string]interface{}
+		descGetter = func(page *model.Page) string {
+			if page.Descripition != "" {
+				return page.Descripition
+			}
+			return b.source.Config.Site.Description
+		}
+	)
+	// build each page
+	for _, pg := range b.source.Pages {
+		pg.Link = "/" + strings.TrimPrefix(pg.Slug, "/")
+		dstFile = model.FormatIndexHTML(pg.Link)
+
+		// convert markdown to html
+		if err = pg.Convert(b.markdown); err != nil {
+			zlog.Warn("failed to convert markdown post", "title", pg.Title, "path", pg.LocalFile(), "err", err)
+			continue
+		}
+
+		buf = bytes.NewBuffer(nil)
+		extData := map[string]interface{}{
+			"page": pg,
+			"current": map[string]interface{}{
+				"Title":       pg.Title + " - " + b.source.Config.Site.Title,
+				"Description": descGetter(pg),
+			},
+		}
+		tplData = ctx.buildTemplateData(extData)
+		if err = b.render.Execute(buf, pg.Template, tplData); err != nil {
+			zlog.Warn("failed to render page", "title", pg.Title, "path", pg.LocalFile(), "err", err)
+			continue
+		}
+
+		ctx.setBuffer(dstFile, buf)
+		zlog.Info("pages: rendered ok", "title", pg.Title, "path", pg.LocalFile(), "dst", dstFile, "size", buf.Len())
 	}
 	return nil
 }

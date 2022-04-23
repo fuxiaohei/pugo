@@ -189,14 +189,8 @@ func (p *Post) Convert(md goldmark.Markdown) error {
 
 // NewPostFromFile returns a new post from file.
 func NewPostFromFile(path string) (*Post, error) {
-	rawData, err := ioutil.ReadFile(path)
+	p, err := parseContentBase(path)
 	if err != nil {
-		return nil, err
-	}
-	// trim space lines
-	rawData = bytes.TrimSpace(rawData)
-	p := new(Post)
-	if err = p.Parse(path, rawData); err != nil {
 		return nil, err
 	}
 
@@ -211,6 +205,20 @@ func NewPostFromFile(path string) (*Post, error) {
 		p.Template = DefaultPostTemplate
 	}
 
+	return p, nil
+}
+
+func parseContentBase(path string) (*Post, error) {
+	rawData, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	// trim space lines
+	rawData = bytes.TrimSpace(rawData)
+	p := new(Post)
+	if err = p.Parse(path, rawData); err != nil {
+		return nil, err
+	}
 	return p, nil
 }
 
