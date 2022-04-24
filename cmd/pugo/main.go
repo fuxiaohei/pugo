@@ -1,11 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"pugo/internal/command"
 	"strings"
 
 	"github.com/urfave/cli/v2"
+)
+
+const (
+	appName = "PuGo"
 )
 
 var (
@@ -18,13 +23,17 @@ var (
 		{
 			Name:  "version",
 			Usage: "print the version of PuGo",
+			Action: func(c *cli.Context) error {
+				fmt.Println(appName, version)
+				return nil
+			},
 		},
 	}
 )
 
 func main() {
 	app := &cli.App{
-		Name:     "PuGo",
+		Name:     appName,
 		Usage:    "a simple static site generator with markdown support",
 		Version:  version,
 		Commands: commands,

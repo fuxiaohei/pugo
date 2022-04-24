@@ -102,8 +102,8 @@ func (b *Builder) buildPosts(ctx *buildContext) error {
 	}
 
 	// create pager
-	b.source.PostsPager = model.NewPager(b.source.Config.BuildConfig.PostPerPage, len(b.source.Posts))
-	zlog.Info("posts: pager created ok", "total", len(b.source.Posts), "per_page", b.source.Config.BuildConfig.PostPerPage, "pages", b.source.PostsPager.PageSize())
+	b.source.PostsPager = model.NewPager(b.source.BuildConfig.PostPerPage, len(b.source.Posts))
+	zlog.Info("posts: pager created ok", "total", len(b.source.Posts), "per_page", b.source.BuildConfig.PostPerPage, "pages", b.source.PostsPager.PageSize())
 	return nil
 }
 
@@ -126,7 +126,7 @@ func (b *Builder) buildPostLists(ctx *buildContext) error {
 }
 
 func (b *Builder) buildPostListTemplateData(ctx *buildContext, page int) (map[string]interface{}, *model.PagerItem) {
-	pageItem := b.source.PostsPager.Page(page, b.source.Config.BuildConfig.PostPageLinkFormat)
+	pageItem := b.source.PostsPager.Page(page, b.source.BuildConfig.PostPageLinkFormat)
 	tplData := ctx.buildTemplateData(map[string]interface{}{
 		"posts": model.PostsPageList(b.source.Posts, pageItem),
 		"pager": pageItem,
@@ -151,7 +151,7 @@ func (b *Builder) buildArchives(ctx *buildContext) error {
 		zlog.Warn("failed to render archives", "err", err)
 		return err
 	}
-	dstFile := model.FormatIndexHTML(b.source.Config.BuildConfig.ArchivesLink)
+	dstFile := model.FormatIndexHTML(b.source.BuildConfig.ArchivesLink)
 	ctx.setBuffer(dstFile, buf)
 	zlog.Info("posts: archives rendered ok", "dst", dstFile, "archives", len(archives), "size", buf.Len())
 	return nil

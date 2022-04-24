@@ -14,11 +14,12 @@ import (
 
 // SourceData is the parsed source data.
 type SourceData struct {
-	Posts      []*model.Post
-	PostsPager *model.Pager
-	Tags       []*model.TagPosts
-	Pages      []*model.Page
-	Config     *model.Config
+	Posts       []*model.Post
+	PostsPager  *model.Pager
+	Tags        []*model.TagPosts
+	Pages       []*model.Page
+	Config      *model.Config
+	BuildConfig *model.BuildConfig
 
 	// for theme
 }
@@ -41,9 +42,12 @@ func (b *Builder) parseConfig() error {
 		return fmt.Errorf("failed to parse config file: %s", err)
 	}
 
+	// move BuildConfig to top
+	b.source.BuildConfig = b.source.Config.BuildConfig
+
 	// override output directory if empty
 	if b.outputDir == "" {
-		b.outputDir = b.source.Config.BuildConfig.OutputDir
+		b.outputDir = b.source.BuildConfig.OutputDir
 	}
 	if b.outputDir == "" {
 		return fmt.Errorf("output directory is empty")
@@ -52,8 +56,6 @@ func (b *Builder) parseConfig() error {
 	if err = b.source.Config.Check(); err != nil {
 		return err
 	}
-
-	// zlog.Debug("parsed config", "config", b.config)
 
 	zlog.Info("config: parsed ok", "output", b.outputDir)
 	return nil
@@ -90,7 +92,7 @@ func (b *Builder) parseSource() error {
 	b.source.FulFill()
 
 	// prepare minifer
-	if b.source.Config.BuildConfig.EnableMinifyHTML {
+	if b.source.BuildConfig.EnableMinifyHTML {
 		m := minify.New()
 		m.Add("text/html", &mhtml.Minifier{
 			KeepComments:            false,

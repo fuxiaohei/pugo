@@ -112,7 +112,7 @@ func NewDefaultConfig() *Config {
 			},
 		},
 		Theme: &Theme{
-			Directory:  "./theme/default",
+			Directory:  "./themes/default",
 			ConfigFile: "theme_config.toml",
 		},
 		BuildConfig: NewDefaultBuildConfig(),

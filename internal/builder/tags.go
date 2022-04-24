@@ -13,11 +13,11 @@ func (b *Builder) buildTags(ctx *buildContext) error {
 
 	// build tag pages
 	for _, tagData := range b.source.Tags {
-		pager := model.NewPager(b.source.Config.BuildConfig.PostPerPage, len(tagData.Posts))
+		pager := model.NewPager(b.source.BuildConfig.PostPerPage, len(tagData.Posts))
 
 		total := pager.PageSize()
 		for i := 1; i <= total; i++ {
-			linkFormat := strings.ReplaceAll(b.source.Config.BuildConfig.TagPageLinkFormat, "{{.Tag}}", tagData.Tag.Name)
+			linkFormat := strings.ReplaceAll(b.source.BuildConfig.TagPageLinkFormat, "{{.Tag}}", tagData.Tag.Name)
 			pageItem := pager.Page(i, linkFormat)
 			dstFile := pageItem.LocalFile
 

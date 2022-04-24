@@ -25,7 +25,7 @@ func (b *Builder) buildIndex(ctx *buildContext) error {
 
 func (b *Builder) buildFeedAtom(ctx *buildContext) error {
 	var posts []*model.Post
-	var limit = b.source.Config.BuildConfig.FeedPostLimit
+	var limit = b.source.BuildConfig.FeedPostLimit
 	if limit <= 0 {
 		limit = model.DefaultFeedPostLimit
 	}

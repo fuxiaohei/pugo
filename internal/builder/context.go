@@ -26,11 +26,11 @@ func newBuildContext(s *SourceData) *buildContext {
 	ctx := &buildContext{
 		outputs:            make(map[string]*bytes.Buffer),
 		globalTemplateData: map[string]interface{}{},
-		copingDirs:         make([]*model.CopyDir, 0, len(s.Config.BuildConfig.StaticAssetsDir)),
+		copingDirs:         make([]*model.CopyDir, 0, len(s.BuildConfig.StaticAssetsDir)),
 		outputCounter:      atomic.NewInt64(0),
 	}
 
-	for _, dir := range s.Config.BuildConfig.StaticAssetsDir {
+	for _, dir := range s.BuildConfig.StaticAssetsDir {
 		ctx.copingDirs = append(ctx.copingDirs, &model.CopyDir{
 			SrcDir:  dir,
 			DestDir: dir,
@@ -38,22 +38,22 @@ func newBuildContext(s *SourceData) *buildContext {
 	}
 
 	// build post slug template
-	tpl, err := template.New("post-slug").Parse(s.Config.BuildConfig.PostLinkFormat)
+	tpl, err := template.New("post-slug").Parse(s.BuildConfig.PostLinkFormat)
 	if err != nil {
 		zlog.Warn("posts: failed to parse post slug template", "err", err)
 		return nil
 	}
 	ctx.postSlugTemplate = tpl
-	zlog.Debug("posts: built post slug template", "format", s.Config.BuildConfig.PostLinkFormat)
+	zlog.Debug("posts: built post slug template", "format", s.BuildConfig.PostLinkFormat)
 
 	// build tag link template
-	tpl, err = template.New("tag").Parse(s.Config.BuildConfig.TagLinkFormat)
+	tpl, err = template.New("tag").Parse(s.BuildConfig.TagLinkFormat)
 	if err != nil {
 		zlog.Warn("posts: failed to parse tag link template", "err", err)
 		return nil
 	}
 	ctx.tagLinkTemplate = tpl
-	zlog.Debug("posts: built post tag link template", "format", s.Config.BuildConfig.TagLinkFormat)
+	zlog.Debug("posts: built post tag link template", "format", s.BuildConfig.TagLinkFormat)
 
 	// prepare global template data
 	ctx.globalTemplateData["site"] = s.Config.Site

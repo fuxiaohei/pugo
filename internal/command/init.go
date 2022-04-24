@@ -7,6 +7,7 @@ import (
 	"pugo/internal/model"
 	"pugo/internal/utils"
 	"pugo/internal/zlog"
+	"pugo/themes"
 
 	"github.com/BurntSushi/toml"
 	"github.com/urfave/cli/v2"
@@ -66,7 +67,7 @@ var (
 	initDirectories = []string{
 		"content/posts",
 		"content/pages",
-		"theme/default",
+		"themes/default",
 		"build",
 		"assets",
 	}
@@ -101,5 +102,46 @@ func createDirectories(topDir string) error {
 
 func createDemoContents(topDir string) error {
 	zlog.Debug("create demo contents")
+
+	// extract default theme
+	if err := extractThemeDir(filepath.Join(topDir, "themes/default"), "default"); err != nil {
+		zlog.Warn("failed to extract default theme", "err", err)
+		return err
+	}
+
+	return nil
+}
+
+func extractThemeDir(topDir, dir string) error {
+	files, err := themes.DefaultAssets.ReadDir(dir)
+	if err != nil {
+		return err
+	}
+	for _, file := range files {
+		if file.IsDir() {
+			dirName := filepath.Join(topDir, file.Name())
+			if err := utils.MkdirAll(dirName); err != nil {
+				zlog.Warn("failed to create theme directory", "dir", dirName, "err", err)
+				continue
+			}
+			zlog.Debug("create theme directory", "dir", dirName)
+			if err := extractThemeDir(dirName, filepath.Join(dir, file.Name())); err != nil {
+				zlog.Warn("failed to extract theme directory", "dir", dirName, "err", err)
+			}
+			continue
+		}
+		filePath := filepath.Join(dir, file.Name())
+		data, err := themes.DefaultAssets.ReadFile(filePath)
+		if err != nil {
+			zlog.Warn("failed to extract theme file", "name", file.Name(), "err", err)
+			continue
+		}
+		dstFile := filepath.Join(topDir, file.Name())
+		if err = utils.WriteFile(dstFile, data); err != nil {
+			zlog.Warn("failed to write theme file", "name", file.Name(), "err", err)
+			continue
+		}
+		zlog.Debug("create theme file", "name", dstFile)
+	}
 	return nil
 }

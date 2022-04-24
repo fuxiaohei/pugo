@@ -42,7 +42,7 @@ func (b *Builder) outputCompiledFiles(ctx *buildContext) error {
 	for fpath, buf := range outputs {
 		fpath = filepath.Join(b.outputDir, fpath)
 		data := buf.Bytes()
-		if b.source.Config.BuildConfig.EnableMinifyHTML && b.minifier != nil {
+		if b.source.BuildConfig.EnableMinifyHTML && b.minifier != nil {
 			data, err = b.minifier.Bytes("text/html", data)
 			if err != nil {
 				zlog.Warn("output: failed to minify", "path", fpath, "err", err)
