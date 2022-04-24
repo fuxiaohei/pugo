@@ -46,6 +46,11 @@ func NewInitCommand() *cli.Command {
 				return err
 			}
 
+			// create demo contents
+			if err := createDemoContents(dir); err != nil {
+				return err
+			}
+
 			return nil
 		},
 	}
@@ -91,5 +96,10 @@ func createDirectories(topDir string) error {
 		}
 		zlog.Debug("create directory", "dir", realDir)
 	}
+	return nil
+}
+
+func createDemoContents(topDir string) error {
+	zlog.Debug("create demo contents")
 	return nil
 }

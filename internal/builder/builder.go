@@ -2,6 +2,7 @@ package builder
 
 import (
 	"fmt"
+	"pugo/internal/theme"
 	"pugo/internal/zlog"
 	"time"
 
@@ -17,7 +18,7 @@ import (
 type Builder struct {
 	configFile string
 
-	render   *ThemeRender
+	render   *theme.Render
 	source   *SourceData
 	markdown goldmark.Markdown
 	minifier *minify.M
@@ -82,12 +83,6 @@ func (b *Builder) buildContents() (*buildContext, error) {
 	ctx := newBuildContext(b.source)
 	if ctx == nil {
 		return nil, fmt.Errorf("failed to build contents context")
-	}
-
-	// set theme copy dir
-	if err := b.render.updateCopyDirs(ctx); err != nil {
-		zlog.Warn("theme: failed to update copy dirs", "err", err)
-		return nil, err
 	}
 
 	// build files

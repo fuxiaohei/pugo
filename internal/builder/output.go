@@ -10,11 +10,24 @@ import (
 
 // Output outputs contents to destination directory.
 func (b *Builder) Output(ctx *buildContext) error {
+	if err := b.updateThemeCopyDirs(ctx); err != nil {
+		zlog.Warn("theme: failed to update copy dirs", "err", err)
+		return err
+	}
 	if err := b.outputCompiledFiles(ctx); err != nil {
 		return err
 	}
 	if err := b.copyAssets(ctx); err != nil {
 		return err
+	}
+	return nil
+}
+
+func (b *Builder) updateThemeCopyDirs(ctx *buildContext) error {
+	staticDirs := b.render.GetStaticDirs()
+	themeDir := b.render.GetDir()
+	for _, dir := range staticDirs {
+		ctx.appendCopyDir(filepath.Join(themeDir, dir), dir)
 	}
 	return nil
 }
@@ -50,18 +63,18 @@ func (b *Builder) outputCompiledFiles(ctx *buildContext) error {
 
 func (b *Builder) copyAssets(ctx *buildContext) error {
 	for _, dirData := range ctx.copingDirs {
-		err := filepath.Walk(dirData.SourceDir, func(path string, info os.FileInfo, err error) error {
+		err := filepath.Walk(dirData.SrcDir, func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
 			}
 			if info.IsDir() {
 				return nil
 			}
-			relPath, err := filepath.Rel(dirData.SourceDir, path)
+			relPath, err := filepath.Rel(dirData.SrcDir, path)
 			if err != nil {
 				return nil
 			}
-			dstPath := filepath.Join(dirData.DstDir, relPath)
+			dstPath := filepath.Join(dirData.DestDir, relPath)
 			dstPath = filepath.Join(b.outputDir, dstPath)
 			if err := utils.CopyFile(path, dstPath); err != nil {
 				zlog.Warn("copyAssets: failed to copy", "src", path, "dst", dstPath, "err", err)
@@ -72,7 +85,7 @@ func (b *Builder) copyAssets(ctx *buildContext) error {
 			return nil
 		})
 		if err != nil {
-			zlog.Warn("copyAssets: failed to copy", "src", dirData.SourceDir, "dst", dirData.DstDir, "err", err)
+			zlog.Warn("copyAssets: failed to copy", "src", dirData.SrcDir, "dst", dirData.DestDir, "err", err)
 			return err
 		}
 	}

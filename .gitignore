@@ -19,6 +19,7 @@
 
 # sample site
 /sample
+/demo
 
 # editor
 .vscode/

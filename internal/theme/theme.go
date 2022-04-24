@@ -1,4 +1,4 @@
-package builder
+package theme
 
 import (
 	"fmt"
@@ -20,29 +20,16 @@ var (
 	reTemplateTag = regexp.MustCompile("{{ ?template \"([^\"]*)\" ?([^ ]*)? ?}}")
 )
 
-// ThemeConfig is the theme config.
-type ThemeConfig struct {
-	Name          string   `toml:"name"`
-	IndexTemplate string   `toml:"index_template"`
-	Extension     []string `toml:"extension"`
-	StaticDirs    []string `toml:"static_dirs"`
+type namedTemplateFile struct {
+	Name string
+	Src  string
 }
 
-// NewDefaultThemeConfig returns default theme config
-func NewDefaultThemeConfig() *ThemeConfig {
-	return &ThemeConfig{
-		Name:          "theme",
-		Extension:     []string{".html"},
-		IndexTemplate: "post-list.html",
-		StaticDirs:    []string{"static"},
-	}
-}
-
-// ThemeRender renders the parsed data to static files.
-type ThemeRender struct {
+// Render renders the parsed data to static files.
+type Render struct {
 	dir        string
 	configFile string
-	config     *ThemeConfig
+	config     *Config
 	funcMap    template.FuncMap
 
 	lock      sync.Mutex
@@ -50,8 +37,8 @@ type ThemeRender struct {
 	cache     []*namedTemplateFile
 }
 
-func NewRender(cfg *model.Theme) (*ThemeRender, error) {
-	r := &ThemeRender{
+func NewRender(cfg *model.Theme) (*Render, error) {
+	r := &Render{
 		dir:        cfg.Directory,
 		configFile: cfg.ConfigFile,
 		funcMap:    make(template.FuncMap),
@@ -60,22 +47,7 @@ func NewRender(cfg *model.Theme) (*ThemeRender, error) {
 	return r, r.Parse()
 }
 
-// GetIndexTemplate gets index template
-func (r *ThemeRender) GetIndexTemplate() string {
-	return r.config.IndexTemplate
-}
-
-// GetDir gets theme dir
-func (r *ThemeRender) GetDir() string {
-	return r.dir
-}
-
-// GetStaticDirs gets static directories
-func (r *ThemeRender) GetStaticDirs() []string {
-	return r.config.StaticDirs
-}
-
-func (r *ThemeRender) initDefaultFuncMap() {
+func (r *Render) initDefaultFuncMap() {
 	r.funcMap["HTML"] = func(v interface{}) template.HTML {
 		if str, ok := v.(string); ok {
 			return template.HTML(str)
@@ -88,7 +60,7 @@ func (r *ThemeRender) initDefaultFuncMap() {
 }
 
 // Parse parses theme config and template files.
-func (r *ThemeRender) Parse() error {
+func (r *Render) Parse() error {
 	if err := r.parseThemeConfig(); err != nil {
 		return err
 	}
@@ -99,8 +71,8 @@ func (r *ThemeRender) Parse() error {
 	return nil
 }
 
-func (r *ThemeRender) parseThemeConfig() error {
-	r.config = NewDefaultThemeConfig()
+func (r *Render) parseThemeConfig() error {
+	r.config = NewDefaultConfig()
 
 	// if no config file, use empty config
 	if r.configFile == "" {
@@ -122,7 +94,7 @@ func (r *ThemeRender) parseThemeConfig() error {
 	return nil
 }
 
-func (r *ThemeRender) loadTemplates() error {
+func (r *Render) loadTemplates() error {
 	r.lock.Lock()
 	defer r.lock.Unlock()
 
@@ -180,12 +152,7 @@ func (r *ThemeRender) loadTemplates() error {
 	return err
 }
 
-type namedTemplateFile struct {
-	Name string
-	Src  string
-}
-
-func (r *ThemeRender) loadOneTemplate(path, rel string) error {
+func (r *Render) loadOneTemplate(path, rel string) error {
 	// already loaded in cache
 	for _, t := range r.cache {
 		if t.Name == rel {
@@ -221,8 +188,7 @@ func (r *ThemeRender) loadOneTemplate(path, rel string) error {
 	return nil
 }
 
-// Template gets template by name
-func (r *ThemeRender) GetTemplate(name string) *template.Template {
+func (r *Render) getTemplate(name string) *template.Template {
 	r.lock.Lock()
 	defer r.lock.Unlock()
 
@@ -230,26 +196,25 @@ func (r *ThemeRender) GetTemplate(name string) *template.Template {
 }
 
 // Execute executes template by name with data, and write into a Writer
-func (r *ThemeRender) Execute(w io.Writer, name string, data interface{}) error {
-	tpl := r.GetTemplate(name)
+func (r *Render) Execute(w io.Writer, name string, data interface{}) error {
+	tpl := r.getTemplate(name)
 	if tpl == nil {
 		return fmt.Errorf("template '%s' is missing", name)
 	}
 	return tpl.ExecuteTemplate(w, name, data)
 }
 
-func (r *ThemeRender) updateCopyDirs(ctx *buildContext) error {
-	for _, dir := range r.config.StaticDirs {
-		ctx.appendCopyDir(filepath.Join(r.dir, dir), dir)
-	}
-	return nil
+// GetIndexTemplate gets index template
+func (r *Render) GetIndexTemplate() string {
+	return r.config.IndexTemplate
 }
 
-func (b *Builder) parseTheme() error {
-	r, err := NewRender(b.source.Config.Theme)
-	if err != nil {
-		return err
-	}
-	b.render = r
-	return nil
+// GetDir gets theme dir
+func (r *Render) GetDir() string {
+	return r.dir
+}
+
+// GetStaticDirs gets static directories
+func (r *Render) GetStaticDirs() []string {
+	return r.config.StaticDirs
 }

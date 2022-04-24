@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"pugo/internal/model"
+	"pugo/internal/theme"
 	"pugo/internal/zlog"
 
 	"github.com/BurntSushi/toml"
@@ -55,6 +56,15 @@ func (b *Builder) parseConfig() error {
 	// zlog.Debug("parsed config", "config", b.config)
 
 	zlog.Info("config: parsed ok", "output", b.outputDir)
+	return nil
+}
+
+func (b *Builder) parseTheme() error {
+	r, err := theme.NewRender(b.source.Config.Theme)
+	if err != nil {
+		return err
+	}
+	b.render = r
 	return nil
 }
 

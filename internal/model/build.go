@@ -44,3 +44,9 @@ func NewDefaultBuildConfig() *BuildConfig {
 		EnableMinifyHTML: true,
 	}
 }
+
+// CopyDir is a directory to be copied
+type CopyDir struct {
+	SrcDir  string
+	DestDir string
+}

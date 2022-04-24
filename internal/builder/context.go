@@ -16,29 +16,24 @@ type buildContext struct {
 	outputs            map[string]*bytes.Buffer
 	outputCounter      *atomic.Int64
 	globalTemplateData map[string]interface{}
-	copingDirs         []*copyDir
+	copingDirs         []*model.CopyDir
 
 	postSlugTemplate *template.Template
 	tagLinkTemplate  *template.Template
-}
-
-type copyDir struct {
-	SourceDir string
-	DstDir    string
 }
 
 func newBuildContext(s *SourceData) *buildContext {
 	ctx := &buildContext{
 		outputs:            make(map[string]*bytes.Buffer),
 		globalTemplateData: map[string]interface{}{},
-		copingDirs:         make([]*copyDir, 0),
+		copingDirs:         make([]*model.CopyDir, 0, len(s.Config.BuildConfig.StaticAssetsDir)),
 		outputCounter:      atomic.NewInt64(0),
 	}
 
 	for _, dir := range s.Config.BuildConfig.StaticAssetsDir {
-		ctx.copingDirs = append(ctx.copingDirs, &copyDir{
-			SourceDir: dir,
-			DstDir:    dir,
+		ctx.copingDirs = append(ctx.copingDirs, &model.CopyDir{
+			SrcDir:  dir,
+			DestDir: dir,
 		})
 	}
 
@@ -88,7 +83,7 @@ func (bc *buildContext) getOutputs() map[string]*bytes.Buffer {
 }
 
 func (bc *buildContext) appendCopyDir(srcDir, dstDir string) {
-	bc.copingDirs = append(bc.copingDirs, &copyDir{srcDir, dstDir})
+	bc.copingDirs = append(bc.copingDirs, &model.CopyDir{SrcDir: srcDir, DestDir: dstDir})
 }
 
 func (bc *buildContext) buildPostLink(p *model.Post) (string, string, error) {

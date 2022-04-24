@@ -87,17 +87,17 @@ func NewDefaultConfig() *Config {
 		Menu: []*Menu{
 			{
 				Title: "Index",
-				Slug:  "/index.html",
+				Slug:  "/",
 				Blank: false,
 			},
 			{
-				Title: "Archive",
-				Slug:  "/archive.html",
+				Title: "Archives/",
+				Slug:  "/archives/",
 				Blank: false,
 			},
 			{
 				Title: "About",
-				Slug:  "/about.html",
+				Slug:  "/about/",
 				Blank: false,
 			},
 		},
@@ -105,7 +105,7 @@ func NewDefaultConfig() *Config {
 			{
 				Name:        "admin",
 				Email:       "admin@example.com",
-				Website:     "http://pugo.io",
+				Website:     "http://example.com",
 				Avatar:      "",
 				UseGravatar: true,
 				Slug:        "admin",
