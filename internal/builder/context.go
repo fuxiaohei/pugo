@@ -7,11 +7,14 @@ import (
 	"pugo/internal/model"
 	"pugo/internal/zlog"
 	"sync"
+
+	"go.uber.org/atomic"
 )
 
 type buildContext struct {
 	lock               sync.RWMutex
 	outputs            map[string]*bytes.Buffer
+	outputCounter      *atomic.Int64
 	globalTemplateData map[string]interface{}
 	copingDirs         []*copyDir
 
@@ -29,6 +32,7 @@ func newBuildContext(s *SourceData) *buildContext {
 		outputs:            make(map[string]*bytes.Buffer),
 		globalTemplateData: map[string]interface{}{},
 		copingDirs:         make([]*copyDir, 0),
+		outputCounter:      atomic.NewInt64(0),
 	}
 
 	for _, dir := range s.Config.BuildConfig.StaticAssetsDir {
@@ -126,6 +130,10 @@ func (bc *buildContext) buildTemplateData(data map[string]interface{}) map[strin
 }
 
 // outputLength returns the length of the output buffer
-func (bc *buildContext) outputLength() int {
-	return len(bc.outputs)
+func (bc *buildContext) getOutputCounter() int64 {
+	return bc.outputCounter.Load()
+}
+
+func (bc *buildContext) incrOutputCounter(delta int64) int64 {
+	return bc.outputCounter.Add(delta)
 }

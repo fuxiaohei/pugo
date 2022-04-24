@@ -7,6 +7,8 @@ import (
 	"pugo/internal/zlog"
 
 	"github.com/BurntSushi/toml"
+	"github.com/tdewolff/minify/v2"
+	mhtml "github.com/tdewolff/minify/v2/html"
 )
 
 // SourceData is the parsed source data.
@@ -76,6 +78,21 @@ func (b *Builder) parseSource() error {
 
 	// make relative data available
 	b.source.FulFill()
+
+	// prepare minifer
+	if b.source.Config.BuildConfig.EnableMinifyHTML {
+		m := minify.New()
+		m.Add("text/html", &mhtml.Minifier{
+			KeepComments:            false,
+			KeepConditionalComments: true,
+			KeepDefaultAttrVals:     true,
+			KeepDocumentTags:        true,
+			KeepEndTags:             false,
+			KeepQuotes:              true,
+			KeepWhitespace:          false,
+		})
+		b.minifier = m
+	}
 
 	return nil
 }

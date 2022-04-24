@@ -136,3 +136,23 @@ func (b *Builder) buildPostListTemplateData(ctx *buildContext, page int) (map[st
 	})
 	return tplData, pageItem
 }
+
+func (b *Builder) buildArchives(ctx *buildContext) error {
+	archives := model.NewArchives(b.source.Posts)
+	buf := bytes.NewBuffer(nil)
+	extData := map[string]interface{}{
+		"archives": archives,
+		"current": map[string]interface{}{
+			"Title": b.source.Config.Site.Title,
+		},
+	}
+	tplData := ctx.buildTemplateData(extData)
+	if err := b.render.Execute(buf, model.DefaultArchivesTemplate, tplData); err != nil {
+		zlog.Warn("failed to render archives", "err", err)
+		return err
+	}
+	dstFile := model.FormatIndexHTML(b.source.Config.BuildConfig.ArchivesLink)
+	ctx.setBuffer(dstFile, buf)
+	zlog.Info("posts: archives rendered ok", "dst", dstFile, "archives", len(archives), "size", buf.Len())
+	return nil
+}

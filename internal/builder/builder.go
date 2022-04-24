@@ -5,6 +5,7 @@ import (
 	"pugo/internal/zlog"
 	"time"
 
+	"github.com/tdewolff/minify/v2"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
@@ -19,6 +20,7 @@ type Builder struct {
 	render   *ThemeRender
 	source   *SourceData
 	markdown goldmark.Markdown
+	minifier *minify.M
 
 	outputDir string
 }
@@ -53,6 +55,7 @@ func NewBuilder(opt *Option) *Builder {
 				html.WithXHTML(),
 			),
 		),
+		minifier: nil,
 	}
 }
 
@@ -72,7 +75,7 @@ func (b *Builder) Build() {
 		zlog.Error("failed to output", "err", err)
 		return
 	}
-	zlog.Info("build: finished", "files", ctx.outputLength(), "duration", time.Since(st).Milliseconds())
+	zlog.Info("build: finished", "files", ctx.getOutputCounter(), "duration", time.Since(st).Milliseconds())
 }
 
 func (b *Builder) buildContents() (*buildContext, error) {
@@ -102,6 +105,10 @@ func (b *Builder) buildContents() (*buildContext, error) {
 	}
 	if err := b.buildIndex(ctx); err != nil {
 		zlog.Warn("posts: failed to build index", "err", err)
+		return nil, err
+	}
+	if err := b.buildArchives(ctx); err != nil {
+		zlog.Warn("posts: failed to build archives", "err", err)
 		return nil, err
 	}
 	if err := b.buildFeedAtom(ctx); err != nil {

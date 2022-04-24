@@ -23,14 +23,27 @@ func (b *Builder) outputCompiledFiles(ctx *buildContext) error {
 	if b.outputDir == "" {
 		return fmt.Errorf("output directory is empty")
 	}
+	var err error
+
 	outputs := ctx.getOutputs()
 	for fpath, buf := range outputs {
 		fpath = filepath.Join(b.outputDir, fpath)
-		if err := utils.WriteFile(fpath, buf.Bytes()); err != nil {
+		data := buf.Bytes()
+		if b.source.Config.BuildConfig.EnableMinifyHTML && b.minifier != nil {
+			data, err = b.minifier.Bytes("text/html", data)
+			if err != nil {
+				zlog.Warn("output: failed to minify", "path", fpath, "err", err)
+				data = buf.Bytes()
+			} else {
+				zlog.Debug("output: minified ok", "path", fpath)
+			}
+		}
+		if err = utils.WriteFile(fpath, data); err != nil {
 			zlog.Warn("output: failed to write", "path", fpath, "err", err)
 			continue
 		}
-		zlog.Debug("output: write ok", "path", fpath)
+		zlog.Debug("output: write ok", "path", fpath, "size", len(data))
+		ctx.incrOutputCounter(1)
 	}
 	return nil
 }
@@ -55,6 +68,7 @@ func (b *Builder) copyAssets(ctx *buildContext) error {
 				return err
 			}
 			zlog.Info("copyAssets: copied ok", "src", path, "dst", dstPath)
+			ctx.incrOutputCounter(1)
 			return nil
 		})
 		if err != nil {

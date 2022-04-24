@@ -17,7 +17,11 @@ type BuildConfig struct {
 	PostPerPage        int    `toml:"post_per_page"`
 	PostPageLinkFormat string `toml:"post_page_link_format"`
 
+	ArchivesLink string `toml:"archive_link"`
+
 	FeedPostLimit int `toml:"feed_post_limit"`
+
+	EnableMinifyHTML bool `toml:"enable_minify_html"`
 }
 
 // NewDefaultBuildConfig returns a new default build config
@@ -33,6 +37,10 @@ func NewDefaultBuildConfig() *BuildConfig {
 		PostPerPage:        5,
 		PostPageLinkFormat: "/page/{{.Page}}/",
 
+		ArchivesLink: "/archives/",
+
 		FeedPostLimit: DefaultFeedPostLimit,
+
+		EnableMinifyHTML: true,
 	}
 }
