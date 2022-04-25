@@ -99,6 +99,10 @@ func (b *Builder) buildPosts(ctx *buildContext) error {
 		ctx.setBuffer(dstFile, buf)
 
 		zlog.Info("posts: rendered ok", "title", p.Title, "path", p.LocalFile(), "dst", dstFile, "size", buf.Len())
+
+		t := p.Date()
+		ctx.addSitemap(&model.SitemapURL{Loc: link, LastMod: &t})
+
 	}
 
 	// create pager
@@ -120,6 +124,7 @@ func (b *Builder) buildPostLists(ctx *buildContext) error {
 		}
 		dstFile := pageItem.LocalFile
 		ctx.setBuffer(dstFile, buf)
+		ctx.addSitemap(&model.SitemapURL{Loc: pageItem.Link})
 		zlog.Info("posts: rendered page list ok", "page", i, "dst", dstFile, "size", buf.Len())
 	}
 	return nil
@@ -154,5 +159,9 @@ func (b *Builder) buildArchives(ctx *buildContext) error {
 	dstFile := model.FormatIndexHTML(b.source.BuildConfig.ArchivesLink)
 	ctx.setBuffer(dstFile, buf)
 	zlog.Info("posts: archives rendered ok", "dst", dstFile, "archives", len(archives), "size", buf.Len())
+
+	t := b.source.Posts[0].Date()
+	ctx.addSitemap(&model.SitemapURL{Loc: b.source.BuildConfig.ArchivesLink, LastMod: &t})
+
 	return nil
 }

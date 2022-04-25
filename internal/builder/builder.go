@@ -114,6 +114,10 @@ func (b *Builder) buildContents() (*buildContext, error) {
 		zlog.Warn("pages: failed to build", "err", err)
 		return nil, err
 	}
+	if err := b.buildSitemap(ctx); err != nil {
+		zlog.Warn("sitemap: failed to build", "err", err)
+		return nil, err
+	}
 
 	return ctx, nil
 }

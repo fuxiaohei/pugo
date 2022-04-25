@@ -85,6 +85,9 @@ func (b *Builder) buildPages(ctx *buildContext) error {
 
 		ctx.setBuffer(dstFile, buf)
 		zlog.Info("pages: rendered ok", "title", pg.Title, "path", pg.LocalFile(), "dst", dstFile, "size", buf.Len())
+
+		t := pg.Date()
+		ctx.addSitemap(&model.SitemapURL{Loc: pg.Link, LastMod: &t})
 	}
 	return nil
 }

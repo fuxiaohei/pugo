@@ -20,6 +20,8 @@ type buildContext struct {
 
 	postSlugTemplate *template.Template
 	tagLinkTemplate  *template.Template
+
+	sitemap *model.Sitemap
 }
 
 func newBuildContext(s *SourceData) *buildContext {
@@ -28,6 +30,7 @@ func newBuildContext(s *SourceData) *buildContext {
 		globalTemplateData: map[string]interface{}{},
 		copingDirs:         make([]*model.CopyDir, 0, len(s.BuildConfig.StaticAssetsDir)),
 		outputCounter:      atomic.NewInt64(0),
+		sitemap:            model.NewSiteMap(s.Config.Site.Base),
 	}
 
 	for _, dir := range s.BuildConfig.StaticAssetsDir {
@@ -58,6 +61,8 @@ func newBuildContext(s *SourceData) *buildContext {
 	// prepare global template data
 	ctx.globalTemplateData["site"] = s.Config.Site
 	ctx.globalTemplateData["menu"] = s.Config.Menu
+	// TODO: support authors list
+	ctx.globalTemplateData["author"] = s.Config.Author[0]
 
 	// update tag data
 	var tagTemplateData []*model.TagLink
@@ -131,4 +136,12 @@ func (bc *buildContext) getOutputCounter() int64 {
 
 func (bc *buildContext) incrOutputCounter(delta int64) int64 {
 	return bc.outputCounter.Add(delta)
+}
+
+func (bc *buildContext) addSitemap(url *model.SitemapURL) {
+	bc.sitemap.Add(url)
+}
+
+func (bc *buildContext) getSitemap() *model.Sitemap {
+	return bc.sitemap
 }

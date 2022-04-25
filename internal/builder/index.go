@@ -45,3 +45,16 @@ func (b *Builder) buildFeedAtom(ctx *buildContext) error {
 	zlog.Info("posts: feed atom rendered ok", "posts", len(posts), "limit", limit, "size", len(data))
 	return nil
 }
+
+func (b *Builder) buildSitemap(ctx *buildContext) error {
+	sitemap := ctx.getSitemap()
+	buf := bytes.NewBuffer(nil)
+	if err := sitemap.Write(buf); err != nil {
+		zlog.Warn("failed to write sitemap", "err", err)
+		return err
+	}
+	var dstFile = "/sitemap.xml"
+	ctx.setBuffer(dstFile, buf)
+	zlog.Info("sitemap: rendered ok", "size", buf.Len())
+	return nil
+}

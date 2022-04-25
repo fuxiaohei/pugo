@@ -22,8 +22,9 @@ func (b *Builder) buildTags(ctx *buildContext) error {
 			dstFile := pageItem.LocalFile
 
 			buf := bytes.NewBuffer(nil)
+			posts := model.PostsPageList(tagData.Posts, pageItem)
 			tplData := ctx.buildTemplateData(map[string]interface{}{
-				"posts": model.PostsPageList(tagData.Posts, pageItem),
+				"posts": posts,
 				"pager": pageItem,
 				"tag":   tagData.Tag,
 				"current": map[string]interface{}{
@@ -38,9 +39,13 @@ func (b *Builder) buildTags(ctx *buildContext) error {
 			ctx.setBuffer(dstFile, buf)
 			zlog.Info("tags: rendered ok", "page", i, "tag", tagData.Tag.Name, "dst", dstFile, "size", buf.Len())
 
+			t := posts[0].Date()
+			ctx.addSitemap(&model.SitemapURL{Loc: pageItem.Link, LastMod: &t})
+
 			// tag list index.html
 			if i == 1 {
 				ctx.setBuffer(tagData.Tag.LocalFile, buf)
+				ctx.addSitemap(&model.SitemapURL{Loc: tagData.Tag.Link, LastMod: &t})
 				zlog.Info("tags: rendered index ok", "page", i, "tag", tagData.Tag.Name, "dst", tagData.Tag.LocalFile, "size", buf.Len())
 			}
 		}

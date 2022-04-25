@@ -2,7 +2,6 @@ package model
 
 import (
 	"fmt"
-	"net/url"
 	"strings"
 )
 
@@ -15,9 +14,9 @@ type (
 	Config struct {
 		Site        *SiteConfig  `toml:"site"`
 		Menu        []*Menu      `toml:"menu"`
-		Author      []*Author    `toml:"author"`
 		Theme       *Theme       `toml:"theme"`
 		BuildConfig *BuildConfig `toml:"build"`
+		Author      []*Author    `toml:"author"`
 	}
 	SiteConfig struct {
 		Title       string   `toml:"title"`
@@ -25,14 +24,6 @@ type (
 		Base        string   `toml:"base"`
 		Description string   `toml:"description"`
 		Keywords    []string `toml:"keywords"`
-	}
-	Author struct {
-		Name        string `toml:"name"`
-		Email       string `toml:"email"`
-		Website     string `toml:"website"`
-		Avatar      string `toml:"avatar"`
-		UseGravatar bool   `toml:"use_gravatar"`
-		Slug        string `toml:"slug"`
 	}
 	// Theme is the theme of the site.
 	Theme struct {
@@ -44,16 +35,6 @@ type (
 // FullURL returns the full url after the base.
 func (sc *SiteConfig) FullURL(url string) string {
 	return strings.TrimSuffix(sc.Base, "/") + "/" + strings.TrimPrefix(url, "/")
-}
-
-// NewDemoAuthor return a new author with demo fulfilled information.
-func NewDemoAuthor(name string) *Author {
-	return &Author{
-		Name:        name,
-		Email:       name + "@example.com",
-		UseGravatar: true,
-		Slug:        "/author/" + url.PathEscape(name),
-	}
 }
 
 // GetAuthor gets the author by the given name
@@ -86,12 +67,12 @@ func NewDefaultConfig() *Config {
 		},
 		Menu: []*Menu{
 			{
-				Title: "Index",
+				Title: "Home",
 				Slug:  "/",
 				Blank: false,
 			},
 			{
-				Title: "Archives/",
+				Title: "Archives",
 				Slug:  "/archives/",
 				Blank: false,
 			},
@@ -101,16 +82,7 @@ func NewDefaultConfig() *Config {
 				Blank: false,
 			},
 		},
-		Author: []*Author{
-			{
-				Name:        "admin",
-				Email:       "admin@example.com",
-				Website:     "http://example.com",
-				Avatar:      "",
-				UseGravatar: true,
-				Slug:        "admin",
-			},
-		},
+		Author: []*Author{NewDemoAuthor("admin")},
 		Theme: &Theme{
 			Directory:  "./themes/default",
 			ConfigFile: "theme_config.toml",
