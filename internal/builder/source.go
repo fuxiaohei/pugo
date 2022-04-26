@@ -2,12 +2,11 @@ package builder
 
 import (
 	"fmt"
-	"io/ioutil"
 	"pugo/internal/model"
 	"pugo/internal/theme"
+	"pugo/internal/utils"
 	"pugo/internal/zlog"
 
-	"github.com/BurntSushi/toml"
 	"github.com/tdewolff/minify/v2"
 	mhtml "github.com/tdewolff/minify/v2/html"
 )
@@ -20,8 +19,6 @@ type SourceData struct {
 	Pages       []*model.Page
 	Config      *model.Config
 	BuildConfig *model.BuildConfig
-
-	// for theme
 }
 
 // NewDefaultSourceData returns a new default source data.
@@ -33,12 +30,17 @@ func NewDefaultSourceData() *SourceData {
 	}
 }
 
-func (b *Builder) parseConfig() error {
-	fileBytes, err := ioutil.ReadFile(b.configFile)
-	if err != nil {
-		return fmt.Errorf("failed to read config file: %s", err)
+// LoadConfig loads config file.
+func LoadConfig(configFile string) (*model.Config, error) {
+	config := model.NewDefaultConfig()
+	if err := utils.LoadTOML(configFile, config); err != nil {
+		return nil, fmt.Errorf("failed to parse config file: %s", err)
 	}
-	if err = toml.Unmarshal(fileBytes, b.source.Config); err != nil {
+	return config, nil
+}
+
+func (b *Builder) parseConfig() error {
+	if err := utils.LoadTOML(b.configFile, b.source.Config); err != nil {
 		return fmt.Errorf("failed to parse config file: %s", err)
 	}
 
@@ -53,7 +55,7 @@ func (b *Builder) parseConfig() error {
 		return fmt.Errorf("output directory is empty")
 	}
 
-	if err = b.source.Config.Check(); err != nil {
+	if err := b.source.Config.Check(); err != nil {
 		return err
 	}
 

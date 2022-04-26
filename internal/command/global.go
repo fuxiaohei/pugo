@@ -15,6 +15,9 @@ var (
 			Usage: "enable debug mode",
 		},
 	}
+
+	contentPostsDir = "content/posts"
+	contentPagesDir = "content/pages"
 )
 
 func initGlobalFlags(c *cli.Context) {

@@ -78,8 +78,8 @@ const (
 
 var (
 	initDirectories = []string{
-		"content/posts",
-		"content/pages",
+		contentPostsDir,
+		contentPagesDir,
 		"themes/default",
 		"build",
 		"assets",

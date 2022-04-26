@@ -8,7 +8,7 @@ If you see this article, you have installed it successfully. Thank you for using
 - create a new post
 
 ```bash
-pugo new post new-hello-world.md
+pugo create post new-hello-world.md
 ```
 
 `new-hello-world.md` is at `content/posts/new-hello-world.md`.
@@ -16,7 +16,7 @@ pugo new post new-hello-world.md
 - create new page
 
 ```bash
-pugo new page new-hello-page.md
+pugo create page new-hello-page.md
 ```
 
 `new-hello-page.md` is at `content/pages/new-hello-page.md`.
