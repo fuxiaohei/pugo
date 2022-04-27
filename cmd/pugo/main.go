@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"pugo/internal/command"
+	"pugo/pkg/cmd"
 	"strings"
 
 	"github.com/urfave/cli/v2"
@@ -16,10 +16,10 @@ const (
 var (
 	version                 = "dev"
 	commands []*cli.Command = []*cli.Command{
-		command.NewInitCommand(),
-		command.NewBuildCommand(),
-		command.NewServeCommand(),
-		command.NewCreateCommand(),
+		cmd.NewInit(),
+		cmd.NewBuild(),
+		cmd.NewCreate(),
+		cmd.NewServer(),
 		{
 			Name:  "version",
 			Usage: "print the version of PuGo",
@@ -37,7 +37,7 @@ func main() {
 		Usage:    "a simple static site generator with markdown support",
 		Version:  version,
 		Commands: commands,
-		Flags:    command.GlobalFlags,
+		Flags:    cmd.GetGlobalFlags(),
 	}
 	args := movePostfixOptions(os.Args)
 	app.Run(args)

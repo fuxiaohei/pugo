@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/BurntSushi/toml v1.1.0
+	github.com/fsnotify/fsnotify v1.5.4
 	github.com/tdewolff/minify/v2 v2.11.1
 	github.com/urfave/cli/v2 v2.4.0
 	github.com/yuin/goldmark v1.4.11
@@ -17,4 +18,5 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/tdewolff/parse/v2 v2.5.29 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
+	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
 )
