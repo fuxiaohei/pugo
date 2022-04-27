@@ -1,6 +1,6 @@
-<div class="post-pager text-gray-500 py-8">
+<div class="post-pager text-gray-500 dark:text-zinc-300 py-8">
     {{if .pager.HasPrev}}<a href="{{.pager.PrevLink}}"
-        class="text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700">上一页</a>{{end}}
+        class="text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700 dark:hover:text-zinc-300 dark:hover:border-slate-300">Prev</a>{{end}}
     <span class="px-3 py-1 mx-1">
         {{.pager.Current}} / {{.pager.Total}}
     </span>
@@ -9,5 +9,5 @@
     <a href="#"
         class="text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700">2</a>-->
     {{if .pager.HasNext}}<a href="{{.pager.NextLink}}"
-        class="text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700">下一页</a>{{end}}
+        class="text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700 dark:hover:text-zinc-300 dark:hover:border-slate-300">Next</a>{{end}}
 </div>

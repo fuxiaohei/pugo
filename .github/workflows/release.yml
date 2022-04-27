@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Pack
         run: make release
-      - uses: actions/upload-artifact@v3
-        with:
-          name: PuGo-Artifact
-          path: bin/release
+      # - uses: actions/upload-artifact@v3
+      #  with:
+      #    name: PuGo-Artifact
+      #    path: bin/release

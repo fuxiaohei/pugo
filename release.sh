@@ -14,3 +14,5 @@ PUGO_VERSION=$(./pugo version)
 PUGO_VERSION="${PUGO_VERSION// /_}""_$OS""_$ARCH"
 tar -czf $PUGO_VERSION.tar.gz pugo
 echo $PUGO_VERSION.tar.gz
+
+rm -rf ./pugo

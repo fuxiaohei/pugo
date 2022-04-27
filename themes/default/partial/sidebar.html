@@ -1,9 +1,9 @@
 <div class="sidebar">
-    <div class="profile flex items-center justify-center border-b border-slate-200 my-8 pb-8">
+    <div class="profile flex items-center justify-center border-b border-slate-200 my-8 pb-8 dark:border-zinc-800">
         <div class="card mx-auto">
-            <img class="w-24 h-24 mx-auto rounded-lg leading-8 mb-3" src="{{.author.AvatarLink}}" alt="{{.author.Name}}">
-            <div class="text-center pb-4 text-xl text-gray-700 font-medium">{{.author.Name}}</div>
-            <div class="text-center pb-4 text-gray-400 text-xs font-semibold">{{.author.Bio}}</div>
+            <img class="w-24 h-24 mx-auto rounded-lg leading-8 mb-3" src="{{.author.AvatarLink}}" alt="">
+            <div class="text-center pb-4 text-xl text-gray-700 font-medium dark:text-zinc-300">{{.author.Name}}</div>
+            <div class="text-center pb-4 text-gray-400 text-xs font-semibold dark:text-zinc-300">{{.author.Bio}}</div>
             <!--<div class="text-center">
                 <a href="#" class="w-6 inline-block opacity-50 hover:opacity-100 mx-2">
                     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -29,10 +29,11 @@
             </div>-->
         </div>
     </div>
-    <div class="all-tags border-b border-slate-200 mb-8 pb-8">
-        <h4 class="mb-4 text-lg font-semibold text-gray-700">Tags</h4>
+    <div class="all-tags border-b border-slate-200 mb-8 pb-8 dark:border-zinc-800">
+        <h4 class="mb-4 text-lg font-semibold text-gray-700 dark:text-zinc-300">Tags</h4>
         <div class="tag-list">
-            {{range .tags}}<a class="p-2 rounded leading-none inline-block items-center hover:text-sky-600"
+            {{range .tags}}<a
+                class="p-2 rounded leading-none inline-block items-center hover:text-sky-600 dark:text-zinc-400 dark:hover:text-sky-300"
                 href="{{.Link}}">
                 {{.Name}}<span class="bg-slate-200 p-1 rounded text-gray-600 text-xs ml-1">{{.PostCount}}</span>
             </a>{{end}}
