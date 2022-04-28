@@ -7,6 +7,7 @@ import (
 	"pugo/pkg/models"
 	"pugo/pkg/utils"
 	"pugo/pkg/zlog"
+	"sort"
 	"sync"
 
 	"github.com/tdewolff/minify/v2"
@@ -97,13 +98,25 @@ func (ctx *Context) SetOutput(path string, buf *bytes.Buffer) *Context {
 	return ctx
 }
 
-func (ctx *Context) GetOutputs() map[string]*bytes.Buffer {
+type outputFile struct {
+	Path string
+	Buf  *bytes.Buffer
+}
+
+func (ctx *Context) GetOutputs() []*outputFile {
 	outputs := make(map[string]*bytes.Buffer)
 	ctx.outputs.Range(func(key, value interface{}) bool {
 		outputs[key.(string)] = value.(*bytes.Buffer)
 		return true
 	})
-	return outputs
+	result := make([]*outputFile, 0, len(outputs))
+	for key, buf := range outputs {
+		result = append(result, &outputFile{Path: key, Buf: buf})
+	}
+	sort.Slice(result, func(i, j int) bool {
+		return result[i].Path < result[j].Path
+	})
+	return result
 }
 
 func (ctx *Context) createPostLink(p *models.Post) (string, string, error) {

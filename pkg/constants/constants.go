@@ -1,5 +1,7 @@
 package constants
 
+import "time"
+
 const (
 	// ConfigFile is the default config file name.
 	ConfigFile = "config.toml"
@@ -15,6 +17,8 @@ var (
 		ContentPostsDir,
 		ContentPagesDir,
 		"themes/default",
+		"themes/default/static",
+		"themes/default/partial",
 		"build",
 		"assets",
 	}
@@ -23,3 +27,10 @@ var (
 func InitDirectories() []string {
 	return initDirectories
 }
+
+const (
+	// WatchPollingDuration is the duration of polling for file changes.
+	WatchPollingDuration = time.Second / 2
+	// WatchTickerDuaration is the duration of ticker for file changes.
+	WatchTickerDuaration = time.Second
+)

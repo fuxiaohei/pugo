@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"pugo/pkg/models"
@@ -34,10 +35,17 @@ func updateThemeCopyDirs(r *theme.Render, ctx *Context) error {
 }
 
 func outputFiles(s *models.SiteData, ctx *Context) error {
-	var err error
+	var (
+		err   error
+		fpath string
+		buf   *bytes.Buffer
+	)
 
 	outputs := ctx.GetOutputs()
-	for fpath, buf := range outputs {
+	for _, outputFile := range outputs {
+		fpath = outputFile.Path
+		buf = outputFile.Buf
+
 		data := buf.Bytes()
 		dataLen := len(data)
 		if s.BuildConfig.EnableMinifyHTML {

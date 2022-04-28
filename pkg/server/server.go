@@ -23,6 +23,6 @@ func New(dir string, port int) *Server {
 // Run runs the server.
 func (s *Server) Run() error {
 	http.Handle("/", http.FileServer(http.Dir(s.dir)))
-	zlog.Info("server: listening", "port", s.port, "dir", s.dir)
+	zlog.Infof("listening on port %d, serving %s", s.port, s.dir)
 	return http.ListenAndServe(":"+fmt.Sprintf("%d", s.port), nil)
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"pugo/pkg/cmd"
+	"pugo/pkg/zlog"
 	"strings"
 
 	"github.com/urfave/cli/v2"
@@ -38,6 +39,10 @@ func main() {
 		Version:  version,
 		Commands: commands,
 		Flags:    cmd.GetGlobalFlags(),
+		Before: func(c *cli.Context) error {
+			zlog.Infof("%s %s", appName, version)
+			return nil
+		},
 	}
 	args := movePostfixOptions(os.Args)
 	app.Run(args)

@@ -25,7 +25,7 @@ func initGlobalFlags(c *cli.Context) {
 	// set debug mode
 	if c.Bool("debug") {
 		zlog.Init(true)
-		zlog.Debug("debug mode enabled")
+		zlog.Debug("debug logging enabled")
 	} else {
 		zlog.Init(false)
 	}
