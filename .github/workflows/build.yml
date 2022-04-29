@@ -1,9 +1,5 @@
 name: release
-# on: [push, pull_request]
-on:
-  push:
-    tags:
-      - "*"
+on: [push, pull_request]
 jobs:
   package:
     strategy:
@@ -17,12 +13,5 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
       - uses: actions/checkout@v2
-      - name: version
-        run: cat ./version
-        id: version
-      - name: Pack
-        run: make release
-      - uses: actions/upload-artifact@v3
-        with:
-          name: PuGo-${{steps.version.outputs.version}}
-          path: bin/release
+      - name: Build and Init
+        run: make dev-init dir=demo
