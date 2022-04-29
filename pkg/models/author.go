@@ -38,3 +38,18 @@ func (a *Author) AvatarLink() string {
 	}
 	return "https://www.gravatar.com/avatar/" + utils.MD5String(strings.ToLower(a.Email))
 }
+
+// HasSocials returns true if the author has social information
+func (a *Author) HasSocials() bool {
+	return len(a.Social) > 0
+}
+
+// HasSocial returns true if the author has the specified social information
+func (a *Author) HasSocial(key string) bool {
+	return a.Social[key] != ""
+}
+
+// GetSocial returns the specified social information
+func (a *Author) GetSocial(key string) string {
+	return a.Social[key]
+}

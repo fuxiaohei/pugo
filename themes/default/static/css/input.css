@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.post-content>p:not(:last-child) {
+    @apply pb-2
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+    @apply py-2 font-semibold
+}
+
+.post-content h1 {
+    @apply text-2xl
+}
+
+.post-content h2,
+.post-content h3 {
+    @apply text-xl
+}
+
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+    @apply text-lg
+}
+
+.post-content pre {
+    @apply text-sm leading-5
+}
+
+.post-content a {
+    @apply text-sky-600 hover:underline dark:text-sky-400
+}
+
+.post-content ul {
+    @apply list-disc pl-8
+}
+
+.post-content ol {
+    @apply list-decimal pl-8
+}
