@@ -32,7 +32,7 @@ type Context struct {
 	minifier *minify.M
 }
 
-func NewContext(s *models.SiteData) *Context {
+func NewContext(s *models.SiteData, opt *Option) *Context {
 	ctx := &Context{
 		templateData:  map[string]interface{}{},
 		copingDirs:    make([]*models.CopyDir, 0, len(s.BuildConfig.StaticAssetsDir)),
@@ -83,6 +83,9 @@ func NewContext(s *models.SiteData) *Context {
 		"Name":    constants.AppName(),
 		"Version": constants.AppVersion(),
 		"Github":  constants.AppGithubLink(),
+	}
+	ctx.templateData["server"] = map[string]interface{}{
+		"local": opt.IsLocalServer,
 	}
 
 	return ctx

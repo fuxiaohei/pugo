@@ -31,6 +31,7 @@ func NewServer() *cli.Command {
 			initGlobalFlags(c)
 
 			opt := parseCliOption(c)
+			opt.IsLocalServer = true
 
 			generator.Generate(opt)
 

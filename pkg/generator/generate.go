@@ -25,7 +25,7 @@ func Generate(opt *Option) error {
 		opt.OutputDir = siteData.BuildConfig.OutputDir
 	}
 
-	context := NewContext(siteData)
+	context := NewContext(siteData, opt)
 
 	if err = Render(siteData, context, opt); err != nil {
 		zlog.Warnf("render failed: %v", err)
