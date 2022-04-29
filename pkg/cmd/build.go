@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"pugo/pkg/constants"
 	"pugo/pkg/generator"
 
 	"github.com/urfave/cli/v2"
@@ -47,8 +46,10 @@ func NewBuild() *cli.Command {
 }
 
 func parseCliOption(c *cli.Context) *generator.Option {
-	var option generator.Option
-	option.ConfigFile = constants.ConfigFile
+	configFileItem := loadLocalConfigFile()
+	var option = generator.Option{
+		ConfigFileItem: &configFileItem,
+	}
 
 	// parse output directory
 	if c.String("output") != "" {

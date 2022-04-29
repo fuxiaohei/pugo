@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"pugo/pkg/constants"
 	"pugo/pkg/models"
 	"pugo/pkg/utils"
 	"pugo/pkg/zlog"
@@ -77,6 +78,12 @@ func NewContext(s *models.SiteData) *Context {
 		tagTemplateData = append(tagTemplateData, tagData.Tag)
 	}
 	ctx.templateData["tags"] = tagTemplateData
+	// add pugo data
+	ctx.templateData["pugo"] = map[string]interface{}{
+		"Name":    constants.AppName(),
+		"Version": constants.AppVersion(),
+		"Github":  constants.AppGithubLink(),
+	}
 
 	return ctx
 }

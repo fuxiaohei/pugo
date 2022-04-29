@@ -2,10 +2,29 @@ package constants
 
 import "time"
 
+// ConfigType is config file type
+type ConfigType string
+
 const (
-	// ConfigFile is the default config file name.
-	ConfigFile = "config.toml"
+	// ConfigTypeTOML is the config type for TOML
+	ConfigTypeTOML ConfigType = "toml"
+	// ConfigTypeYAML is the config type for YAML
+	ConfigTypeYAML ConfigType = "yaml"
 )
+
+// ConfigFileItem returns a config file item
+type ConfigFileItem struct {
+	Type ConfigType
+	File string
+}
+
+// ConfigFiles returns default config files list
+func ConfigFiles() []ConfigFileItem {
+	return []ConfigFileItem{
+		{Type: ConfigTypeTOML, File: "config.toml"},
+		{Type: ConfigTypeYAML, File: "config.yaml"},
+	}
+}
 
 const (
 	ContentPostsDir = "content/posts"

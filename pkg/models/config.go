@@ -93,12 +93,21 @@ func DefaultBuildConfig() *BuildConfig {
 }
 
 // LoadConfigFromFile loads config file.
-func LoadConfigFromFile(file string) (*Config, error) {
+func LoadConfigFromFile(item constants.ConfigFileItem) (*Config, error) {
 	config := DefaultConfig()
-	if err := utils.LoadTOMLFile(file, config); err != nil {
-		return nil, fmt.Errorf("failed to parse config file: %s", err)
+	if item.Type == constants.ConfigTypeTOML {
+		if err := utils.LoadTOMLFile(item.File, config); err != nil {
+			return nil, fmt.Errorf("failed to parse config file: %s", err)
+		}
+		return config, nil
 	}
-	return config, nil
+	if item.Type == constants.ConfigTypeYAML {
+		if err := utils.LoadYAMLFile(item.File, config); err != nil {
+			return nil, fmt.Errorf("failed to parse config file: %s", err)
+		}
+		return config, nil
+	}
+	return nil, fmt.Errorf("unsupported config file type: %s", item.Type)
 }
 
 // FullURL returns the full url after the base.

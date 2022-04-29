@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bytes"
+	"fmt"
 	"path/filepath"
 	"pugo/pkg/cmd/initdata"
 	"pugo/pkg/constants"
@@ -15,19 +16,37 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+var (
+	initFlags = []cli.Flag{
+		&cli.BoolFlag{
+			Name:    "yaml",
+			Value:   false,
+			Aliases: []string{"yml"},
+			Usage:   "initialize a new site with yaml config file",
+		},
+	}
+)
+
 // NewInit returns a new cli.Command for the init subcommand.
 func NewInit() *cli.Command {
 	cmd := &cli.Command{
 		Name:  "init",
 		Usage: "initialize a new sample site in the current directory",
-		Flags: globalFlags,
+		Flags: append(globalFlags, initFlags...),
 		Action: func(c *cli.Context) error {
 			initGlobalFlags(c)
-			if err := initConfigFile(); err != nil {
+
+			ctype := constants.ConfigTypeTOML
+			if c.Bool("yaml") {
+				ctype = constants.ConfigTypeYAML
+			}
+			configItem, err := initConfigFile(ctype)
+
+			if err != nil {
 				zlog.Warnf("failed to initialize config file: %s", err)
 				return err
 			}
-			zlog.Debugf("initialized config file: %s ", constants.ConfigFile)
+			zlog.Debugf("initialized config file: %s ", configItem.File)
 			if err := initDirectories(); err != nil {
 				zlog.Warnf("failed to initialize directories: %s", err)
 				return err
@@ -51,11 +70,18 @@ func NewInit() *cli.Command {
 	return cmd
 }
 
-func initConfigFile() error {
-	if utils.IsFileExist(constants.ConfigFile) {
+func initConfigFile(ctype constants.ConfigType) (*constants.ConfigFileItem, error) {
+	configFileItem := selectConfigFile(ctype)
+	if utils.IsFileExist(configFileItem.File) {
 		// FIXME: should we overwrite the config file?
 	}
-	return utils.WriteTOMLFile(constants.ConfigFile, models.DefaultConfig())
+	if configFileItem.Type == constants.ConfigTypeTOML {
+		return configFileItem, utils.WriteTOMLFile(configFileItem.File, models.DefaultConfig())
+	}
+	if configFileItem.Type == constants.ConfigTypeYAML {
+		return configFileItem, utils.WriteYAMLFile(configFileItem.File, models.DefaultConfig())
+	}
+	return nil, fmt.Errorf("unsupported config type: %s", configFileItem.Type)
 }
 
 func initDirectories() error {

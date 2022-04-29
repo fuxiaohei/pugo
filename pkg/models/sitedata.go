@@ -1,6 +1,7 @@
 package models
 
 import (
+	"pugo/pkg/constants"
 	"pugo/pkg/theme"
 	"pugo/pkg/zlog"
 )
@@ -13,6 +14,7 @@ type SiteData struct {
 	Pages []*Page
 
 	Config      *Config
+	ConfigType  constants.ConfigType
 	BuildConfig *BuildConfig
 	SiteConfig  *SiteConfig
 
@@ -27,15 +29,17 @@ func NewSiteData() *SiteData {
 	}
 }
 
-func LoadSiteData(configFile string) (*SiteData, error) {
+func LoadSiteData(item constants.ConfigFileItem) (*SiteData, error) {
 	siteData := NewSiteData()
 
 	// load config
-	cfg, err := LoadConfigFromFile(configFile)
+	cfg, err := LoadConfigFromFile(item)
 	if err != nil {
 		zlog.Warnf("load config file failed: %v", err)
 		return nil, err
 	}
+	zlog.Debugf("load config ok: %s", item.File)
+	siteData.ConfigType = item.Type
 	siteData.Config = cfg
 	siteData.BuildConfig = cfg.BuildConfig
 	siteData.SiteConfig = cfg.Site

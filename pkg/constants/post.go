@@ -10,7 +10,7 @@ const (
 type postMetaSeperator struct {
 	StartChars []byte
 	EndChars   []byte
-	MetaType   string
+	MetaType   ConfigType
 }
 
 var (
@@ -18,12 +18,12 @@ var (
 		{
 			StartChars: []byte("---\n"),
 			EndChars:   []byte("---\n"),
-			MetaType:   "yaml",
+			MetaType:   ConfigTypeYAML,
 		},
 		{
 			StartChars: []byte("```toml\n"),
 			EndChars:   []byte("```\n"),
-			MetaType:   "toml",
+			MetaType:   ConfigTypeTOML,
 		},
 	}
 	postDateLayouts = []string{

@@ -9,6 +9,10 @@ build:
 release:
 	@./release.sh
 
-.PHONY: local-server
-local-server: build
+.PHONY: dev-server
+dev-server: build
 	@cd $(dir) && ../pugo server --watch --debug
+
+.PHONY: dev-init
+dev-init: build
+	@rm -rf $(dir) && mkdir -p $(dir) && cd $(dir) && ../pugo init --debug --yml

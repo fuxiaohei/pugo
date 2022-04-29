@@ -4,14 +4,10 @@ import (
 	"fmt"
 	"os"
 	"pugo/pkg/cmd"
-	"pugo/pkg/zlog"
+	"pugo/pkg/constants"
 	"strings"
 
 	"github.com/urfave/cli/v2"
-)
-
-const (
-	appName = "PuGo"
 )
 
 var (
@@ -25,7 +21,7 @@ var (
 			Name:  "version",
 			Usage: "print the version of PuGo",
 			Action: func(c *cli.Context) error {
-				fmt.Println(appName, version)
+				fmt.Println(constants.AppName(), version)
 				return nil
 			},
 		},
@@ -33,16 +29,14 @@ var (
 )
 
 func main() {
+	constants.SetAppVersion(version)
+
 	app := &cli.App{
-		Name:     appName,
+		Name:     constants.AppName(),
 		Usage:    "a simple static site generator with markdown support",
-		Version:  version,
+		Version:  constants.AppVersion(),
 		Commands: commands,
 		Flags:    cmd.GetGlobalFlags(),
-		Before: func(c *cli.Context) error {
-			zlog.Infof("%s %s", appName, version)
-			return nil
-		},
 	}
 	args := movePostfixOptions(os.Args)
 	app.Run(args)

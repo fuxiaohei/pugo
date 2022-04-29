@@ -16,7 +16,7 @@ import (
 func Generate(opt *Option) error {
 	st := time.Now()
 
-	siteData, err := models.LoadSiteData(opt.ConfigFile)
+	siteData, err := models.LoadSiteData(*opt.ConfigFileItem)
 	if err != nil {
 		zlog.Warnf("load site data failed: %v", err)
 		return err
@@ -62,7 +62,9 @@ func Watch(opt *Option) {
 	// use time loop to handle several events at once
 	utils.Ticker(constants.WatchTickerDuaration, func() {
 		delta := nextGenerateTime.Sub(time.Now())
+		// zlog.Debugf("next generate time: %v", delta)
 		if delta > 0 {
+			// if nextGenerateTime is in the future, handle it
 			nextGenerateTime = time.Now().Add(time.Second * -1)
 			Generate(opt)
 		}
@@ -80,7 +82,8 @@ func Watch(opt *Option) {
 		for {
 			event := <-w.Events()
 			zlog.Infof("wathcing event: %s, %v", event.Name, event.Op)
-			nextGenerateTime = time.Now().Add(constants.WatchPollingDuration)
+			// set a future time to avoid generating too frequently
+			nextGenerateTime = time.Now().Add(time.Hour)
 		}
 	}()
 	zlog.Infof("watching...")

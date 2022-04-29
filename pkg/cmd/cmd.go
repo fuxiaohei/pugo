@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"pugo/pkg/constants"
+	"pugo/pkg/utils"
 	"pugo/pkg/zlog"
 
 	"github.com/urfave/cli/v2"
@@ -22,6 +24,7 @@ func GetGlobalFlags() []cli.Flag {
 }
 
 func initGlobalFlags(c *cli.Context) {
+	zlog.Infof("%s %s", c.App.Name, c.App.Version)
 	// set debug mode
 	if c.Bool("debug") {
 		zlog.Init(true)
@@ -29,4 +32,24 @@ func initGlobalFlags(c *cli.Context) {
 	} else {
 		zlog.Init(false)
 	}
+}
+
+func loadLocalConfigFile() constants.ConfigFileItem {
+	items := constants.ConfigFiles()
+	for _, item := range items {
+		if utils.IsFileExist(item.File) {
+			return item
+		}
+	}
+	return items[0]
+}
+
+func selectConfigFile(ctype constants.ConfigType) *constants.ConfigFileItem {
+	items := constants.ConfigFiles()
+	for _, item := range items {
+		if item.Type == ctype {
+			return &item
+		}
+	}
+	return selectConfigFile(constants.ConfigTypeTOML)
 }

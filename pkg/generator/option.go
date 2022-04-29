@@ -1,8 +1,10 @@
 package generator
 
+import "pugo/pkg/constants"
+
 // Options is the options for building a site.
 type Option struct {
-	ConfigFile  string
-	OutputDir   string
-	EnableWatch bool
+	ConfigFileItem *constants.ConfigFileItem
+	OutputDir      string
+	EnableWatch    bool
 }

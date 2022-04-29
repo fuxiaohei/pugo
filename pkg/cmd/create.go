@@ -13,6 +13,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/urfave/cli/v2"
+	"gopkg.in/yaml.v3"
 )
 
 // NewCreate returns a new cli.Command for the create subcommand.
@@ -41,17 +42,19 @@ func NewCreate() *cli.Command {
 			}
 
 			// load config
-			config, err := models.LoadConfigFromFile(constants.ConfigFile)
+			configFileItem := loadLocalConfigFile()
+			config, err := models.LoadConfigFromFile(configFileItem)
 			if err != nil {
 				zlog.Warnf("load config file failed: %v", err)
 				return err
 			}
+			zlog.Debugf("load config file: %s", configFileItem.File)
 
 			if typename == "post" {
-				return createSamplePost(filename, config)
+				return createSamplePost(filename, config, configFileItem)
 			}
 			if typename == "page" {
-				return createSamplePage(filename, config)
+				return createSamplePage(filename, config, configFileItem)
 			}
 			return nil
 
@@ -60,7 +63,32 @@ func NewCreate() *cli.Command {
 	return cmd
 }
 
-func createSamplePost(filename string, cfg *models.Config) error {
+func createContentMeta(content interface{}, configType constants.ConfigType) (*bytes.Buffer, error) {
+	buf := bytes.NewBuffer(nil)
+	for _, separator := range constants.PostMetaSeperators() {
+		if separator.MetaType == configType {
+			buf.Write(separator.StartChars)
+
+			if configType == constants.ConfigTypeTOML {
+				if err := toml.NewEncoder(buf).Encode(content); err != nil {
+					return nil, err
+				}
+			} else if configType == constants.ConfigTypeYAML {
+				data, err := yaml.Marshal(content)
+				if err != nil {
+					return nil, err
+				}
+				buf.Write(data)
+			}
+
+			buf.Write(separator.EndChars)
+			break
+		}
+	}
+	return buf, nil
+}
+
+func createSamplePost(filename string, cfg *models.Config, item constants.ConfigFileItem) error {
 	fpath := filepath.Join(constants.ContentPostsDir, filename)
 	if filepath.Ext(fpath) != ".md" {
 		return errors.New("file extension must be .md")
@@ -77,18 +105,16 @@ func createSamplePost(filename string, cfg *models.Config) error {
 		Template:     "post.html",
 		AuthorName:   cfg.Author[0].Name,
 	}
-
-	buf := bytes.NewBufferString("```toml\n")
-	if err := toml.NewEncoder(buf).Encode(post); err != nil {
+	buf, err := createContentMeta(post, item.Type)
+	if err != nil {
 		return err
 	}
-	buf.WriteString("```\n")
 	buf.WriteString("this is an empty post\n")
 	zlog.Info("create post", "filename", fpath)
 	return utils.WriteFile(fpath, buf.Bytes())
 }
 
-func createSamplePage(filename string, cfg *models.Config) error {
+func createSamplePage(filename string, cfg *models.Config, item constants.ConfigFileItem) error {
 	fpath := filepath.Join(constants.ContentPagesDir, filename)
 	if filepath.Ext(fpath) != ".md" {
 		return errors.New("file extension must be .md")
@@ -106,11 +132,10 @@ func createSamplePage(filename string, cfg *models.Config) error {
 			AuthorName:   cfg.Author[0].Name,
 		},
 	}
-	buf := bytes.NewBufferString("```toml\n")
-	if err := toml.NewEncoder(buf).Encode(page); err != nil {
+	buf, err := createContentMeta(page, item.Type)
+	if err != nil {
 		return err
 	}
-	buf.WriteString("```\n")
 	buf.WriteString("this is an empty page\n")
 	zlog.Info("create page", "filename", fpath)
 	return utils.WriteFile(fpath, buf.Bytes())
