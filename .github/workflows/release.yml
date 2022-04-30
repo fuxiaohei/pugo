@@ -1,5 +1,4 @@
 name: release
-# on: [push, pull_request]
 on:
   push:
     tags:
@@ -18,8 +17,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - uses: actions/checkout@v2
       - name: version
-        run: cat ./version
-        id: version
+        run: echo "::set-output name=version::$(cat ./version)"
       - name: Pack
         run: make release
       - uses: actions/upload-artifact@v3
