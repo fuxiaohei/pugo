@@ -2,7 +2,11 @@
 
 release logs of PuGo
 
-#### v0.1.11 - 2020-04-30
+#### v0.1.12 - 2022-05-01
+
+- [theme-default] shorten css class name, simplify html
+
+#### v0.1.11 - 2022-04-30
 
 - [update] author add `HasSocials`, `HasSocial` and `GetSocial` methods
 - [theme-default] add tailwind.config.js and input css source

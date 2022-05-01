@@ -1,11 +1,11 @@
-<footer class="w-full flex-none border-t border-slate-200 dark:bg-zinc-800 dark:border-gray-700">
-    <div class="max-w-6xl mx-auto py-8 text-gray-400 flex">
+<footer class="footer">
+    <div class="footer-container">
         <div class="flex-auto w-1/2">
-            <a href="/atom.xml" class="post-tag hover:text-gray-800 dark:hover:text-zinc-300">RSS</a>
-            <span class="mx-4 dark:text-zinc-300">|</span>
-            <a href="/sitemap.xml" class="post-tag hover:text-gray-800 dark:hover:text-zinc-300">Sitemap</a>
+            <a href="/atom.xml" class="footer-item">RSS</a>
+            <span class="post-meta-gap">|</span>
+            <a href="/sitemap.xml" class="footer-item">Sitemap</a>
         </div>
-        <div class="flex-auto w-1/2 text-right">Base on <a href="https://github.com/fuxiaohei/pugo" target="_blank" class="hover:text-zinc-800 dark:hover:text-zinc-300">{{.pugo.Name}} {{.pugo.Version}}</a></div>
+        <div class="flex-auto w-1/2 text-right">Base on <a href="https://github.com/fuxiaohei/pugo" target="_blank" class="footer-item">{{.pugo.Name}} v{{.pugo.Version}}</a></div>
     </div>
 </footer>
 <script src="/static/js/prism.js"></script>

@@ -1,35 +1,38 @@
 <!DOCTYPE html>
 <html>
 {{template "head.html" .}}
+
 <body class="dark:bg-zinc-900">
     {{template "header.html" .}}
-    <main class="w-full flex-none">
-        <div class="max-w-6xl mx-auto py-8 flex">
-            <div class="flex-auto w-3/4 pr-10 border-r border-slate-200 dark:border-zinc-800">
-                <!--{{if not .pager.IsFirst}}<div class="flex-auto pt-4 pb-4 mb-4 text-2xl text-gray-500 border-b border-t border-slate-200">Next</div>{{end}}-->
-                {{if .tag}}<div class="flex-auto py-4 mb-4 text-xl text-gray-500 border-b border-t border-slate-200">#{{.tag.Name}}</div>{{end}}
-                {{range .posts}}<section class="post border-b border-slate-200 mb-8 dark:border-zinc-800">
-                    <h3 class="mb-6 text-3xl font-semibold text-gray-700 hover:text-sky-700 dark:text-zinc-300 dark:hover:text-sky-500"><a
-                            href="{{.Link}}">{{.Title}}</a></h3>
-                    <div class="post-meta px-1 mb-5 text-gray-400">
+    <main class="main">
+        <div class="main-container">
+            <div class="main-left-container">
+                {{if .tag}}<div class="post-header">
+                    #{{.tag.Name}}</div>{{end}}
+                {{range .posts}}<article class="post-container">
+                    <h3 class="post-title">
+                        <a href="{{.Link}}">{{.Title}}</a></h3>
+                    <div class="post-meta">
                         <span class="post-date">{{.Date.Format "2006-01-02"}}</span>
-                        <span class="mx-4 dark:text-zinc-800">|</span>
+                        <span class="post-meta-gap">|</span>
                         <span class="post-author">{{.Author.Name}}</span>
-                        {{range .TagLinks}}<span class="mx-4 dark:text-zinc-800">|</span>
-                        <a href="{{.Link}}" class="post-tag text-gray-500 hover:text-sky-700 dark:hover:text-sky-500">#{{.Name}}</a>{{end}}
+                        {{range .TagLinks}}<span class="post-meta-gap">|</span>
+                        <a href="{{.Link}}" class="post-tag">#{{.Name}}</a>{{end}}
                     </div>
-                    <article class="post-brief post-content px-1 mb-6 leading-8 text-gray-700 max-w-none dark:text-zinc-300">{{HTML .Brief}}</article>
-                    <div class="post-read-more px-1 mb-6">
-                        <a href="{{.Link}}" class="post-tag text-gray-500 hover:text-gray-800">Read More</a>
+                    <div class="post-brief post-content">
+                        {{HTML .Brief}}</div>
+                    <div class="post-readmore">
+                        <a href="{{.Link}}" class="post-tag">Read More</a>
                     </div>
-                </section>{{end}}
+                </article>{{end}}
                 {{template "partial/pager.html" .}}
             </div>
-            <div class="flex-auto w-1/4 pl-10">
+            <div class="main-sidebar">
                 {{template "partial/sidebar.html" .}}
             </div>
         </div>
     </main>
     {{template "footer.html" .}}
 </body>
+
 </html>

@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html>
 {{template "head.html" .}}
+
 <body class="dark:bg-zinc-900">
     {{template "header.html" .}}
-    <main class="w-full flex-none">
-        <div class="max-w-6xl mx-auto py-8 flex">
-            <div class="flex-auto w-3/4 pr-10 border-r border-slate-200 dark:border-zinc-800">
-                <div class="flex-auto py-4 mb-4 text-xl text-gray-500 border-b border-t border-slate-200 dark:border-zinc-800 dark:text-zinc-300">Archives</div>
-                {{range .archives}}<section class="archive border-b border-slate-200 mb-8 dark:border-zinc-800">
-                    <h3 class="mb-4 text-3xl font-semibold text-gray-700 dark:text-zinc-300">{{.Year}}</h3>
-                    <ul class="list-disc mb-4 text-gray-500 dark:text-zinc-300">
-                        {{range .Posts}}<li class="py-3 ml-8">
-                            <span class="text-gray-500 w-14 inline-block font-mono dark:text-zinc-300">{{.Date.Format "01-02"}}</span>
-                            <span class="mx-4 dark:text-gray-300">|</span>
-                            <a class="text-sky-600 hover:underline dark:text-sky-300" href="{{.Link}}">{{.Title}}</a>
+    <main class="main">
+        <div class="main-container">
+            <div class="main-left-container">
+                <div class="post-header">Archives</div>
+                {{range .archives}}<section class="post-container">
+                    <h3 class="archive-title">{{.Year}}</h3>
+                    <ul class="archive-list">
+                        {{range .Posts}}<li class="archive-item">
+                            <span class="archive-date">{{.Date.Format "01-02"}}</span>
+                            <span class="post-meta-gap">|</span>
+                            <a class="archive-post-title" href="{{.Link}}">{{.Title}}</a>
                         </li>{{end}}
                     </ul>
                 </section>{{end}}
             </div>
-            <div class="flex-auto w-1/4 pl-10">
+            <div class="main-sidebar">
                 {{template "partial/sidebar.html" .}}
             </div>
         </div>
     </main>
     {{template "footer.html" .}}
 </body>
+
 </html>

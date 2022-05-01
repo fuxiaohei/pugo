@@ -1,20 +1,20 @@
 <div class="sidebar">
-    <div class="profile flex items-center justify-center border-b border-slate-200 my-8 pb-8 dark:border-zinc-800">
-        <div class="card mx-auto">
-            <img class="w-24 h-24 mx-auto rounded-lg leading-8 mb-3" src="{{.author.AvatarLink}}" alt="">
-            <div class="text-center pb-4 text-xl text-gray-700 font-medium dark:text-zinc-300">{{.author.Name}}</div>
-            <div class="text-center pb-4 text-gray-400 text-xs font-semibold dark:text-zinc-300">{{.author.Bio}}</div>
+    <div class="sidebar-profile">
+        <div class="profile-card mx-auto">
+            <img class="profile-avatar" src="{{.author.AvatarLink}}" alt="">
+            <div class="profile-name">{{.author.Name}}</div>
+            <div class="profile-bio">{{.author.Bio}}</div>
             {{if .author.HasSocials}}{{template "partial/social.html" .}}{{end}}
         </div>
     </div>
-    <div class="all-tags border-b border-slate-200 mb-8 pb-8 dark:border-zinc-800">
-        <h4 class="mb-4 text-lg font-semibold text-gray-700 dark:text-zinc-300">Tags</h4>
-        <div class="tag-list">
+    <div class="sidebar-tags">
+        <h4 class="tags-title">Tags</h4>
+        <div class="tags-list">
             {{range .tags}}<a
-                class="p-2 rounded leading-none inline-block items-center hover:text-sky-600 dark:text-zinc-400 dark:hover:text-sky-300"
+                class=""
                 href="{{.Link}}">
                 {{.Name}}<span
-                    class="bg-slate-200 font-bold rounded text-gray-600 text-sm ml-2 text-center w-5 inline-block dark:bg-zinc-600 dark:text-zinc-300">{{.PostCount}}</span>
+                    class="tags-post-count">{{.PostCount}}</span>
             </a>{{end}}
         </div>
     </div>

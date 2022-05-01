@@ -1,13 +1,7 @@
-<div class="post-pager text-gray-500 dark:text-zinc-300 py-8">
+<div class="post-pager">
     {{if .pager.HasPrev}}<a href="{{.pager.PrevLink}}"
-        class="text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700 dark:hover:text-zinc-300 dark:hover:border-slate-300">Prev</a>{{end}}
-    <span class="px-3 py-1 mx-1">
-        {{.pager.Current}} / {{.pager.Total}}
-    </span>
-    <!--<a href="#"
-        class="text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700">1</a>
-    <a href="#"
-        class="text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700">2</a>-->
+        class="post-pager-step">Prev</a>{{end}}
+    <span class="post-pager-size">{{.pager.Current}} / {{.pager.Total}}</span>
     {{if .pager.HasNext}}<a href="{{.pager.NextLink}}"
-        class="text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700 dark:hover:text-zinc-300 dark:hover:border-slate-300">Next</a>{{end}}
+        class="post-pager-step">Next</a>{{end}}
 </div>

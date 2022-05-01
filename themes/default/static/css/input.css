@@ -2,8 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+.main {
+    @apply w-full flex-none
+}
+
+.main-container {
+    @apply max-w-6xl mx-auto py-8 flex
+}
+
+.main-left-container {
+    @apply flex-auto w-3/4 pr-10 border-r border-slate-200 dark:border-zinc-800
+}
+
+.main-sidebar {
+    @apply flex-auto w-1/4 pl-10
+}
+
+.post-header {
+    @apply flex-auto pb-4 mb-4 text-xl text-gray-500 border-b border-slate-200
+}
+
+.post-container {
+    @apply border-b border-slate-200 mb-8 dark:border-zinc-800
+}
+
 .post-content>p:not(:last-child) {
     @apply pb-2
+}
+
+h3.post-title {
+    @apply mb-6 text-3xl font-semibold text-gray-700 hover:text-sky-700 dark:text-zinc-300 dark:hover:text-sky-500
+}
+
+.post-meta {
+    @apply px-1 mb-5 text-gray-400
+}
+
+.post-meta-gap {
+    @apply mx-4 dark:text-zinc-800
+}
+
+.post-tag {
+    @apply text-gray-500 hover:text-sky-700 dark:hover:text-sky-500
 }
 
 .post-content h1,
@@ -13,6 +53,10 @@
 .post-content h5,
 .post-content h6 {
     @apply py-2 font-semibold
+}
+
+.post-content {
+    @apply px-1 mb-6 leading-8 text-gray-700 max-w-none dark:text-zinc-300
 }
 
 .post-content h1 {
@@ -44,4 +88,120 @@
 
 .post-content ol {
     @apply list-decimal pl-8
+}
+
+.post-readmore {
+    @apply px-1 mb-6
+}
+
+.post-readmore .post-tag {
+    @apply text-gray-500 hover:text-gray-800
+}
+
+.archive-title {
+    @apply mb-4 text-3xl font-semibold text-gray-700 dark:text-zinc-300
+}
+
+.archive-list {
+    @apply list-disc mb-4 text-gray-500 dark:text-zinc-300
+}
+
+.archive-item {
+    @apply py-3 ml-8
+}
+
+.archive-date {
+    @apply text-gray-500 w-14 inline-block dark:text-zinc-300
+}
+
+.archive-post-title {
+    @apply text-sky-600 hover:underline dark:text-sky-300
+}
+
+.footer {
+    @apply w-full flex-none border-t border-slate-200 dark:bg-zinc-800 dark:border-gray-700
+}
+
+.footer-container {
+    @apply max-w-6xl mx-auto py-8 text-gray-400 flex
+}
+
+.footer-item {
+    @apply post-tag hover:text-gray-800 dark:hover:text-zinc-300
+}
+
+.header{
+    @apply w-full flex-none border-b border-slate-200 bg-slate-100 dark:bg-zinc-800 dark:border-zinc-700
+}
+
+.header-container{
+    @apply max-w-6xl mx-auto
+}
+
+.header-top{
+    @apply py-8 flex items-center justify-between
+}
+
+.site-title{
+    @apply text-2xl font-bold text-sky-700 dark:text-sky-300
+}
+
+.header-nav{
+    @apply leading-10 text-slate-600
+}
+
+.header-nav-item{
+    @apply ml-6 border-l border-slate-200 dark:border-zinc-700
+}
+
+.header-nav-item > a{
+    @apply rounded ml-6 px-3 py-1.5 hover:bg-sky-800 hover:text-gray-100 dark:text-zinc-200 dark:hover:bg-sky-700
+}
+
+.dark-toggle-icon{
+    @apply w-7 h-7
+}
+
+.post-pager{
+    @apply text-gray-500 dark:text-zinc-300 py-8
+}
+
+.post-pager-step{
+    @apply text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700 dark:hover:text-zinc-300 dark:hover:border-slate-300
+}
+
+.post-pager-size{
+    @apply px-3 py-1 mx-1
+}
+
+.sidebar-profile{
+    @apply flex items-center justify-center border-b border-slate-200 my-8 pb-8 dark:border-zinc-800
+}
+
+.profile-avatar{
+    @apply w-24 h-24 mx-auto rounded-lg leading-8 mb-3
+}
+
+.profile-name{
+    @apply text-center pb-4 text-xl text-gray-700 font-medium dark:text-zinc-300
+}
+
+.profile-bio{
+    @apply text-center pb-4 text-gray-400 text-xs font-semibold dark:text-zinc-300
+}
+
+.sidebar-tags{
+    @apply border-b border-slate-200 mb-8 pb-8 dark:border-zinc-800
+}
+
+.tags-title{
+    @apply mb-4 text-lg font-semibold text-gray-700 dark:text-zinc-300
+}
+
+.tags-list > a{
+    @apply p-2 rounded leading-none inline-block items-center hover:text-sky-600 dark:text-zinc-400 dark:hover:text-sky-300
+}
+
+.tags-post-count{
+    @apply bg-slate-200 font-bold rounded text-gray-600 text-sm ml-2 text-center w-5 inline-block dark:bg-zinc-600 dark:text-zinc-300
 }
