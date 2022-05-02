@@ -3,10 +3,10 @@ package generator
 import (
 	"bytes"
 	"path/filepath"
-	"pugo/pkg/converter"
 	"pugo/pkg/core/models"
+	"pugo/pkg/plugins/converter"
 	"pugo/pkg/utils"
-	"pugo/pkg/zlog"
+	"pugo/pkg/utils/zlog"
 	"strings"
 )
 

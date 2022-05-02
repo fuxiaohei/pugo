@@ -3,7 +3,7 @@ package generator
 import (
 	"bytes"
 	"path/filepath"
-	"pugo/pkg/zlog"
+	"pugo/pkg/utils/zlog"
 )
 
 func renderIndex(params *renderPostListsParams) error {

@@ -3,7 +3,7 @@ package generator
 import (
 	"pugo/pkg/core/models"
 	"pugo/pkg/core/theme"
-	"pugo/pkg/zlog"
+	"pugo/pkg/utils/zlog"
 )
 
 type renderBaseParams struct {

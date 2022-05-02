@@ -3,10 +3,10 @@ package generator
 import (
 	"bytes"
 	"path/filepath"
-	"pugo/pkg/converter"
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/models"
-	"pugo/pkg/zlog"
+	"pugo/pkg/plugins/converter"
+	"pugo/pkg/utils/zlog"
 )
 
 type renderPostsParams struct {

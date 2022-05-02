@@ -3,7 +3,7 @@ package cmd
 import (
 	"pugo/pkg/core/constants"
 	"pugo/pkg/utils"
-	"pugo/pkg/zlog"
+	"pugo/pkg/utils/zlog"
 
 	"github.com/urfave/cli/v2"
 )

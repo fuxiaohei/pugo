@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"path/filepath"
-	"pugo/pkg/cmd/initdata"
+	"pugo/pkg/core/cmd/initdata"
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/models"
 	"pugo/pkg/utils"
-	"pugo/pkg/zlog"
+	"pugo/pkg/utils/zlog"
 	"pugo/themes"
 	"time"
 

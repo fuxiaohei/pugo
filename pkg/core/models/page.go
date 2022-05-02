@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"pugo/pkg/core/constants"
-	"pugo/pkg/zlog"
+	"pugo/pkg/utils/zlog"
 )
 
 // Page is the page model.

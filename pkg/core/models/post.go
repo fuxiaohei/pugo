@@ -7,9 +7,9 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
-	"pugo/pkg/converter"
 	"pugo/pkg/core/constants"
-	"pugo/pkg/zlog"
+	"pugo/pkg/plugins/converter"
+	"pugo/pkg/utils/zlog"
 	"sort"
 	"time"
 

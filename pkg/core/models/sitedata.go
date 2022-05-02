@@ -3,7 +3,7 @@ package models
 import (
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/theme"
-	"pugo/pkg/zlog"
+	"pugo/pkg/utils/zlog"
 )
 
 type SiteData struct {

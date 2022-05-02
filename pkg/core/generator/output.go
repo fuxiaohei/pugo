@@ -7,7 +7,7 @@ import (
 	"pugo/pkg/core/models"
 	"pugo/pkg/core/theme"
 	"pugo/pkg/utils"
-	"pugo/pkg/zlog"
+	"pugo/pkg/utils/zlog"
 )
 
 // Output outputs contents to destination directory.

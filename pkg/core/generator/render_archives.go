@@ -6,7 +6,7 @@ import (
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/models"
 	"pugo/pkg/utils"
-	"pugo/pkg/zlog"
+	"pugo/pkg/utils/zlog"
 )
 
 type renderArchivesParams struct {

@@ -6,7 +6,7 @@ import (
 	"pugo/pkg/core/models"
 	"pugo/pkg/core/watcher"
 	"pugo/pkg/utils"
-	"pugo/pkg/zlog"
+	"pugo/pkg/utils/zlog"
 	"time"
 
 	"go.uber.org/atomic"
