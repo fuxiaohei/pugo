@@ -1,8 +1,8 @@
 package models
 
 import (
-	"pugo/pkg/constants"
-	"pugo/pkg/theme"
+	"pugo/pkg/core/constants"
+	"pugo/pkg/core/theme"
 	"pugo/pkg/zlog"
 )
 

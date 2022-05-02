@@ -2,10 +2,10 @@ package generator
 
 import (
 	"path/filepath"
-	"pugo/pkg/constants"
-	"pugo/pkg/models"
+	"pugo/pkg/core/constants"
+	"pugo/pkg/core/models"
+	"pugo/pkg/core/watcher"
 	"pugo/pkg/utils"
-	"pugo/pkg/watcher"
 	"pugo/pkg/zlog"
 	"time"
 

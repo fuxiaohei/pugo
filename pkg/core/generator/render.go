@@ -1,30 +1,42 @@
 package generator
 
 import (
-	"pugo/pkg/models"
+	"pugo/pkg/core/models"
+	"pugo/pkg/core/theme"
 	"pugo/pkg/zlog"
 )
 
-func Render(siteData *models.SiteData, context *Context, opt *Option) error {
-	if err := renderPosts(&renderPostsParams{
+type renderBaseParams struct {
+	Ctx       *Context
+	Render    *theme.Render
+	OutputDir string
+}
+
+func newRenderBaseParams(siteData *models.SiteData, context *Context, opt *Option) renderBaseParams {
+	return renderBaseParams{
 		Ctx:       context,
-		Posts:     siteData.Posts,
-		SiteDesc:  siteData.SiteConfig.Description,
-		SiteTitle: siteData.SiteConfig.Title,
 		Render:    siteData.Render,
 		OutputDir: opt.OutputDir,
+	}
+}
+
+func Render(siteData *models.SiteData, context *Context, opt *Option) error {
+	renderBase := newRenderBaseParams(siteData, context, opt)
+	if err := renderPosts(&renderPostsParams{
+		renderBaseParams: renderBase,
+		Posts:            siteData.Posts,
+		SiteDesc:         siteData.SiteConfig.Description,
+		SiteTitle:        siteData.SiteConfig.Title,
 	}); err != nil {
 		zlog.Warnf("render posts failed: %v", err)
 		return err
 	}
 	postListParams := &renderPostListsParams{
-		Ctx:                context,
+		renderBaseParams:   renderBase,
 		Pager:              siteData.PostsPager,
-		Render:             siteData.Render,
 		Posts:              siteData.Posts,
 		PostPageLinkFormat: siteData.BuildConfig.PostPageLinkFormat,
 		SiteTitle:          siteData.SiteConfig.Title,
-		OutputDir:          opt.OutputDir,
 	}
 	if err := renderPostLists(postListParams); err != nil {
 		zlog.Warnf("render post lists failed: %v", err)
@@ -35,47 +47,40 @@ func Render(siteData *models.SiteData, context *Context, opt *Option) error {
 		return err
 	}
 	if err := renderTags(&renderTagsParams{
-		Ctx:               context,
+		renderBaseParams:  renderBase,
 		Tags:              siteData.Tags,
 		PostPerPage:       siteData.BuildConfig.PostPerPage,
 		TagPageLinkFormat: siteData.BuildConfig.TagPageLinkFormat,
 		SiteTitle:         siteData.SiteConfig.Title,
-		Render:            siteData.Render,
-		OutputDir:         opt.OutputDir,
 	}); err != nil {
 		zlog.Warnf("render tags failed: %v", err)
 		return err
 	}
 	if err := renderArchives(&renderArchivesParams{
-		Ctx:          context,
-		Posts:        siteData.Posts,
-		SiteTitle:    siteData.SiteConfig.Title,
-		Render:       siteData.Render,
-		OutputDir:    opt.OutputDir,
-		ArchivesLink: siteData.BuildConfig.ArchivesLink,
+		renderBaseParams: renderBase,
+		Posts:            siteData.Posts,
+		SiteTitle:        siteData.SiteConfig.Title,
+		ArchivesLink:     siteData.BuildConfig.ArchivesLink,
 	}); err != nil {
 		zlog.Warnf("render archives failed: %v", err)
 		return err
 	}
 
 	if err := renderPages(&renderPagesParams{
-		Ctx:       context,
-		Pages:     siteData.Pages,
-		SiteDesc:  siteData.SiteConfig.Description,
-		SiteTitle: siteData.SiteConfig.Title,
-		Render:    siteData.Render,
-		OutputDir: opt.OutputDir,
+		renderBaseParams: renderBase,
+		Pages:            siteData.Pages,
+		SiteDesc:         siteData.SiteConfig.Description,
+		SiteTitle:        siteData.SiteConfig.Title,
 	}); err != nil {
 		zlog.Warnf("render pages failed: %v", err)
 		return err
 	}
 
 	if err := renderFeedAtom(&renderFeedAtomParams{
-		Ctx:           context,
-		Posts:         siteData.Posts,
-		SiteConfig:    siteData.SiteConfig,
-		PostFeedLimit: siteData.BuildConfig.FeedPostLimit,
-		OutputDir:     opt.OutputDir,
+		renderBaseParams: renderBase,
+		Posts:            siteData.Posts,
+		SiteConfig:       siteData.SiteConfig,
+		PostFeedLimit:    siteData.BuildConfig.FeedPostLimit,
 	}); err != nil {
 		zlog.Warnf("render feed atom failed: %v", err)
 		return err

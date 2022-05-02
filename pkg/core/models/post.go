@@ -2,17 +2,18 @@ package models
 
 import (
 	"bytes"
+	"errors"
 	"io/ioutil"
 	"net/url"
 	"os"
 	"path/filepath"
-	"pugo/pkg/constants"
+	"pugo/pkg/converter"
+	"pugo/pkg/core/constants"
 	"pugo/pkg/zlog"
 	"sort"
 	"time"
 
 	"github.com/BurntSushi/toml"
-	"github.com/yuin/goldmark"
 	"gopkg.in/yaml.v3"
 )
 
@@ -168,16 +169,19 @@ func (p *Post) parseDate() error {
 }
 
 // Convert converts post markdown content to html content.
-func (p *Post) Convert(md goldmark.Markdown) error {
+func (p *Post) Convert(fn converter.MarkdownFunc) error {
+	if fn == nil {
+		return errors.New("converter is nil")
+	}
 	buf := bytes.NewBuffer(nil)
 	if len(p.rawBrief) > 0 {
-		if err := md.Convert(p.rawBrief, buf); err != nil {
+		if err := fn(p.rawBrief, buf); err != nil {
 			return err
 		}
 		p.htmlBrief = buf.String()
 		buf.Reset()
 	}
-	if err := md.Convert(p.rawContent, buf); err != nil {
+	if err := fn(p.rawContent, buf); err != nil {
 		return err
 	}
 	p.htmlContent = buf.String()

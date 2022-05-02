@@ -3,19 +3,17 @@ package generator
 import (
 	"bytes"
 	"path/filepath"
-	"pugo/pkg/constants"
-	"pugo/pkg/models"
-	"pugo/pkg/theme"
+	"pugo/pkg/converter"
+	"pugo/pkg/core/constants"
+	"pugo/pkg/core/models"
 	"pugo/pkg/zlog"
 )
 
 type renderPostsParams struct {
-	Ctx       *Context
+	renderBaseParams
 	Posts     []*models.Post
 	SiteDesc  string
 	SiteTitle string
-	Render    *theme.Render
-	OutputDir string
 }
 
 func renderPosts(params *renderPostsParams) error {
@@ -46,7 +44,7 @@ func renderPosts(params *renderPostsParams) error {
 		dstFile = filepath.Join(params.OutputDir, dstFile)
 
 		// convert markdown
-		if err := p.Convert(GetMarkdown()); err != nil {
+		if err := p.Convert(converter.Get()); err != nil {
 			zlog.Warnf("failed to convert markdown post: %s, %s", p.LocalFile(), err)
 			continue
 		}
@@ -78,10 +76,8 @@ func renderPosts(params *renderPostsParams) error {
 }
 
 type renderPostListsParams struct {
-	Ctx                *Context
+	renderBaseParams
 	Pager              *models.Pager
-	Render             *theme.Render
-	OutputDir          string
 	Posts              []*models.Post
 	PostPageLinkFormat string
 	SiteTitle          string

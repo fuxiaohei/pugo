@@ -3,20 +3,17 @@ package generator
 import (
 	"bytes"
 	"path/filepath"
-	"pugo/pkg/constants"
-	"pugo/pkg/models"
-	"pugo/pkg/theme"
+	"pugo/pkg/core/constants"
+	"pugo/pkg/core/models"
 	"pugo/pkg/utils"
 	"pugo/pkg/zlog"
 )
 
 type renderArchivesParams struct {
-	Ctx          *Context
+	renderBaseParams
 	Posts        []*models.Post
 	SiteTitle    string
-	Render       *theme.Render
 	ArchivesLink string
-	OutputDir    string
 }
 
 func renderArchives(params *renderArchivesParams) error {

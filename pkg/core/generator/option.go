@@ -1,6 +1,6 @@
 package generator
 
-import "pugo/pkg/constants"
+import "pugo/pkg/core/constants"
 
 // Options is the options for building a site.
 type Option struct {

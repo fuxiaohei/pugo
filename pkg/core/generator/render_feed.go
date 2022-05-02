@@ -4,17 +4,16 @@ import (
 	"bytes"
 	"encoding/xml"
 	"path/filepath"
-	"pugo/pkg/constants"
-	"pugo/pkg/models"
+	"pugo/pkg/core/constants"
+	"pugo/pkg/core/models"
 	"pugo/pkg/zlog"
 )
 
 type renderFeedAtomParams struct {
-	Ctx           *Context
+	renderBaseParams
 	Posts         []*models.Post
 	SiteConfig    *models.SiteConfig
 	PostFeedLimit int
-	OutputDir     string
 }
 
 func renderFeedAtom(params *renderFeedAtomParams) error {

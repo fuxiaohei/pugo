@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
-	"pugo/pkg/models"
-	"pugo/pkg/theme"
+	"pugo/pkg/core/models"
+	"pugo/pkg/core/theme"
 	"pugo/pkg/utils"
 	"pugo/pkg/zlog"
 )
@@ -75,6 +75,10 @@ func copyAssets(outputDir string, ctx *Context) error {
 			if info.IsDir() {
 				return nil
 			}
+			if utils.IsTempFile(path) {
+				zlog.Debugf("skip temp file: %s", path)
+				return nil
+			}
 			relPath, err := filepath.Rel(dirData.SrcDir, path)
 			if err != nil {
 				return nil
@@ -82,7 +86,7 @@ func copyAssets(outputDir string, ctx *Context) error {
 			dstPath := filepath.Join(dirData.DestDir, relPath)
 			dstPath = filepath.Join(outputDir, dstPath)
 			if err := utils.CopyFile(path, dstPath); err != nil {
-				zlog.Warnf("output: failed to copy file: %s, %s", dstPath, err)
+				zlog.Warnf("failed to copy file: %s, %s", dstPath, err)
 				return err
 			}
 			zlog.Infof("assets copied: %s", dstPath)
@@ -90,7 +94,7 @@ func copyAssets(outputDir string, ctx *Context) error {
 			return nil
 		})
 		if err != nil {
-			zlog.Warnf("output: failed to copy assets: %s, %s", dirData.SrcDir, err)
+			zlog.Warnf("failed to copy assets: %s, %s", dirData.SrcDir, err)
 			return err
 		}
 	}

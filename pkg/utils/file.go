@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // IsFileExist checks if a file exists
@@ -68,4 +69,24 @@ func CopyFile(src, dst string) error {
 	w.ReadFrom(r)
 
 	return nil
+}
+
+// IsTempFile checks if a file is a temporary file
+func IsTempFile(fpath string) bool {
+	ext := filepath.Ext(fpath)
+	baseName := filepath.Base(fpath)
+	istemp := strings.HasSuffix(ext, "~") ||
+		(ext == ".swp") || // vim
+		(ext == ".swx") || // vim
+		(ext == ".tmp") || // generic temp file
+		(ext == ".DS_Store") || // OSX Thumbnail
+		baseName == "4913" || // vim
+		strings.HasPrefix(ext, ".goutputstream") || // gnome
+		strings.HasSuffix(ext, "jb_old___") || // intelliJ
+		strings.HasSuffix(ext, "jb_tmp___") || // intelliJ
+		strings.HasSuffix(ext, "jb_bak___") || // intelliJ
+		strings.HasPrefix(ext, ".sb-") || // byword
+		strings.HasPrefix(baseName, ".#") || // emacs
+		strings.HasPrefix(baseName, "#") // emacs
+	return istemp
 }

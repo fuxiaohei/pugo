@@ -15,4 +15,4 @@ dev-server: build
 
 .PHONY: dev-init
 dev-init: build
-	@rm -rf $(dir) && mkdir -p $(dir) && cd $(dir) && ../pugo init --debug --yml
+	@rm -rf $(dir) && mkdir -p $(dir) && cd $(dir) && ../pugo init --debug

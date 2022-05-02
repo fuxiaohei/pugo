@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"pugo/pkg/generator"
+	"pugo/pkg/core/generator"
 
 	"github.com/urfave/cli/v2"
 )

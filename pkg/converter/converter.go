@@ -2,6 +2,7 @@ package converter
 
 import (
 	"bytes"
+	"io"
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
@@ -12,12 +13,21 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
+// MarkdownFunc is the markdown function.
+type MarkdownFunc func(source []byte, writer io.Writer) error
+
 var (
 	globalMarkdown goldmark.Markdown = nil
 )
 
-// GetMarkdown returns the global markdown instance.
-func GetMarkdown() goldmark.Markdown {
+// Get gets markdown converter function.
+func Get() MarkdownFunc {
+	return func(source []byte, writer io.Writer) error {
+		return getMarkdown().Convert(source, writer)
+	}
+}
+
+func getMarkdown() goldmark.Markdown {
 	if globalMarkdown == nil {
 		globalMarkdown = NewMarkdown()
 	}

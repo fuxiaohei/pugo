@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"pugo/pkg/cmd"
-	"pugo/pkg/constants"
+	"pugo/pkg/core/constants"
 	"strings"
 
 	"github.com/urfave/cli/v2"

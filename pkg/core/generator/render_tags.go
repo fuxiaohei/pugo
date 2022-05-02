@@ -3,21 +3,18 @@ package generator
 import (
 	"bytes"
 	"path/filepath"
-	"pugo/pkg/constants"
-	"pugo/pkg/models"
-	"pugo/pkg/theme"
+	"pugo/pkg/core/constants"
+	"pugo/pkg/core/models"
 	"pugo/pkg/zlog"
 	"strings"
 )
 
 type renderTagsParams struct {
-	Ctx               *Context
+	renderBaseParams
 	Tags              []*models.TagPosts
 	PostPerPage       int
 	TagPageLinkFormat string
 	SiteTitle         string
-	Render            *theme.Render
-	OutputDir         string
 }
 
 func renderTags(params *renderTagsParams) error {

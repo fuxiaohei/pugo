@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"pugo/pkg/constants"
+	"pugo/pkg/core/constants"
 	"pugo/pkg/utils"
 	"pugo/pkg/zlog"
 

@@ -3,20 +3,18 @@ package generator
 import (
 	"bytes"
 	"path/filepath"
-	"pugo/pkg/models"
-	"pugo/pkg/theme"
+	"pugo/pkg/converter"
+	"pugo/pkg/core/models"
 	"pugo/pkg/utils"
 	"pugo/pkg/zlog"
 	"strings"
 )
 
 type renderPagesParams struct {
-	Ctx       *Context
+	renderBaseParams
 	Pages     []*models.Page
 	SiteDesc  string
 	SiteTitle string
-	Render    *theme.Render
-	OutputDir string
 }
 
 func renderPages(params *renderPagesParams) error {
@@ -38,7 +36,7 @@ func renderPages(params *renderPagesParams) error {
 		dstFile = utils.FormatIndexHTML(pg.Link)
 
 		// convert markdown to html
-		if err = pg.Convert(GetMarkdown()); err != nil {
+		if err = pg.Convert(converter.Get()); err != nil {
 			zlog.Warnf("failed to convert markdown page: %s, %s", pg.LocalFile(), err)
 			continue
 		}

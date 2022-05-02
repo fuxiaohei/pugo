@@ -15,12 +15,11 @@ jobs:
         uses: actions/setup-go@37335c7bb261b353407cff977110895fa0b4f7d8
         with:
           go-version: ${{ matrix.go-version }}
-      - uses: actions/checkout@v2
-      - name: version
-        run: echo "::set-output name=version::$(cat ./version)"
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Pack
         run: make release
       - uses: actions/upload-artifact@v3
         with:
-          name: PuGo-${{steps.version.outputs.version}}
+          name: PuGo-Artifact
           path: bin/release
