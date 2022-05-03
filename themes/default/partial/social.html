@@ -1,7 +1,7 @@
 <div class="text-center" id="author-social">
     {{if .author.HasSocial "github"}}
     <a href="{{.author.GetSocial `github`}}" target="_blank"
-        class="w-6 inline-block opacity-50 hover:opacity-100 mx-2">
+        class="w-6 inline-block opacity-80 hover:opacity-100 mx-2 dark:fill-zinc-200">
         <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title>GitHub</title>
             <path
@@ -11,7 +11,7 @@
     {{end}}
     {{if .author.HasSocial "twitter"}}
     <a href="{{.author.GetSocial `twitter`}}" target="_blank"
-        class="w-6 inline-block opacity-50 hover:opacity-100 mx-2 fill-sky-500">
+        class="w-6 inline-block opacity-80 hover:opacity-100 mx-2 fill-sky-500 dark:fill-sky-300">
         <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title>Twitter</title>
             <path
@@ -21,7 +21,7 @@
     {{end}}
     {{if .author.HasSocial "weibo"}}
     <a href="{{.author.GetSocial `weibo`}}" target="_blank"
-        class="w-6 inline-block opacity-50 hover:opacity-100 mx-2 fill-red-600">
+        class="w-6 inline-block opacity-80 hover:opacity-100 mx-2 fill-red-600 dark:fill-red-200">
         <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <title>Sina Weibo</title>
             <path

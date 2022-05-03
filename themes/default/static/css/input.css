@@ -205,3 +205,11 @@ h3.post-title {
 .tags-post-count{
     @apply bg-slate-200 font-bold rounded text-gray-600 text-sm ml-2 text-center w-5 inline-block dark:bg-zinc-600 dark:text-zinc-300
 }
+
+.footer-left{
+    @apply flex-auto w-1/2
+}
+
+.footer-right{
+    @apply flex-auto w-1/2 text-right
+}

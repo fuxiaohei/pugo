@@ -6,6 +6,7 @@ import (
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/models"
 	"pugo/pkg/ext/markdown"
+	"pugo/pkg/ext/sitemap"
 	"pugo/pkg/utils/zlog"
 )
 
@@ -68,7 +69,7 @@ func renderPosts(params *renderPostsParams) error {
 		zlog.Infof("post generated: %s", dstFile)
 
 		t := p.Date()
-		params.Ctx.addSitemap(&models.SitemapURL{Loc: link, LastMod: &t})
+		sitemap.Add(&sitemap.URL{Loc: link, LastMod: &t})
 
 	}
 
@@ -108,7 +109,7 @@ func renderPostLists(params *renderPostListsParams) error {
 		}
 		dstFile := filepath.Join(params.OutputDir, pageItem.LocalFile)
 		params.Ctx.SetOutput(dstFile, buf)
-		params.Ctx.addSitemap(&models.SitemapURL{Loc: pageItem.Link})
+		sitemap.Add(&sitemap.URL{Loc: pageItem.Link})
 		zlog.Infof("post list generated: %s", dstFile)
 	}
 	return nil

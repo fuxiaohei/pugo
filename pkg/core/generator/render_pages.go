@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"pugo/pkg/core/models"
 	"pugo/pkg/ext/markdown"
+	"pugo/pkg/ext/sitemap"
 	"pugo/pkg/utils"
 	"pugo/pkg/utils/zlog"
 	"strings"
@@ -59,7 +60,7 @@ func renderPages(params *renderPagesParams) error {
 		zlog.Infof("page generated: %s", dstFile)
 
 		t := pg.Date()
-		params.Ctx.addSitemap(&models.SitemapURL{Loc: pg.Link, LastMod: &t})
+		sitemap.Add(&sitemap.URL{Loc: pg.Link, LastMod: &t})
 	}
 
 	return nil

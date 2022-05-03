@@ -27,8 +27,6 @@ type Context struct {
 	postSlugTemplate *template.Template
 	tagLinkTemplate  *template.Template
 
-	sitemap *models.Sitemap
-
 	minifier *minify.M
 }
 
@@ -37,7 +35,6 @@ func NewContext(s *SiteData, opt *Option) *Context {
 		templateData:  map[string]interface{}{},
 		copingDirs:    make([]*models.CopyDir, 0, len(s.BuildConfig.StaticAssetsDir)),
 		outputCounter: atomic.NewInt64(0),
-		sitemap:       models.NewSiteMap(s.Config.Site.Base),
 	}
 
 	for _, dir := range s.BuildConfig.StaticAssetsDir {
@@ -158,14 +155,6 @@ func (ctx *Context) getOutputCounter() int64 {
 
 func (ctx *Context) incrOutputCounter(delta int64) int64 {
 	return ctx.outputCounter.Add(delta)
-}
-
-func (ctx *Context) addSitemap(url *models.SitemapURL) {
-	ctx.sitemap.Add(url)
-}
-
-func (ctx *Context) getSitemap() *models.Sitemap {
-	return ctx.sitemap
 }
 
 func (ctx *Context) appendCopyDir(srcDir, dstDir string) {

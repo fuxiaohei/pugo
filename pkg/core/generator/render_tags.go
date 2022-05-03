@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/models"
+	"pugo/pkg/ext/sitemap"
 	"pugo/pkg/utils/zlog"
 	"strings"
 )
@@ -51,13 +52,14 @@ func renderTags(params *renderTagsParams) error {
 			zlog.Infof("tag page generated: %s", dstFile)
 
 			t := posts[0].Date()
-			params.Ctx.addSitemap(&models.SitemapURL{Loc: pageItem.Link, LastMod: &t})
+
+			sitemap.Add(&sitemap.URL{Loc: pageItem.Link, LastMod: &t})
 
 			// tag list index.html
 			if i == 1 {
 				dstFile = filepath.Join(params.OutputDir, tagData.Tag.LocalFile)
 				params.Ctx.SetOutput(dstFile, buf)
-				params.Ctx.addSitemap(&models.SitemapURL{Loc: tagData.Tag.Link, LastMod: &t})
+				sitemap.Add(&sitemap.URL{Loc: tagData.Tag.Link, LastMod: &t})
 				zlog.Infof("tag page generated: %s", dstFile)
 			}
 		}

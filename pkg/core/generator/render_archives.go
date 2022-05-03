@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/models"
+	"pugo/pkg/ext/sitemap"
 	"pugo/pkg/utils"
 	"pugo/pkg/utils/zlog"
 )
@@ -36,6 +37,8 @@ func renderArchives(params *renderArchivesParams) error {
 	zlog.Infof("archives generated: %s", dstFile)
 
 	t := params.Posts[0].Date()
-	params.Ctx.addSitemap(&models.SitemapURL{Loc: params.ArchivesLink, LastMod: &t})
+
+	sitemap.Add(&sitemap.URL{Loc: params.ArchivesLink, LastMod: &t})
+
 	return nil
 }

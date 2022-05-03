@@ -4,6 +4,7 @@ import (
 	"path/filepath"
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/watcher"
+	"pugo/pkg/ext"
 	"pugo/pkg/utils"
 	"pugo/pkg/utils/zlog"
 	"time"
@@ -23,6 +24,9 @@ func Generate(opt *Option) error {
 	if opt.OutputDir == "" {
 		opt.OutputDir = siteData.BuildConfig.OutputDir
 	}
+
+	// TODO: use a method to contains all extensions initialization
+	ext.Reload(siteData.Config)
 
 	context := NewContext(siteData, opt)
 

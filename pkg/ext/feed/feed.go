@@ -43,8 +43,4 @@ func Render(params *RenderParams) (*models.OutputFile, error) {
 		Path: filepath.Join(params.OutputDir, params.Config.Link),
 		Buf:  bytes.NewBuffer(data),
 	}, nil
-	/*dstFile = filepath.Join(params.OutputDir, dstFile)
-	params.Ctx.SetOutput(dstFile, bytes.NewBuffer(data))
-	zlog.Infof("atom feed generated: %s", dstFile)
-	return nil*/
 }

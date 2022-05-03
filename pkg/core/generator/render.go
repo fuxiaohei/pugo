@@ -3,6 +3,7 @@ package generator
 import (
 	"pugo/pkg/core/theme"
 	"pugo/pkg/ext/feed"
+	"pugo/pkg/ext/sitemap"
 	"pugo/pkg/utils/zlog"
 )
 
@@ -93,9 +94,15 @@ func Render(siteData *SiteData, context *Context, opt *Option) error {
 		zlog.Infof("atom feed generated: %s", out.Path)
 	}
 
-	if err := renderSitemap(opt.OutputDir, context); err != nil {
+	// render sitemap
+	out, err = sitemap.Render(siteData.Config.Extension.Sitemap, opt.OutputDir)
+	if err != nil {
 		zlog.Warnf("render sitemap failed: %v", err)
 		return err
+	}
+	if out != nil {
+		context.SetOutput(out.Path, out.Buf)
+		zlog.Infof("sitemap generated: %s", out.Path)
 	}
 
 	return nil

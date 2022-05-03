@@ -6,6 +6,7 @@ import (
 	"pugo/pkg/core/models"
 	"pugo/pkg/core/theme"
 	"pugo/pkg/ext/feed"
+	"pugo/pkg/ext/sitemap"
 	"pugo/pkg/utils"
 )
 
@@ -62,7 +63,8 @@ func DefaultConfig() *Config {
 		},
 		Build: DefaultBuild(),
 		Extension: &Extension{
-			Feed: feed.DefaultConfig(),
+			Feed:    feed.DefaultConfig(),
+			Sitemap: sitemap.DefaultConfig(),
 		},
 	}
 }
