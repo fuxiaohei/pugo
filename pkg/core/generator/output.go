@@ -4,14 +4,13 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
-	"pugo/pkg/core/models"
 	"pugo/pkg/core/theme"
 	"pugo/pkg/utils"
 	"pugo/pkg/utils/zlog"
 )
 
 // Output outputs contents to destination directory.
-func Output(s *models.SiteData, ctx *Context, outputDir string) error {
+func Output(s *SiteData, ctx *Context, outputDir string) error {
 	if err := updateThemeCopyDirs(s.Render, ctx); err != nil {
 		zlog.Warn("theme: failed to update copy dirs", "err", err)
 		return err
@@ -34,7 +33,7 @@ func updateThemeCopyDirs(r *theme.Render, ctx *Context) error {
 	return nil
 }
 
-func outputFiles(s *models.SiteData, ctx *Context) error {
+func outputFiles(s *SiteData, ctx *Context) error {
 	var (
 		err   error
 		fpath string

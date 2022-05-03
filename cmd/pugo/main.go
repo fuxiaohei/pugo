@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"pugo/pkg/core/cmd"
+	"pugo/pkg/cmd"
 	"pugo/pkg/core/constants"
 	"strings"
 

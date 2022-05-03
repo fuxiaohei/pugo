@@ -12,3 +12,8 @@ func FormatIndexHTML(slug string) string {
 	}
 	return filepath.Join(slug, "index.html")
 }
+
+// FullURL returns the full url after the base.
+func FullURL(base, url string) string {
+	return strings.TrimSuffix(base, "/") + "/" + strings.TrimPrefix(url, "/")
+}

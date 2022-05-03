@@ -1,4 +1,4 @@
-package converter
+package markdown
 
 import (
 	"bytes"
@@ -13,15 +13,15 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
-// MarkdownFunc is the markdown function.
-type MarkdownFunc func(source []byte, writer io.Writer) error
+// ConvertFunc is the markdown function.
+type ConvertFunc func(source []byte, writer io.Writer) error
 
 var (
 	globalMarkdown goldmark.Markdown = nil
 )
 
 // Get gets markdown converter function.
-func Get() MarkdownFunc {
+func Get() ConvertFunc {
 	return func(source []byte, writer io.Writer) error {
 		return getMarkdown().Convert(source, writer)
 	}

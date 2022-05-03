@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"path/filepath"
 	"pugo/pkg/core/models"
-	"pugo/pkg/plugins/converter"
+	"pugo/pkg/ext/markdown"
 	"pugo/pkg/utils"
 	"pugo/pkg/utils/zlog"
 	"strings"
@@ -36,7 +36,7 @@ func renderPages(params *renderPagesParams) error {
 		dstFile = utils.FormatIndexHTML(pg.Link)
 
 		// convert markdown to html
-		if err = pg.Convert(converter.Get()); err != nil {
+		if err = pg.Convert(markdown.Get()); err != nil {
 			zlog.Warnf("failed to convert markdown page: %s, %s", pg.LocalFile(), err)
 			continue
 		}

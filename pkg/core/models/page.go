@@ -35,7 +35,8 @@ func NewPageFromFile(path, contentDir string) (*Page, error) {
 	}, nil
 }
 
-func LoadPages(s *SiteData) error {
+func LoadPages() ([]*Page, error) {
+	var pages []*Page
 	err := filepath.Walk(constants.ContentPagesDir, func(path string, info os.FileInfo, err error) error {
 		// skip directory
 		if info.IsDir() {
@@ -54,14 +55,14 @@ func LoadPages(s *SiteData) error {
 		}
 
 		// save post into parsed data
-		s.Pages = append(s.Pages, page)
+		pages = append(pages, page)
 		zlog.Infof("load page ok: %s", path)
 
 		return nil
 	})
 
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return pages, nil
 }

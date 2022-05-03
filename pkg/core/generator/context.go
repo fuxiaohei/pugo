@@ -32,7 +32,7 @@ type Context struct {
 	minifier *minify.M
 }
 
-func NewContext(s *models.SiteData, opt *Option) *Context {
+func NewContext(s *SiteData, opt *Option) *Context {
 	ctx := &Context{
 		templateData:  map[string]interface{}{},
 		copingDirs:    make([]*models.CopyDir, 0, len(s.BuildConfig.StaticAssetsDir)),
@@ -108,20 +108,15 @@ func (ctx *Context) SetOutput(path string, buf *bytes.Buffer) *Context {
 	return ctx
 }
 
-type outputFile struct {
-	Path string
-	Buf  *bytes.Buffer
-}
-
-func (ctx *Context) GetOutputs() []*outputFile {
+func (ctx *Context) GetOutputs() []*models.OutputFile {
 	outputs := make(map[string]*bytes.Buffer)
 	ctx.outputs.Range(func(key, value interface{}) bool {
 		outputs[key.(string)] = value.(*bytes.Buffer)
 		return true
 	})
-	result := make([]*outputFile, 0, len(outputs))
+	result := make([]*models.OutputFile, 0, len(outputs))
 	for key, buf := range outputs {
-		result = append(result, &outputFile{Path: key, Buf: buf})
+		result = append(result, &models.OutputFile{Path: key, Buf: buf})
 	}
 	sort.Slice(result, func(i, j int) bool {
 		return result[i].Path < result[j].Path

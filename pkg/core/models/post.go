@@ -8,7 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"pugo/pkg/core/constants"
-	"pugo/pkg/plugins/converter"
+	"pugo/pkg/ext/markdown"
 	"pugo/pkg/utils/zlog"
 	"sort"
 	"time"
@@ -169,7 +169,7 @@ func (p *Post) parseDate() error {
 }
 
 // Convert converts post markdown content to html content.
-func (p *Post) Convert(fn converter.MarkdownFunc) error {
+func (p *Post) Convert(fn markdown.ConvertFunc) error {
 	if fn == nil {
 		return errors.New("converter is nil")
 	}
@@ -189,7 +189,8 @@ func (p *Post) Convert(fn converter.MarkdownFunc) error {
 }
 
 // LoadPosts loads posts from content/posts directory.
-func LoadPosts(s *SiteData) error {
+func LoadPosts() ([]*Post, error) {
+	var posts []*Post
 	err := filepath.Walk(constants.ContentPostsDir, func(path string, info os.FileInfo, err error) error {
 		// skip directory
 		if info.IsDir() {
@@ -208,18 +209,18 @@ func LoadPosts(s *SiteData) error {
 		}
 
 		// save post into parsed data
-		s.Posts = append(s.Posts, post)
+		posts = append(posts, post)
 		zlog.Infof("load post ok: %s", path)
 
 		return nil
 	})
 
 	if err != nil {
-		return err
+		return nil, err
 	}
-	sort.Slice(s.Posts, func(i, j int) bool {
+	sort.Slice(posts, func(i, j int) bool {
 		// order by date desc
-		return s.Posts[i].Date().Unix() > s.Posts[j].Date().Unix()
+		return posts[i].Date().Unix() > posts[j].Date().Unix()
 	})
-	return nil
+	return posts, nil
 }

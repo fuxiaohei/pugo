@@ -5,10 +5,12 @@
 // Adapted from encoding/xml/read_test.go.
 // Package atom defines XML data structures for an Atom feed.
 // Modified from "golang.org/x/tools/blog/atom"
-package models
+package feed
 
 import (
 	"encoding/xml"
+	"pugo/pkg/core/models"
+	"pugo/pkg/utils"
 	"time"
 )
 
@@ -59,14 +61,14 @@ func AtomTime(t time.Time) AtomTimeStr {
 }
 
 // BuildAtom builds an Atom feed from the given source.
-func BuildAtom(link string, posts []*Post, sc *SiteConfig) *AtomFeed {
+func BuildAtom(link string, posts []*models.Post, baseURL, title string) *AtomFeed {
 	feed := AtomFeed{
-		Title: sc.Title,
+		Title: title,
 		// ID:      "tag:" + s.cfg.Hostname + ",2013:" + s.cfg.Hostname,
 		Updated: AtomTime(posts[0].Date()),
 		Link: []AtomLink{{
 			Rel:  "self",
-			Href: sc.FullURL(link),
+			Href: utils.FullURL(baseURL, link),
 		}},
 	}
 	for _, p := range posts {
@@ -74,7 +76,7 @@ func BuildAtom(link string, posts []*Post, sc *SiteConfig) *AtomFeed {
 			Title: p.Title,
 			Link: []AtomLink{{
 				Rel:  "alternate",
-				Href: sc.FullURL(p.Link),
+				Href: utils.FullURL(baseURL, p.Link),
 			}},
 			Published: AtomTime(p.Date()),
 			Updated:   AtomTime(p.Date()),

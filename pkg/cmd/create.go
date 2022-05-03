@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"path/filepath"
+	"pugo/pkg/core/configs"
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/models"
 	"pugo/pkg/utils"
@@ -43,7 +44,7 @@ func NewCreate() *cli.Command {
 
 			// load config
 			configFileItem := loadLocalConfigFile()
-			config, err := models.LoadConfigFromFile(configFileItem)
+			config, err := configs.LoadFromFile(configFileItem)
 			if err != nil {
 				zlog.Warnf("load config file failed: %v", err)
 				return err
@@ -88,7 +89,7 @@ func createContentMeta(content interface{}, configType constants.ConfigType) (*b
 	return buf, nil
 }
 
-func createSamplePost(filename string, cfg *models.Config, item constants.ConfigFileItem) error {
+func createSamplePost(filename string, cfg *configs.Config, item constants.ConfigFileItem) error {
 	fpath := filepath.Join(constants.ContentPostsDir, filename)
 	if filepath.Ext(fpath) != ".md" {
 		return errors.New("file extension must be .md")
@@ -114,7 +115,7 @@ func createSamplePost(filename string, cfg *models.Config, item constants.Config
 	return utils.WriteFile(fpath, buf.Bytes())
 }
 
-func createSamplePage(filename string, cfg *models.Config, item constants.ConfigFileItem) error {
+func createSamplePage(filename string, cfg *configs.Config, item constants.ConfigFileItem) error {
 	fpath := filepath.Join(constants.ContentPagesDir, filename)
 	if filepath.Ext(fpath) != ".md" {
 		return errors.New("file extension must be .md")

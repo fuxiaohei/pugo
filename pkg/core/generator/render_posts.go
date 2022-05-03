@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/models"
-	"pugo/pkg/plugins/converter"
+	"pugo/pkg/ext/markdown"
 	"pugo/pkg/utils/zlog"
 )
 
@@ -44,7 +44,7 @@ func renderPosts(params *renderPostsParams) error {
 		dstFile = filepath.Join(params.OutputDir, dstFile)
 
 		// convert markdown
-		if err := p.Convert(converter.Get()); err != nil {
+		if err := p.Convert(markdown.Get()); err != nil {
 			zlog.Warnf("failed to convert markdown post: %s, %s", p.LocalFile(), err)
 			continue
 		}

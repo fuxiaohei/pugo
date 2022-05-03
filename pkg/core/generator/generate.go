@@ -3,7 +3,6 @@ package generator
 import (
 	"path/filepath"
 	"pugo/pkg/core/constants"
-	"pugo/pkg/core/models"
 	"pugo/pkg/core/watcher"
 	"pugo/pkg/utils"
 	"pugo/pkg/utils/zlog"
@@ -16,7 +15,7 @@ import (
 func Generate(opt *Option) error {
 	st := time.Now()
 
-	siteData, err := models.LoadSiteData(*opt.ConfigFileItem)
+	siteData, err := CreateSiteData(*opt.ConfigFileItem)
 	if err != nil {
 		zlog.Warnf("load site data failed: %v", err)
 		return err

@@ -1,8 +1,8 @@
 package generator
 
 import (
-	"pugo/pkg/core/models"
 	"pugo/pkg/core/theme"
+	"pugo/pkg/ext/feed"
 	"pugo/pkg/utils/zlog"
 )
 
@@ -12,7 +12,7 @@ type renderBaseParams struct {
 	OutputDir string
 }
 
-func newRenderBaseParams(siteData *models.SiteData, context *Context, opt *Option) renderBaseParams {
+func newRenderBaseParams(siteData *SiteData, context *Context, opt *Option) renderBaseParams {
 	return renderBaseParams{
 		Ctx:       context,
 		Render:    siteData.Render,
@@ -20,7 +20,7 @@ func newRenderBaseParams(siteData *models.SiteData, context *Context, opt *Optio
 	}
 }
 
-func Render(siteData *models.SiteData, context *Context, opt *Option) error {
+func Render(siteData *SiteData, context *Context, opt *Option) error {
 	renderBase := newRenderBaseParams(siteData, context, opt)
 	if err := renderPosts(&renderPostsParams{
 		renderBaseParams: renderBase,
@@ -76,14 +76,21 @@ func Render(siteData *models.SiteData, context *Context, opt *Option) error {
 		return err
 	}
 
-	if err := renderFeedAtom(&renderFeedAtomParams{
-		renderBaseParams: renderBase,
-		Posts:            siteData.Posts,
-		SiteConfig:       siteData.SiteConfig,
-		PostFeedLimit:    siteData.BuildConfig.FeedPostLimit,
-	}); err != nil {
-		zlog.Warnf("render feed atom failed: %v", err)
+	// render feed
+	out, err := feed.Render(&feed.RenderParams{
+		Posts:       siteData.Posts,
+		SiteBaseURL: siteData.SiteConfig.Base,
+		SiteTitle:   siteData.SiteConfig.Title,
+		OutputDir:   opt.OutputDir,
+		Config:      siteData.Config.Extension.Feed,
+	})
+	if err != nil {
+		zlog.Warnf("render feed failed: %v", err)
 		return err
+	}
+	if out != nil {
+		context.SetOutput(out.Path, out.Buf)
+		zlog.Infof("atom feed generated: %s", out.Path)
 	}
 
 	if err := renderSitemap(opt.OutputDir, context); err != nil {

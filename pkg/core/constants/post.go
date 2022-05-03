@@ -1,7 +1,6 @@
 package constants
 
 const (
-	PostFeedLimit    = 10
 	PostTemplate     = "post.html"
 	PostListTemplate = "post-list.html"
 	ArchivesTemplate = "archives.html"

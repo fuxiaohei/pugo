@@ -4,7 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"path/filepath"
-	"pugo/pkg/core/cmd/initdata"
+	"pugo/pkg/cmd/initdata"
+	"pugo/pkg/core/configs"
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/models"
 	"pugo/pkg/utils"
@@ -76,10 +77,10 @@ func initConfigFile(ctype constants.ConfigType) (*constants.ConfigFileItem, erro
 		// FIXME: should we overwrite the config file?
 	}
 	if configFileItem.Type == constants.ConfigTypeTOML {
-		return configFileItem, utils.WriteTOMLFile(configFileItem.File, models.DefaultConfig())
+		return configFileItem, utils.WriteTOMLFile(configFileItem.File, configs.DefaultConfig())
 	}
 	if configFileItem.Type == constants.ConfigTypeYAML {
-		return configFileItem, utils.WriteYAMLFile(configFileItem.File, models.DefaultConfig())
+		return configFileItem, utils.WriteYAMLFile(configFileItem.File, configs.DefaultConfig())
 	}
 	return nil, fmt.Errorf("unsupported config type: %s", configFileItem.Type)
 }
