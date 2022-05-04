@@ -2,6 +2,10 @@
 
 release logs of PuGo
 
+#### v0.1.14 - 2022-05-04
+
+- [extension] add Google Analytics and Plausible Analytics
+
 #### v0.1.13 - 2022-05-03
 
 - [refactor] add core/, add configs/, add ext/ packages
