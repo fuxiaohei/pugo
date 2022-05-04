@@ -5,8 +5,6 @@ import (
 	"pugo/pkg/core/constants"
 	"pugo/pkg/core/models"
 	"pugo/pkg/core/theme"
-	"pugo/pkg/ext/feed"
-	"pugo/pkg/ext/sitemap"
 	"pugo/pkg/utils"
 )
 
@@ -61,11 +59,8 @@ func DefaultConfig() *Config {
 			Directory:  "./themes/default",
 			ConfigFile: "theme_config.toml",
 		},
-		Build: DefaultBuild(),
-		Extension: &Extension{
-			Feed:    feed.DefaultConfig(),
-			Sitemap: sitemap.DefaultConfig(),
-		},
+		Build:     DefaultBuild(),
+		Extension: defaultExtension(),
 	}
 }
 

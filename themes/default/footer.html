@@ -6,7 +6,7 @@
             <a href="/sitemap.xml" class="footer-item">Sitemap</a>
         </div>
         <div class="footer-right">
-            {{- if .server.local}}
+            {{- if .server.Local}}
             <span>Local Server</span>
             <span class="post-meta-gap">|</span>{{end -}}
             <span>Base on <a href="https://github.com/fuxiaohei/pugo" target="_blank" class="footer-item">{{.pugo.Name}} v{{.pugo.Version}}</a></span>
@@ -15,3 +15,4 @@
 </footer>
 <script src="/static/js/prism.js"></script>
 <script src="/static/js/main.js"></script>
+{{template "partial/analytics.html" .}}

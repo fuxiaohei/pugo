@@ -1,0 +1,23 @@
+{{if not .server.Local}}
+
+{{- with .extension.Analytics.Plausible}}
+{{- if .Enabled}}
+<script defer data-domain="{{.DataDomain}}" src="https://plausible.io/js/plausible.js"></script>
+{{end -}}
+{{end -}}
+
+{{- with .extension.Analytics.GoogleAnalytics}}
+{{- if .Enabled}}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{.UID}}"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', '{{.UID}}');
+</script>
+{{end -}}
+{{end -}}
+
+{{end -}}

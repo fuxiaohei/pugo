@@ -82,8 +82,9 @@ func NewContext(s *SiteData, opt *Option) *Context {
 		"Github":  constants.AppGithubLink(),
 	}
 	ctx.templateData["server"] = map[string]interface{}{
-		"local": opt.IsLocalServer,
+		"Local": opt.IsLocalServer,
 	}
+	ctx.templateData["extension"] = s.Config.Extension
 
 	return ctx
 }

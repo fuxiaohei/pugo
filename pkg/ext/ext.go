@@ -19,4 +19,10 @@ func Reload(cfg *configs.Config) {
 	} else {
 		zlog.Debugf("sitemap reloaded, nil, disabled")
 	}
+	if cfg.Extension.Analytics.GoogleAnalytics.Enabled {
+		zlog.Debugf("analytics: GoogleAnalytics enabled")
+	}
+	if cfg.Extension.Analytics.Plausible.Enabled {
+		zlog.Debugf("analytics: Plausible enabled")
+	}
 }
