@@ -22,8 +22,16 @@
     @apply flex-auto pb-4 mb-4 text-xl text-gray-500 border-b border-slate-200
 }
 
-.post-container {
+.post-list .post-container {
     @apply border-b border-slate-200 mb-8 dark:border-zinc-800
+}
+
+.post-comment{
+    @apply border-t border-slate-200 mt-8 dark:border-zinc-800
+}
+
+.comment-local-disabled{
+    @apply text-zinc-500 pt-6
 }
 
 .post-content>p:not(:last-child) {
@@ -31,7 +39,7 @@
 }
 
 h3.post-title {
-    @apply mb-6 text-3xl font-semibold text-gray-700 hover:text-sky-700 dark:text-zinc-300 dark:hover:text-sky-500
+    @apply mb-6 text-3xl font-semibold text-gray-700 hover:text-sky-700 dark:text-zinc-400 dark:hover:text-sky-500
 }
 
 .post-meta {
@@ -40,6 +48,10 @@ h3.post-title {
 
 .post-meta-gap {
     @apply mx-4 dark:text-zinc-800
+}
+
+.footer .post-meta-gap{
+    @apply mx-4 dark:text-zinc-600
 }
 
 .post-tag {
@@ -56,7 +68,7 @@ h3.post-title {
 }
 
 .post-content {
-    @apply px-1 mb-6 leading-8 text-gray-700 max-w-none dark:text-zinc-300
+    @apply px-1 mb-6 leading-8 text-gray-700 max-w-none dark:text-zinc-400
 }
 
 .post-content h1 {
@@ -99,11 +111,11 @@ h3.post-title {
 }
 
 .archive-title {
-    @apply mb-4 text-3xl font-semibold text-gray-700 dark:text-zinc-300
+    @apply mb-4 text-3xl font-semibold text-gray-700 dark:text-zinc-400
 }
 
 .archive-list {
-    @apply list-disc mb-4 text-gray-500 dark:text-zinc-300
+    @apply list-disc mb-4 text-gray-500 dark:text-zinc-400
 }
 
 .archive-item {
@@ -111,7 +123,7 @@ h3.post-title {
 }
 
 .archive-date {
-    @apply text-gray-500 w-14 inline-block dark:text-zinc-300
+    @apply text-gray-500 w-14 inline-block dark:text-zinc-400
 }
 
 .archive-post-title {
@@ -127,7 +139,7 @@ h3.post-title {
 }
 
 .footer-item {
-    @apply post-tag hover:text-gray-800 dark:hover:text-zinc-300
+    @apply post-tag hover:text-gray-800  dark:hover:text-zinc-400
 }
 
 .header{
@@ -163,11 +175,11 @@ h3.post-title {
 }
 
 .post-pager{
-    @apply text-gray-500 dark:text-zinc-300 py-8
+    @apply text-gray-500 dark:text-zinc-400 py-8
 }
 
 .post-pager-step{
-    @apply text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700 dark:hover:text-zinc-300 dark:hover:border-slate-300
+    @apply text-center px-3 py-1 mx-1 hover:text-gray-700 hover:border-b hover:border-slate-700 dark:hover:text-zinc-400 dark:hover:border-slate-300
 }
 
 .post-pager-size{
@@ -183,11 +195,11 @@ h3.post-title {
 }
 
 .profile-name{
-    @apply text-center pb-4 text-xl text-gray-700 font-medium dark:text-zinc-300
+    @apply text-center pb-4 text-xl text-gray-700 font-medium dark:text-zinc-400
 }
 
 .profile-bio{
-    @apply text-center pb-4 text-gray-400 text-xs font-semibold dark:text-zinc-300
+    @apply text-center pb-4 text-gray-400 text-xs font-semibold dark:text-zinc-400
 }
 
 .sidebar-tags{
@@ -195,7 +207,7 @@ h3.post-title {
 }
 
 .tags-title{
-    @apply mb-4 text-lg font-semibold text-gray-700 dark:text-zinc-300
+    @apply mb-4 text-lg font-semibold text-gray-700 dark:text-zinc-400
 }
 
 .tags-list > a{
@@ -203,7 +215,7 @@ h3.post-title {
 }
 
 .tags-post-count{
-    @apply bg-slate-200 font-bold rounded text-gray-600 text-sm ml-2 text-center w-5 inline-block dark:bg-zinc-600 dark:text-zinc-300
+    @apply bg-slate-200 font-bold rounded text-gray-600 text-sm ml-2 text-center w-5 inline-block dark:bg-zinc-600 dark:text-zinc-400
 }
 
 .footer-left{

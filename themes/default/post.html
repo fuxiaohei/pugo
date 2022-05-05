@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 {{template "head.html" .}}
+
 <body class="dark:bg-zinc-900">
     {{template "header.html" .}}
     <main class="main">
         <div class="main-container">
             <div class="main-left-container">
                 <article class="post-container">
-                    <h3 class="post-title"><a
-                            href="{{.post.Link}}">{{.post.Title}}</a></h3>
+                    <h3 class="post-title"><a href="{{.post.Link}}">{{.post.Title}}</a></h3>
                     <div class="post-meta ">
                         <span class="post-date">{{.post.Date.Format "2006-01-02"}}</span>
                         <span class="post-meta-gap">|</span>
@@ -17,6 +17,11 @@
                         <a href="{{.Link}}" class="post-tag">#{{.Name}}</a>{{end}}
                     </div>
                     <div class="post-content">{{HTML .post.Content}}</div>
+                    {{if .extension.Comments.Enabled}}
+                    <section class="post-comment">
+                        {{template "partial/comments.html" .}}
+                    </section>
+                    {{end}}
                 </article>
             </div>
             <div class="main-sidebar">
@@ -26,4 +31,5 @@
     </main>
     {{template "footer.html" .}}
 </body>
+
 </html>

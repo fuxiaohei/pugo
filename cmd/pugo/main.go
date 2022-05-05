@@ -21,7 +21,7 @@ var (
 			Name:  "version",
 			Usage: "print the version of PuGo",
 			Action: func(c *cli.Context) error {
-				fmt.Println(constants.AppName(), version)
+				fmt.Println(constants.AppName(), "v"+version)
 				return nil
 			},
 		},

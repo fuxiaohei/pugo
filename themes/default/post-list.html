@@ -6,7 +6,7 @@
     {{template "header.html" .}}
     <main class="main">
         <div class="main-container">
-            <div class="main-left-container">
+            <div class="main-left-container post-list">
                 {{if .tag}}<div class="post-header">
                     #{{.tag.Name}}</div>{{end}}
                 {{range .posts}}<article class="post-container">

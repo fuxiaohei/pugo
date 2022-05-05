@@ -2,3 +2,5 @@ name = "default"
 extension = [".html"]
 index_template = "post-list.html"
 static_dirs = ["static"]
+enable_dark_mode = true
+show_pugo_version = true

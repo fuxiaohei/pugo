@@ -86,6 +86,12 @@ func NewContext(s *SiteData, opt *Option) *Context {
 	}
 	ctx.templateData["extension"] = s.Config.Extension
 
+	themeConfig := s.Render.GetConfig()
+	ctx.templateData["theme"] = map[string]interface{}{
+		"EnableDarkMode":  themeConfig.EnableDarkMode,
+		"ShowPuGoVersion": themeConfig.ShowPuGoVersion,
+	}
+
 	return ctx
 }
 

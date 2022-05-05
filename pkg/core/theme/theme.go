@@ -221,3 +221,8 @@ func (r *Render) GetDir() string {
 func (r *Render) GetStaticDirs() []string {
 	return r.config.StaticDirs
 }
+
+// GetConfig gets theme config
+func (r *Render) GetConfig() *Config {
+	return r.config
+}

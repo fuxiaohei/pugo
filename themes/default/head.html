@@ -12,4 +12,15 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/static/icon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/static/icon/favicon-16x16.png">
     <link rel="manifest" href="/static/icon/site.webmanifest">
+    {{if .theme.EnableDarkMode}}
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    {{end}}
 </head>

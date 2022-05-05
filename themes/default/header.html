@@ -11,6 +11,7 @@
                         </ul>
                     </nav>
                 </div>
+                {{if .theme.EnableDarkMode}}
                 <button id="dark-mode-toggle" type="button" class="flex text-white">
                     <svg id="theme-toggle-light-icon" class="dark-toggle-icon hidden fill-yellow-200"
                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -25,6 +26,7 @@
                         </path>
                     </svg>
                 </button>
+                {{end}}
             </div>
         </div>
     </nav>
