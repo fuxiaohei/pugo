@@ -229,3 +229,16 @@ h3.post-title {
 .footer-right{
     @apply flex-auto w-1/2 text-right
 }
+
+#vcomments{
+    @apply mt-8
+}
+
+.dark #vcomments .vcount,
+.dark #vcomments .vnick{
+    color: #929298;
+}
+
+.dark #vcomments .vnick:hover{
+    color: #ef2f11
+}

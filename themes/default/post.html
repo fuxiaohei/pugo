@@ -18,7 +18,7 @@
                     </div>
                     <div class="post-content">{{HTML .post.Content}}</div>
                     {{if .extension.Comments.Enabled}}
-                    <section class="post-comment">
+                    <section class="post-comment comment-{{.extension.Comments.Current}}">
                         {{template "partial/comments.html" .}}
                     </section>
                     {{end}}
