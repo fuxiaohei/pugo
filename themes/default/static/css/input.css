@@ -2,8 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+    @apply dark:bg-zinc-800
+}
+
 .main {
-    @apply w-full flex-none
+    @apply w-full flex-none dark:bg-zinc-900
 }
 
 .main-container {
@@ -19,7 +23,7 @@
 }
 
 .post-header {
-    @apply flex-auto pb-4 mb-4 text-xl text-gray-500 border-b border-slate-200
+    @apply flex-auto pb-4 mb-4 text-xl text-gray-500 border-b border-slate-200 dark:border-zinc-800
 }
 
 .post-list .post-container {
