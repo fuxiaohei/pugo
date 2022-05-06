@@ -17,9 +17,13 @@
                         <a href="{{.Link}}" class="post-tag">#{{.Name}}</a>{{end}}
                     </div>
                     <div class="post-content">{{HTML .post.Content}}</div>
-                    {{if .extension.Comments.Enabled}}
+                    {{if and .extension.Comments.Enabled .post.Comment}}
                     <section class="post-comment comment-{{.extension.Comments.Current}}">
                         {{template "partial/comments.html" .}}
+                    </section>
+                    {{else}}
+                    <section class="post-comment">
+                        <div class="comment-closed"> Comment is closed</div>
                     </section>
                     {{end}}
                 </article>

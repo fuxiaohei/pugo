@@ -230,7 +230,7 @@ h3.post-title {
     @apply flex-auto w-1/2 text-right
 }
 
-#vcomments{
+#vcomments, #twikoo, .comment-closed{
     @apply mt-8
 }
 
@@ -241,4 +241,12 @@ h3.post-title {
 
 .dark #vcomments .vnick:hover{
     color: #ef2f11
+}
+
+.dark #twikoo{
+    color: #929298;
+}
+
+.comment-closed{
+    @apply text-zinc-500
 }

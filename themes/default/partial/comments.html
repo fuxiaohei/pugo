@@ -1,4 +1,4 @@
-{{if not .server.Local}}
+{{if .server.Local}}
 <p class="comment-local-disabled">Comment is disabled in local server.</p>
 {{else}}
 
@@ -35,6 +35,19 @@
         visitor: false,
         recordIP: false,
         requiredFields: ['nick', 'mail'],
+    })
+</script>
+{{end -}}
+{{end -}}
+
+{{- with .extension.Comments.Twikoo}}
+{{- if .Enabled}}
+<div id="tcomment"></div>
+<script src="https://cdn.jsdelivr.net/npm/twikoo@1.5.9/dist/twikoo.all.min.js"></script>
+<script>
+    twikoo.init({
+        envId: '{{.EID}}',
+        el: '#tcomment',
     })
 </script>
 {{end -}}

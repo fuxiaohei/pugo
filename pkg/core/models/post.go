@@ -26,6 +26,7 @@ type Post struct {
 	DateString   string   `toml:"date" yaml:"date"`
 	Template     string   `toml:"template" yaml:"template"`
 	Draft        bool     `toml:"draft" yaml:"draft"`
+	Comment      bool     `toml:"comment" yaml:"comment"`
 	AuthorName   string   `toml:"author" yaml:"author"`
 
 	Author   *Author    `toml:"-" yaml:"-"`
@@ -68,7 +69,10 @@ func parseContentBase(path string) (*Post, error) {
 	}
 	// trim space lines
 	rawData = bytes.TrimSpace(rawData)
-	p := new(Post)
+	p := &Post{
+		Draft:   false,
+		Comment: true,
+	}
 	if err = p.Parse(path, rawData); err != nil {
 		return nil, err
 	}

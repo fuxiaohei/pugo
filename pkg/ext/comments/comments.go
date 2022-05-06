@@ -4,6 +4,7 @@ type Config struct {
 	Enabled bool    `toml:"enabled"`
 	Disqus  *Disqus `toml:"disqus"`
 	Valine  *Valine `toml:"valine"`
+	Twikoo  *Twikoo `toml:"twikoo"`
 }
 
 // Current returns the name of the enabled comment system.
@@ -15,6 +16,9 @@ func (c *Config) Current() string {
 	if c.Valine.Enabled {
 		return "valine"
 	}
+	if c.Twikoo.Enabled {
+		return "twikoo"
+	}
 	return "unknown"
 }
 
@@ -23,5 +27,6 @@ func DefaultConfig() *Config {
 		Enabled: false,
 		Disqus:  DefaultDisqusConfig(),
 		Valine:  defaultValine(),
+		Twikoo:  defaultTwikoo(),
 	}
 }
