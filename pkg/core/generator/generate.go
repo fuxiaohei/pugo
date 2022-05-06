@@ -24,6 +24,7 @@ func Generate(opt *Option) error {
 	if opt.OutputDir == "" {
 		opt.OutputDir = siteData.BuildConfig.OutputDir
 	}
+	zlog.Infof("output dir: %s", opt.OutputDir)
 
 	// TODO: use a method to contains all extensions initialization
 	ext.Reload(siteData.Config)
@@ -35,7 +36,7 @@ func Generate(opt *Option) error {
 		return err
 	}
 
-	if err = Output(siteData, context, opt.OutputDir); err != nil {
+	if err = Output(siteData, context, opt); err != nil {
 		zlog.Warnf("output failed: %v", err)
 		return err
 	}

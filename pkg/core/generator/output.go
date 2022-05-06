@@ -2,16 +2,21 @@ package generator
 
 import (
 	"bytes"
+	"context"
+	"fmt"
 	"os"
 	"path/filepath"
 	"pugo/pkg/core/theme"
 	"pugo/pkg/ext/markdown"
 	"pugo/pkg/utils"
 	"pugo/pkg/utils/zlog"
+	"time"
+
+	"github.com/mholt/archiver/v4"
 )
 
 // Output outputs contents to destination directory.
-func Output(s *SiteData, ctx *Context, outputDir string) error {
+func Output(s *SiteData, ctx *Context, opt *Option) error {
 	if err := updateThemeCopyDirs(s.Render, ctx); err != nil {
 		zlog.Warn("theme: failed to update copy dirs", "err", err)
 		return err
@@ -19,8 +24,14 @@ func Output(s *SiteData, ctx *Context, outputDir string) error {
 	if err := outputFiles(s, ctx); err != nil {
 		return err
 	}
-	if err := copyAssets(outputDir, ctx); err != nil {
+	if err := copyAssets(opt.OutputDir, ctx); err != nil {
 		return err
+	}
+	// BuildArchive generates archive files.
+	if opt.BuildArchive {
+		if err := buildArchive(ctx); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -61,7 +72,7 @@ func outputFiles(s *SiteData, ctx *Context) error {
 			zlog.Warnf("output: failed to write file: %s, %s", fpath, err)
 			continue
 		}
-		ctx.incrOutputCounter(1)
+		ctx.recordLinkFile(fpath, fpath)
 	}
 	return nil
 }
@@ -90,7 +101,7 @@ func copyAssets(outputDir string, ctx *Context) error {
 				return err
 			}
 			zlog.Infof("assets copied: %s", dstPath)
-			ctx.incrOutputCounter(1)
+			ctx.recordLinkFile(dstPath, dstPath)
 			return nil
 		})
 		if err != nil {
@@ -98,5 +109,45 @@ func copyAssets(outputDir string, ctx *Context) error {
 			return err
 		}
 	}
+	return nil
+}
+
+func buildArchive(ctx *Context) error {
+	files := ctx.GetRecordFiles()
+	if len(files) == 0 {
+		return fmt.Errorf("no files to archive")
+	}
+	filesMap := make(map[string]string)
+	for _, file := range files {
+		filesMap[file.Path] = file.Path
+	}
+
+	archiveFiles, err := archiver.FilesFromDisk(nil, filesMap)
+	if err != nil {
+		return err
+	}
+
+	// create the output file we'll write to
+	filename := time.Now().Format("build-2006-01-02.tar.gz")
+	out, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	// we can use the CompressedArchive type to gzip a tarball
+	// (compression is not required; you could use Tar directly)
+	format := archiver.CompressedArchive{
+		Compression: archiver.Gz{},
+		Archival:    archiver.Tar{},
+	}
+
+	// create the archive
+	err = format.Archive(context.Background(), out, archiveFiles)
+	if err != nil {
+		return err
+	}
+
+	zlog.Infof("archive created: %s", filename)
 	return nil
 }

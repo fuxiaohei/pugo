@@ -20,6 +20,10 @@ var (
 			Name:  "watch",
 			Usage: "watch source files and rebuild when changed",
 		},
+		&cli.BoolFlag{
+			Name:  "archive",
+			Usage: "compress built files to one archive",
+		},
 	}
 )
 
@@ -49,18 +53,9 @@ func parseCliOption(c *cli.Context) *generator.Option {
 	configFileItem := loadLocalConfigFile()
 	var option = generator.Option{
 		ConfigFileItem: &configFileItem,
+		EnableWatch:    c.Bool("watch"),
+		OutputDir:      c.String("output"),
+		BuildArchive:   c.Bool("archive"),
 	}
-
-	// parse output directory
-	if c.String("output") != "" {
-		option.OutputDir = c.String("output")
-	}
-
-	// enable watching source files
-	if c.Bool("watch") {
-		option.EnableWatch = true
-
-	}
-
 	return &option
 }

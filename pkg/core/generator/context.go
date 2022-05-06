@@ -24,6 +24,8 @@ type Context struct {
 
 	postSlugTemplate *template.Template
 	tagLinkTemplate  *template.Template
+
+	allLinkFiles sync.Map
 }
 
 func NewContext(s *SiteData, opt *Option) *Context {
@@ -124,6 +126,15 @@ func (ctx *Context) GetOutputs() []*models.OutputFile {
 	return result
 }
 
+func (ctx *Context) GetRecordFiles() []*models.OutputFile {
+	var result []*models.OutputFile
+	ctx.allLinkFiles.Range(func(key, value interface{}) bool {
+		result = append(result, &models.OutputFile{Link: key.(string), Path: value.(string)})
+		return true
+	})
+	return result
+}
+
 func (ctx *Context) createPostLink(p *models.Post) (string, string, error) {
 	slugData := map[string]interface{}{
 		"Slug": p.Slug,
@@ -156,10 +167,11 @@ func (ctx *Context) getOutputCounter() int64 {
 	return ctx.outputCounter.Load()
 }
 
-func (ctx *Context) incrOutputCounter(delta int64) int64 {
-	return ctx.outputCounter.Add(delta)
-}
-
 func (ctx *Context) appendCopyDir(srcDir, dstDir string) {
 	ctx.copingDirs = append(ctx.copingDirs, &models.CopyDir{SrcDir: srcDir, DestDir: dstDir})
+}
+
+func (ctx *Context) recordLinkFile(link, file string) {
+	ctx.allLinkFiles.Store(link, file)
+	ctx.outputCounter.Inc()
 }

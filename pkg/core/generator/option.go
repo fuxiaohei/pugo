@@ -8,4 +8,5 @@ type Option struct {
 	OutputDir      string
 	EnableWatch    bool
 	IsLocalServer  bool // if true, some template should be ignored, such as googleAnalytics
+	BuildArchive   bool // if true, build archive
 }
