@@ -28,3 +28,6 @@
 # mac os
 .DS_Store 
 */.DS_Store 
+
+# goreleaser
+dist/

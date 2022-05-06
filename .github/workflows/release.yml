@@ -3,6 +3,12 @@ on:
   push:
     tags:
       - "*"
+
+permissions:
+  contents: write
+  # packages: write
+  # issues: write
+
 jobs:
   package:
     strategy:
@@ -11,15 +17,25 @@ jobs:
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Install Go
-        uses: actions/setup-go@37335c7bb261b353407cff977110895fa0b4f7d8
-        with:
-          go-version: ${{ matrix.go-version }}
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Pack
-        run: make release
-      - uses: actions/upload-artifact@v3
         with:
-          name: PuGo-Artifact
-          path: bin/release
+          fetch-depth: 0
+      
+      - name: Fetch all tags
+        run: git fetch --force --tags
+
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          # either 'goreleaser' (default) or 'goreleaser-pro'
+          distribution: goreleaser
+          version: latest
+          args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
