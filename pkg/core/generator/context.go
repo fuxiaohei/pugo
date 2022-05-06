@@ -11,8 +11,6 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/tdewolff/minify/v2"
-	"github.com/tdewolff/minify/v2/html"
 	"go.uber.org/atomic"
 )
 
@@ -26,8 +24,6 @@ type Context struct {
 
 	postSlugTemplate *template.Template
 	tagLinkTemplate  *template.Template
-
-	minifier *minify.M
 }
 
 func NewContext(s *SiteData, opt *Option) *Context {
@@ -166,21 +162,4 @@ func (ctx *Context) incrOutputCounter(delta int64) int64 {
 
 func (ctx *Context) appendCopyDir(srcDir, dstDir string) {
 	ctx.copingDirs = append(ctx.copingDirs, &models.CopyDir{SrcDir: srcDir, DestDir: dstDir})
-}
-
-func (ctx *Context) MinifyHTML(raw []byte) ([]byte, error) {
-	if ctx.minifier == nil {
-		m := minify.New()
-		m.Add("text/html", &html.Minifier{
-			KeepComments:            false,
-			KeepConditionalComments: true,
-			KeepDefaultAttrVals:     true,
-			KeepDocumentTags:        true,
-			KeepEndTags:             false,
-			KeepQuotes:              true,
-			KeepWhitespace:          false,
-		})
-		ctx.minifier = m
-	}
-	return ctx.minifier.Bytes("text/html", raw)
 }

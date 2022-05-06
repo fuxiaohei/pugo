@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"pugo/pkg/core/theme"
+	"pugo/pkg/ext/markdown"
 	"pugo/pkg/utils"
 	"pugo/pkg/utils/zlog"
 )
@@ -48,7 +49,7 @@ func outputFiles(s *SiteData, ctx *Context) error {
 		data := buf.Bytes()
 		dataLen := len(data)
 		if s.BuildConfig.EnableMinifyHTML {
-			data, err = ctx.MinifyHTML(data)
+			data, err = markdown.MinifyHTML(data)
 			if err != nil {
 				zlog.Warnf("output: failed to minify: %s, %s", fpath, err)
 				data = buf.Bytes()

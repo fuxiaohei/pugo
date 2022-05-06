@@ -2,11 +2,17 @@ package ext
 
 import (
 	"pugo/pkg/core/configs"
+	"pugo/pkg/ext/markdown"
 	"pugo/pkg/ext/sitemap"
 	"pugo/pkg/utils/zlog"
 )
 
 func Reload(cfg *configs.Config) {
+	markdown.InitMinfier(cfg.Build.EnableMinifyHTML)
+	if cfg.Build.EnableMinifyHTML {
+		zlog.Debugf("minify html: enabled")
+	}
+
 	ext := cfg.Extension
 	if ext.Feed != nil {
 		zlog.Debugf("feed reloaded, enabled:%v", ext.Feed.Enabled)
