@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"pugo/pkg/core/constants"
@@ -19,6 +20,7 @@ func NewPageFromFile(path, contentDir string) (*Page, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("---", p.Title, p.Comment)
 
 	// fix slug empty
 	if p.Slug == "" {

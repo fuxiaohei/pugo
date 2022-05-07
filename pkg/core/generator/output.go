@@ -148,6 +148,7 @@ func buildArchive(ctx *Context) error {
 		return err
 	}
 
-	zlog.Infof("archive created: %s", filename)
+	info, _ := os.Stat(filename)
+	zlog.Infof("archive created: %s, size: %d KB", filename, info.Size()/1024)
 	return nil
 }
