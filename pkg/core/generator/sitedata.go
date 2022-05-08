@@ -31,9 +31,16 @@ func NewSiteData() *SiteData {
 	}
 }
 
+// SiteDataParams is the params for create site data.
+type SiteDataParams struct {
+	WithDrafts bool
+}
+
 // CreateSiteData creates a new site data from the given config.
-func CreateSiteData(item constants.ConfigFileItem) (*SiteData, error) {
+func CreateSiteData(item constants.ConfigFileItem, params *SiteDataParams) (*SiteData, error) {
 	siteData := NewSiteData()
+
+	zlog.Infof("load with drafts: %v", params.WithDrafts)
 
 	// load config
 	cfg, err := configs.LoadFromFile(item)
@@ -56,11 +63,11 @@ func CreateSiteData(item constants.ConfigFileItem) (*SiteData, error) {
 	siteData.Render = render
 
 	// load contents
-	if siteData.Posts, err = models.LoadPosts(); err != nil {
+	if siteData.Posts, err = models.LoadPosts(params.WithDrafts); err != nil {
 		zlog.Warnf("load posts failed: %v", err)
 		return nil, err
 	}
-	if siteData.Pages, err = models.LoadPages(); err != nil {
+	if siteData.Pages, err = models.LoadPages(params.WithDrafts); err != nil {
 		zlog.Warnf("load pages failed: %v", err)
 		return nil, err
 	}

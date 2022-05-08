@@ -13,6 +13,10 @@
                         <span class="post-date">{{.page.Date.Format "2006-01-02"}}</span>
                         <span class="post-meta-gap">|</span>
                         <span class="post-author">{{.page.Author.Name}}</span>
+                        {{if .page.Draft}}
+                        <span class="post-meta-gap">|</span>
+                        <span class="post-draft">Draft</span>
+                        {{end}}
                     </div>
                     <div class="post-content">{{HTML .page.Content}}</div>
                     {{if and .extension.Comments.Enabled .page.Comment}}

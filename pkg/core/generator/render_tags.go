@@ -48,7 +48,7 @@ func renderTags(params *renderTagsParams) error {
 				return err
 			}
 			dstFile = filepath.Join(params.OutputDir, dstFile)
-			params.Ctx.SetOutput(dstFile, buf)
+			params.Ctx.SetOutput(dstFile, pageItem.Link, buf)
 			zlog.Infof("tag page generated: %s", dstFile)
 
 			t := posts[0].Date()
@@ -58,7 +58,7 @@ func renderTags(params *renderTagsParams) error {
 			// tag list index.html
 			if i == 1 {
 				dstFile = filepath.Join(params.OutputDir, tagData.Tag.LocalFile)
-				params.Ctx.SetOutput(dstFile, buf)
+				params.Ctx.SetOutput(dstFile, tagData.Tag.Link, buf)
 				sitemap.Add(&sitemap.URL{Loc: tagData.Tag.Link, LastMod: &t})
 				zlog.Infof("tag page generated: %s", dstFile)
 			}

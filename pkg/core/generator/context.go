@@ -105,25 +105,25 @@ func (ctx *Context) updateTagLink(t *models.TagLink) {
 }
 
 // SetOutput sets the output for the given key.
-func (ctx *Context) SetOutput(path string, buf *bytes.Buffer) *Context {
-	ctx.outputs.Store(path, buf)
+func (ctx *Context) SetOutput(path, link string, buf *bytes.Buffer) *Context {
+	ctx.outputs.Store(path, &models.OutputFile{
+		Path: path,
+		Link: link,
+		Buf:  buf,
+	})
 	return ctx
 }
 
 func (ctx *Context) GetOutputs() []*models.OutputFile {
-	outputs := make(map[string]*bytes.Buffer)
+	var outputs []*models.OutputFile
 	ctx.outputs.Range(func(key, value interface{}) bool {
-		outputs[key.(string)] = value.(*bytes.Buffer)
+		outputs = append(outputs, value.(*models.OutputFile))
 		return true
 	})
-	result := make([]*models.OutputFile, 0, len(outputs))
-	for key, buf := range outputs {
-		result = append(result, &models.OutputFile{Path: key, Buf: buf})
-	}
-	sort.Slice(result, func(i, j int) bool {
-		return result[i].Path < result[j].Path
+	sort.Slice(outputs, func(i, j int) bool {
+		return outputs[i].Path < outputs[j].Path
 	})
-	return result
+	return outputs
 }
 
 func (ctx *Context) GetRecordFiles() []*models.OutputFile {

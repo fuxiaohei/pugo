@@ -33,7 +33,7 @@ func renderArchives(params *renderArchivesParams) error {
 	}
 	dstFile := utils.FormatIndexHTML(params.ArchivesLink)
 	dstFile = filepath.Join(params.OutputDir, dstFile)
-	params.Ctx.SetOutput(dstFile, buf)
+	params.Ctx.SetOutput(dstFile, params.ArchivesLink, buf)
 	zlog.Infof("archives generated: %s", dstFile)
 
 	t := params.Posts[0].Date()

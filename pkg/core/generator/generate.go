@@ -16,7 +16,9 @@ import (
 func Generate(opt *Option) error {
 	st := time.Now()
 
-	siteData, err := CreateSiteData(*opt.ConfigFileItem)
+	siteData, err := CreateSiteData(*opt.ConfigFileItem, &SiteDataParams{
+		WithDrafts: opt.EnableDrafts,
+	})
 	if err != nil {
 		zlog.Warnf("load site data failed: %v", err)
 		return err

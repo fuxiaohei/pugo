@@ -90,7 +90,7 @@ func Render(siteData *SiteData, context *Context, opt *Option) error {
 		return err
 	}
 	if out != nil {
-		context.SetOutput(out.Path, out.Buf)
+		context.SetOutput(out.Path, out.Link, out.Buf)
 		zlog.Infof("atom feed generated: %s", out.Path)
 	}
 
@@ -101,7 +101,7 @@ func Render(siteData *SiteData, context *Context, opt *Option) error {
 		return err
 	}
 	if out != nil {
-		context.SetOutput(out.Path, out.Buf)
+		context.SetOutput(out.Path, out.Link, out.Buf)
 		zlog.Infof("sitemap generated: %s", out.Path)
 	}
 

@@ -193,7 +193,7 @@ func (p *Post) Convert(fn markdown.ConvertFunc) error {
 }
 
 // LoadPosts loads posts from content/posts directory.
-func LoadPosts() ([]*Post, error) {
+func LoadPosts(withDrafts bool) ([]*Post, error) {
 	var posts []*Post
 	err := filepath.Walk(constants.ContentPostsDir, func(path string, info os.FileInfo, err error) error {
 		// skip directory
@@ -209,6 +209,10 @@ func LoadPosts() ([]*Post, error) {
 		post, err := NewPostFromFile(path)
 		if err != nil {
 			zlog.Warnf("failed to load post: %s, %s", path, err)
+			return nil
+		}
+		if post.Draft && !withDrafts {
+			zlog.Warnf("skip draft post: %s", path)
 			return nil
 		}
 

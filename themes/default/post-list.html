@@ -16,6 +16,10 @@
                         <span class="post-date">{{.Date.Format "2006-01-02"}}</span>
                         <span class="post-meta-gap">|</span>
                         <span class="post-author">{{.Author.Name}}</span>
+                        {{if .Draft}}
+                        <span class="post-meta-gap">|</span>
+                        <span class="post-draft">Draft</span>
+                        {{end}}
                         {{range .TagLinks}}<span class="post-meta-gap">|</span>
                         <a href="{{.Link}}" class="post-tag">#{{.Name}}</a>{{end}}
                     </div>

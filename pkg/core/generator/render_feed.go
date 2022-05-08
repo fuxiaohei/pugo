@@ -15,7 +15,7 @@ func renderSitemap(link, outputDir string, ctx *Context) error {
 	}
 	var dstFile = link
 	dstFile = filepath.Join(outputDir, dstFile)
-	ctx.SetOutput(dstFile, buf)
+	ctx.SetOutput(dstFile, link, buf)
 	zlog.Infof("sitemap generated: %s", dstFile)
 	return nil
 }

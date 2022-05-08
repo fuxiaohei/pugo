@@ -17,8 +17,9 @@ func renderIndex(params *renderPostListsParams) error {
 		zlog.Warn("failed to render index", "err", err)
 		return err
 	}
-	dstFile := filepath.Join(params.OutputDir, "/index.html")
-	params.Ctx.SetOutput(dstFile, buf)
+	link := "/index.html"
+	dstFile := filepath.Join(params.OutputDir, link)
+	params.Ctx.SetOutput(dstFile, link, buf)
 	zlog.Infof("index generated: %s", dstFile)
 	return nil
 }

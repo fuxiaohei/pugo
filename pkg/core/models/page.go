@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"pugo/pkg/core/constants"
@@ -20,7 +19,6 @@ func NewPageFromFile(path, contentDir string) (*Page, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("---", p.Title, p.Comment)
 
 	// fix slug empty
 	if p.Slug == "" {
@@ -37,7 +35,7 @@ func NewPageFromFile(path, contentDir string) (*Page, error) {
 	}, nil
 }
 
-func LoadPages() ([]*Page, error) {
+func LoadPages(withDrafts bool) ([]*Page, error) {
 	var pages []*Page
 	err := filepath.Walk(constants.ContentPagesDir, func(path string, info os.FileInfo, err error) error {
 		// skip directory
@@ -53,6 +51,10 @@ func LoadPages() ([]*Page, error) {
 		page, err := NewPageFromFile(path, constants.ContentPagesDir)
 		if err != nil {
 			zlog.Warnf("failed to load page: %s, %s", path, err)
+			return nil
+		}
+		if page.Draft && !withDrafts {
+			zlog.Warnf("skip draft page: %s", path)
 			return nil
 		}
 

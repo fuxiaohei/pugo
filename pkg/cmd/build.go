@@ -54,6 +54,7 @@ func parseCliOption(c *cli.Context) *generator.Option {
 	var option = generator.Option{
 		ConfigFileItem: &configFileItem,
 		EnableWatch:    c.Bool("watch"),
+		EnableDrafts:   c.Bool("drafts"),
 		OutputDir:      c.String("output"),
 		BuildArchive:   c.Bool("archive"),
 	}

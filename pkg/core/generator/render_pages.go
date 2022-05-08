@@ -56,7 +56,7 @@ func renderPages(params *renderPagesParams) error {
 			continue
 		}
 		dstFile = filepath.Join(params.OutputDir, dstFile)
-		params.Ctx.SetOutput(dstFile, buf)
+		params.Ctx.SetOutput(dstFile, pg.Link, buf)
 		zlog.Infof("page generated: %s", dstFile)
 
 		t := pg.Date()

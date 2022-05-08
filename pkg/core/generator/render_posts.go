@@ -65,7 +65,7 @@ func renderPosts(params *renderPostsParams) error {
 		}
 
 		// save buffer to write content file later
-		params.Ctx.SetOutput(dstFile, buf)
+		params.Ctx.SetOutput(dstFile, p.Link, buf)
 		zlog.Infof("post generated: %s", dstFile)
 
 		t := p.Date()
@@ -108,7 +108,7 @@ func renderPostLists(params *renderPostListsParams) error {
 			return err
 		}
 		dstFile := filepath.Join(params.OutputDir, pageItem.LocalFile)
-		params.Ctx.SetOutput(dstFile, buf)
+		params.Ctx.SetOutput(dstFile, pageItem.Link, buf)
 		sitemap.Add(&sitemap.URL{Loc: pageItem.Link})
 		zlog.Infof("post list generated: %s", dstFile)
 	}

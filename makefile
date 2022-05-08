@@ -11,7 +11,7 @@ release:
 
 .PHONY: dev-server
 dev-server: build
-	@cd $(dir) && ../pugo server --watch --debug
+	@cd $(dir) && ../pugo server --watch --debug --drafts
 
 .PHONY: dev-init
 dev-init: build
