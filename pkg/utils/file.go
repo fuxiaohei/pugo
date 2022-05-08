@@ -90,3 +90,16 @@ func IsTempFile(fpath string) bool {
 		strings.HasPrefix(baseName, "#") // emacs
 	return istemp
 }
+
+// GetSubDirectories returns all subdirectories of a directory
+// returning slice contains dir self
+func GetSubDirectories(dir string) ([]string, error) {
+	var dirs []string
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if info != nil && info.IsDir() {
+			dirs = append(dirs, path)
+		}
+		return nil
+	})
+	return dirs, err
+}

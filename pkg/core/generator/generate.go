@@ -74,11 +74,22 @@ func Watch(opt *Option) {
 		}
 	})
 
+	var allDirs []string
 	baseDir := filepath.Base(opt.OutputDir)
 	for _, dir := range constants.InitDirectories() {
 		if dir == baseDir {
 			continue
 		}
+		subDirs, err := utils.GetSubDirectories(dir)
+		if err != nil {
+			zlog.Warnf("get sub directories failed: %v", err)
+			allDirs = append(allDirs, dir)
+		} else {
+			allDirs = append(allDirs, subDirs...)
+		}
+	}
+	allDirs = utils.UniqueStringsSlice(allDirs)
+	for _, dir := range allDirs {
 		w.Add(dir)
 		zlog.Debugf("watching dir: %s", dir)
 	}
