@@ -1,4 +1,4 @@
-VERSION := $(shell cat ./version)
+VERSION := $(shell git describe --abbrev=0)
 LDFLAGS=-ldflags "-s -w -X=main.version=$(VERSION)"
 
 .PHONY: build

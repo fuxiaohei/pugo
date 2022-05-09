@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=$(cat ./version)
+VERSION=$(git describe --abbrev=0)
 WORKDIR=$(pwd)
 
 # npx update theme css 
