@@ -24,7 +24,7 @@ func (c *Config) Current() string {
 
 func DefaultConfig() *Config {
 	return &Config{
-		Enabled: false,
+		Enabled: true,
 		Disqus:  DefaultDisqusConfig(),
 		Valine:  defaultValine(),
 		Twikoo:  defaultTwikoo(),

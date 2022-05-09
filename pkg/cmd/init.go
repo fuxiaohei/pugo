@@ -146,6 +146,8 @@ func initFirstPost() error {
 		Tags:         []string{"hello"},
 		Template:     "post.html",
 		AuthorName:   "admin",
+		Comment:      true,
+		Draft:        false,
 	}
 	buf := bytes.NewBufferString("```toml\n")
 	if err := toml.NewEncoder(buf).Encode(post); err != nil {
@@ -167,6 +169,8 @@ func initFirstPage() error {
 			DateString:   time.Now().Format("2006-01-02 15:04:05"),
 			Template:     "page.html",
 			AuthorName:   "admin",
+			Comment:      true,
+			Draft:        false,
 		},
 	}
 	buf := bytes.NewBufferString("```toml\n")
