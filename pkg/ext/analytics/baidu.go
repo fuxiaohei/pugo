@@ -5,7 +5,7 @@ type BaiduConfig struct {
 	Hash    string `toml:"hash"`
 }
 
-func DefaultBaiduConfig() *BaiduConfig {
+func defaultBaiduConfig() *BaiduConfig {
 	return &BaiduConfig{
 		Enabled: false,
 		Hash:    "",

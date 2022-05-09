@@ -11,11 +11,39 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id={{.UID}}"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
+
     function gtag() {
         dataLayer.push(arguments);
     }
     gtag('js', new Date());
     gtag('config', '{{.UID}}');
+</script>
+{{end -}}
+{{end -}}
+
+{{- with .extension.Analytics.Baidu}}
+{{- if .Enabled}}
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?{{.Hash}}";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+{{end -}}
+{{end -}}
+
+
+{{- with .extension.Analytics.V51La}}
+{{- if .Enabled}}
+<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script>
+    LA.init({
+        id: "{{.ID}}",
+        ck: "{{.CK}}"
+    })
 </script>
 {{end -}}
 {{end -}}

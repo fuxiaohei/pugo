@@ -5,7 +5,7 @@ type GtagConfig struct {
 	UID     string `toml:"uid"`
 }
 
-func DefaultGtagConfig() *GtagConfig {
+func defaultGtagConfig() *GtagConfig {
 	return &GtagConfig{
 		Enabled: false,
 		UID:     "",

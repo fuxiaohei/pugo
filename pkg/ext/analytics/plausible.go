@@ -5,7 +5,7 @@ type PlausibleConfig struct {
 	DataDomain string `toml:"data_domain"`
 }
 
-func DefaultPlausibleConfig() *PlausibleConfig {
+func defaultPlausibleConfig() *PlausibleConfig {
 	return &PlausibleConfig{
 		Enabled:    false,
 		DataDomain: "",
