@@ -8,7 +8,7 @@
         <div class="footer-right">
             {{- if .server.Local}}<span>Local Server</span><span class="post-meta-gap">|</span>{{end -}}
             <span>Base on <a href="https://github.com/fuxiaohei/pugo" target="_blank"
-                    class="footer-item">{{.pugo.Name}}{{if .theme.ShowPuGoVersion}} v{{.pugo.Version}}{{end}}</a></span>
+                    class="footer-item">{{.pugo.Name}}{{if .theme.ShowPuGoVersion}} {{.pugo.Version}}{{end}}</a></span>
         </div>
     </div>
 </footer>

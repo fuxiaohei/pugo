@@ -8,21 +8,24 @@ import (
 
 // Server is the server.
 type Server struct {
-	dir  string
-	port int
+	opt ServerOption
+}
+
+type ServerOption struct {
+	Port int
+	Dir  string
 }
 
 // New returns a new server.
-func New(dir string, port int) *Server {
+func New(opt ServerOption) *Server {
 	return &Server{
-		dir:  dir,
-		port: port,
+		opt: opt,
 	}
 }
 
 // Run runs the server.
 func (s *Server) Run() error {
-	http.Handle("/", http.FileServer(http.Dir(s.dir)))
-	zlog.Infof("listening on port %d, serving %s", s.port, s.dir)
-	return http.ListenAndServe(":"+fmt.Sprintf("%d", s.port), nil)
+	http.Handle("/", http.FileServer(http.Dir(s.opt.Dir)))
+	zlog.Infof("listening on port %d, serving %s", s.opt.Port, s.opt.Dir)
+	return http.ListenAndServe(":"+fmt.Sprintf("%d", s.opt.Port), nil)
 }

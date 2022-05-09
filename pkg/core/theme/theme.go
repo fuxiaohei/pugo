@@ -209,7 +209,18 @@ func (r *Render) Execute(w io.Writer, name string, data interface{}) error {
 
 // GetIndexTemplate gets index template
 func (r *Render) GetIndexTemplate() string {
-	return r.config.IndexTemplate
+	return r.GetTemplate("index")
+}
+
+// GetTemplate gets template by name
+func (r *Render) GetTemplate(name string) string {
+	if name == "index" || name == "home" {
+		return r.config.IndexTemplate
+	}
+	if name == "notfound" || name == "error" || name == "404" || name == "not-found" {
+		return r.config.NotFoundTemplate
+	}
+	return ""
 }
 
 // GetDir gets theme dir

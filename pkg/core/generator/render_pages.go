@@ -13,9 +13,7 @@ import (
 
 type renderPagesParams struct {
 	renderBaseParams
-	Pages     []*models.Page
-	SiteDesc  string
-	SiteTitle string
+	Pages []*models.Page
 }
 
 func renderPages(params *renderPagesParams) error {
@@ -28,7 +26,7 @@ func renderPages(params *renderPagesParams) error {
 			if page.Descripition != "" {
 				return page.Descripition
 			}
-			return params.SiteDesc
+			return params.SiteDescription
 		}
 	)
 	// build each page

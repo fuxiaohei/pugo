@@ -8,16 +8,20 @@ import (
 )
 
 type renderBaseParams struct {
-	Ctx       *Context
-	Render    *theme.Render
-	OutputDir string
+	Ctx             *Context
+	Render          *theme.Render
+	OutputDir       string
+	SiteTitle       string
+	SiteDescription string
 }
 
 func newRenderBaseParams(siteData *SiteData, context *Context, opt *Option) renderBaseParams {
 	return renderBaseParams{
-		Ctx:       context,
-		Render:    siteData.Render,
-		OutputDir: opt.OutputDir,
+		Ctx:             context,
+		Render:          siteData.Render,
+		OutputDir:       opt.OutputDir,
+		SiteTitle:       siteData.SiteConfig.Title,
+		SiteDescription: siteData.SiteConfig.Description,
 	}
 }
 
@@ -26,8 +30,6 @@ func Render(siteData *SiteData, context *Context, opt *Option) error {
 	if err := renderPosts(&renderPostsParams{
 		renderBaseParams: renderBase,
 		Posts:            siteData.Posts,
-		SiteDesc:         siteData.SiteConfig.Description,
-		SiteTitle:        siteData.SiteConfig.Title,
 	}); err != nil {
 		zlog.Warnf("render posts failed: %v", err)
 		return err
@@ -37,7 +39,6 @@ func Render(siteData *SiteData, context *Context, opt *Option) error {
 		Pager:              siteData.PostsPager,
 		Posts:              siteData.Posts,
 		PostPageLinkFormat: siteData.BuildConfig.PostPageLinkFormat,
-		SiteTitle:          siteData.SiteConfig.Title,
 	}
 	if err := renderPostLists(postListParams); err != nil {
 		zlog.Warnf("render post lists failed: %v", err)
@@ -52,7 +53,6 @@ func Render(siteData *SiteData, context *Context, opt *Option) error {
 		Tags:              siteData.Tags,
 		PostPerPage:       siteData.BuildConfig.PostPerPage,
 		TagPageLinkFormat: siteData.BuildConfig.TagPageLinkFormat,
-		SiteTitle:         siteData.SiteConfig.Title,
 	}); err != nil {
 		zlog.Warnf("render tags failed: %v", err)
 		return err
@@ -60,7 +60,6 @@ func Render(siteData *SiteData, context *Context, opt *Option) error {
 	if err := renderArchives(&renderArchivesParams{
 		renderBaseParams: renderBase,
 		Posts:            siteData.Posts,
-		SiteTitle:        siteData.SiteConfig.Title,
 		ArchivesLink:     siteData.BuildConfig.ArchivesLink,
 	}); err != nil {
 		zlog.Warnf("render archives failed: %v", err)
@@ -70,10 +69,16 @@ func Render(siteData *SiteData, context *Context, opt *Option) error {
 	if err := renderPages(&renderPagesParams{
 		renderBaseParams: renderBase,
 		Pages:            siteData.Pages,
-		SiteDesc:         siteData.SiteConfig.Description,
-		SiteTitle:        siteData.SiteConfig.Title,
 	}); err != nil {
 		zlog.Warnf("render pages failed: %v", err)
+		return err
+	}
+
+	if err := renderErrorPage(&renderErrorPageParams{
+		renderBaseParams: renderBase,
+		SiteTitle:        siteData.SiteConfig.Title,
+	}); err != nil {
+		zlog.Warnf("render error page failed: %v", err)
 		return err
 	}
 

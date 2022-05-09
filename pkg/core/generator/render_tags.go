@@ -15,7 +15,6 @@ type renderTagsParams struct {
 	Tags              []*models.TagPosts
 	PostPerPage       int
 	TagPageLinkFormat string
-	SiteTitle         string
 }
 
 func renderTags(params *renderTagsParams) error {
@@ -39,7 +38,8 @@ func renderTags(params *renderTagsParams) error {
 				"pager": pageItem,
 				"tag":   tagData.Tag,
 				"current": map[string]interface{}{
-					"Title": tagData.Tag.Name + "-" + params.SiteTitle,
+					"Title":       tagData.Tag.Name + "-" + params.SiteTitle,
+					"Description": tagData.Tag.Name + " - " + params.SiteDescription,
 				},
 			})
 

@@ -35,7 +35,10 @@ func NewServer() *cli.Command {
 
 			generator.Generate(opt)
 
-			s := server.New(opt.OutputDir, c.Int("port"))
+			s := server.New(server.ServerOption{
+				Port: c.Int("port"),
+				Dir:  opt.OutputDir,
+			})
 			s.Run()
 
 			return nil

@@ -12,9 +12,7 @@ import (
 
 type renderPostsParams struct {
 	renderBaseParams
-	Posts     []*models.Post
-	SiteDesc  string
-	SiteTitle string
+	Posts []*models.Post
 }
 
 func renderPosts(params *renderPostsParams) error {
@@ -28,7 +26,7 @@ func renderPosts(params *renderPostsParams) error {
 			if post.Descripition != "" {
 				return post.Descripition
 			}
-			return params.SiteDesc
+			return params.SiteDescription
 		}
 	)
 
@@ -81,7 +79,6 @@ type renderPostListsParams struct {
 	Pager              *models.Pager
 	Posts              []*models.Post
 	PostPageLinkFormat string
-	SiteTitle          string
 }
 
 func buildPostListTemplateData(params *renderPostListsParams, page int) (map[string]interface{}, *models.PagerItem) {
@@ -90,7 +87,8 @@ func buildPostListTemplateData(params *renderPostListsParams, page int) (map[str
 		"posts": models.PostsPageList(params.Posts, pageItem),
 		"pager": pageItem,
 		"current": map[string]interface{}{
-			"Title": params.SiteTitle,
+			"Title":       params.SiteTitle,
+			"Description": params.SiteDescription,
 		},
 	})
 	return tplData, pageItem

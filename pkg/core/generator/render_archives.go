@@ -13,7 +13,6 @@ import (
 type renderArchivesParams struct {
 	renderBaseParams
 	Posts        []*models.Post
-	SiteTitle    string
 	ArchivesLink string
 }
 
@@ -23,7 +22,8 @@ func renderArchives(params *renderArchivesParams) error {
 	extData := map[string]interface{}{
 		"archives": archives,
 		"current": map[string]interface{}{
-			"Title": params.SiteTitle,
+			"Title":       params.SiteTitle,
+			"Description": params.SiteDescription,
 		},
 	}
 	tplData := params.Ctx.createTemplateData(extData)
