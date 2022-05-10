@@ -5,6 +5,7 @@ type Valine struct {
 	APPID     string `toml:"app_id"`
 	APPKey    string `toml:"app_key"`
 	ServerURL string `toml:"server_url"`
+	CDN       string `toml:"cdn"`
 }
 
 func defaultValine() *Valine {
@@ -13,5 +14,6 @@ func defaultValine() *Valine {
 		APPID:     "",
 		APPKey:    "",
 		ServerURL: "",
+		CDN:       "https://unpkg.com/valine@latest/dist/Valine.min.js",
 	}
 }
