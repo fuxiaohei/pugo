@@ -2,5 +2,5 @@ package themes
 
 import "embed"
 
-//go:embed default/*
+//go:embed default/* docs/*
 var DefaultAssets embed.FS
