@@ -3,6 +3,14 @@
         <div class="header-container">
             <div class="header-top">
                 <div class="relative flex items-center">
+                    <div class="header-mobile-menu-toggle">
+                        <button class="outline-none mobile-menu-button" id="nav-mobile-button">
+                            <svg class="w-6 h-6 text-gray-500" x-show="!showMenu" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                <path d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                    </div>
                     <h3><a class="site-title" href="/">{{.site.Title}}</a></h3>
                     <nav class="header-nav">
                         <ul class="flex menu">
@@ -27,6 +35,12 @@
                     </svg>
                 </button>
                 {{end}}
+            </div>
+            <div class="hidden header-mobile-menu" id="nav-mobile-menu">
+                <ul>
+                    {{range .menu}}<li class="mobile-nav-item"><a href="{{.Slug}}">{{.Title}}</a>
+                    </li>{{end}}
+                </ul>
             </div>
         </div>
     </nav>
