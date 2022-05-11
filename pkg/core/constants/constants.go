@@ -35,15 +35,32 @@ var (
 	initDirectories = []string{
 		ContentPostsDir,
 		ContentPagesDir,
+		"build",
+		"assets",
+		"themes",
+	}
+	themeDefaultDirs = []string{
 		"themes/default",
 		"themes/default/static",
 		"themes/default/partial",
-		"build",
-		"assets",
+	}
+	themeDocsDirs = []string{
+		"themes/docs",
+		"themes/docs/static",
+		"themes/docs/partial",
 	}
 )
 
-func InitDirectories() []string {
+// InitDirs returns directories for init
+func InitDirs(isDocsSite bool) []string {
+	if isDocsSite {
+		return append(initDirectories, themeDocsDirs...)
+	}
+	return append(initDirectories, themeDefaultDirs...)
+}
+
+// CommonDirs returns common directories that must exists in pugo site
+func CommonDirs() []string {
 	return initDirectories
 }
 

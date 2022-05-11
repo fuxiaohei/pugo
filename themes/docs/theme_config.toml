@@ -1,0 +1,6 @@
+name = "docs"
+extension = [".html"]
+index_template = "index.html"
+static_dirs = ["static"]
+enable_dark_mode = true
+show_pugo_version = true

@@ -16,3 +16,7 @@ dev-server: build
 .PHONY: dev-init
 dev-init: build
 	@rm -rf $(dir) && mkdir -p $(dir) && cd $(dir) && ../pugo init --debug
+
+.PHONY: dev-docs
+dev-docs: build
+	@cd docs && ../pugo server --watch --debug --drafts

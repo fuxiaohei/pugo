@@ -4,15 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
     <title>PuGo - a Static Site Generator</title>
     <meta name="description" content="pugo is a static site generator.">
+    <link rel="preload" href="/static/fonts/lato-v14-latin-300.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/static/fonts/lato-v14-latin-700.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/static/css/main.css" media="screen" />
 </head>
 
-<body>
-    <h1 class="text-3xl font-bold underline">
-        Hello world!
-    </h1>
+<body class="bg-zinc-50">
+    <header>
+        <nav id="header">
+            <div id="header-container" class="max-w-6xl mx-auto">
+                <div id="header-top" class="py-6 flex items-center justify-between">
+                    <div class="flex items-center relative">
+                        <h3 class="text-2xl font-semibold"><a href="/">PuGo</a></h3>
+                        <nav id="header-nav" class="leading-10 text-zinc-700">
+                            <ul class="flex">
+                                <li><a href="/">Guide</a></li>
+                                <li><a href="/news">News</a></li>
+                                <li> <a href="#">Github</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="flex">
+                        right
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+    </header>
 </body>
 
 </html>

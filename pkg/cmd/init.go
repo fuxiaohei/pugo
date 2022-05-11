@@ -25,6 +25,10 @@ var (
 			Aliases: []string{"yml"},
 			Usage:   "initialize a new site with yaml config file",
 		},
+		&cli.BoolFlag{
+			Name:  "docs",
+			Usage: "initialize a new site as documentation site",
+		},
 	}
 )
 
@@ -37,22 +41,24 @@ func NewInit() *cli.Command {
 		Action: func(c *cli.Context) error {
 			initGlobalFlags(c)
 
+			isDocsSite := c.Bool("docs")
+
 			ctype := constants.ConfigTypeTOML
 			if c.Bool("yaml") {
 				ctype = constants.ConfigTypeYAML
 			}
-			configItem, err := initConfigFile(ctype)
+			configItem, err := initConfigFile(ctype, isDocsSite)
 
 			if err != nil {
 				zlog.Warnf("failed to initialize config file: %s", err)
 				return err
 			}
 			zlog.Debugf("initialized config file: %s ", configItem.File)
-			if err := initDirectories(); err != nil {
+			if err := initDirectories(isDocsSite); err != nil {
 				zlog.Warnf("failed to initialize directories: %s", err)
 				return err
 			}
-			if err := initTheme(); err != nil {
+			if err := initTheme(isDocsSite); err != nil {
 				zlog.Warnf("failed to initialize theme: %s", err)
 				return err
 			}
@@ -71,22 +77,26 @@ func NewInit() *cli.Command {
 	return cmd
 }
 
-func initConfigFile(ctype constants.ConfigType) (*constants.ConfigFileItem, error) {
+func initConfigFile(ctype constants.ConfigType, isDocsSite bool) (*constants.ConfigFileItem, error) {
 	configFileItem := selectConfigFile(ctype)
 	if utils.IsFileExist(configFileItem.File) {
 		// FIXME: should we overwrite the config file?
 	}
+	configData := configs.DefaultConfig()
+	if isDocsSite {
+		configData.Theme.Directory = "./themes/docs"
+	}
 	if configFileItem.Type == constants.ConfigTypeTOML {
-		return configFileItem, utils.WriteTOMLFile(configFileItem.File, configs.DefaultConfig())
+		return configFileItem, utils.WriteTOMLFile(configFileItem.File, configData)
 	}
 	if configFileItem.Type == constants.ConfigTypeYAML {
-		return configFileItem, utils.WriteYAMLFile(configFileItem.File, configs.DefaultConfig())
+		return configFileItem, utils.WriteYAMLFile(configFileItem.File, configData)
 	}
 	return nil, fmt.Errorf("unsupported config type: %s", configFileItem.Type)
 }
 
-func initDirectories() error {
-	for _, dir := range constants.InitDirectories() {
+func initDirectories(isDocsSite bool) error {
+	for _, dir := range constants.InitDirs(isDocsSite) {
 		if err := utils.MkdirAll(dir); err != nil {
 			zlog.Warnf("failed to create directory: '%s' ,%s", dir, err)
 			return err
@@ -96,17 +106,21 @@ func initDirectories() error {
 	return nil
 }
 
-func initTheme() error {
-	// extract default theme
-	if err := extractThemeDir("themes/default", "default"); err != nil {
+func initTheme(isDocsSite bool) error {
+	extractDir, embedDir := "themes/default", "default"
+	if isDocsSite {
+		extractDir = "themes/docs"
+		embedDir = "docs"
+	}
+	if err := extractThemeDir(extractDir, embedDir); err != nil {
 		zlog.Warn("failed to extract default theme", "err", err)
 		return err
 	}
 	return nil
 }
 
-func extractThemeDir(topDir, dir string) error {
-	files, err := themes.DefaultAssets.ReadDir(dir)
+func extractThemeDir(topDir, embedDir string) error {
+	files, err := themes.DefaultAssets.ReadDir(embedDir)
 	if err != nil {
 		return err
 	}
@@ -118,10 +132,10 @@ func extractThemeDir(topDir, dir string) error {
 				continue
 			}
 			zlog.Debugf("created theme directory: '%s'", dirName)
-			extractThemeDir(dirName, filepath.Join(dir, file.Name()))
+			extractThemeDir(dirName, filepath.Join(embedDir, file.Name()))
 			continue
 		}
-		filePath := filepath.Join(dir, file.Name())
+		filePath := filepath.Join(embedDir, file.Name())
 		data, err := themes.DefaultAssets.ReadFile(filePath)
 		if err != nil {
 			zlog.Warnf("failed to extract theme file: '%s', %s", filePath, err)

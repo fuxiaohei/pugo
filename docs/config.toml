@@ -1,0 +1,85 @@
+[site]
+  title = "PuGo"
+  sub_title = "a simple static site generator"
+  base = "http://localhost:18080"
+  description = "a simple static site generator with markdown support"
+  keywords = ["site", "generator", "markdown"]
+
+[[menu]]
+  Title = "Home"
+  Slug = "/"
+  Blank = false
+
+[[menu]]
+  Title = "Archives"
+  Slug = "/archives/"
+  Blank = false
+
+[[menu]]
+  Title = "About"
+  Slug = "/about/"
+  Blank = false
+
+[theme]
+  directory = "./themes/docs"
+  config_file = "theme_config.toml"
+
+[build]
+  output_dir = "./build"
+  static_assets_dir = ["./assets"]
+  post_link_format = "/{{.Date.Year}}/{{.Date.Month}}/{{.Slug}}/"
+  tag_link_format = "/tag/{{.Tag}}/"
+  tag_page_link_format = "/tag/{{.Tag}}/{{.Page}}/"
+  post_per_page = 5
+  post_page_link_format = "/page/{{.Page}}/"
+  archive_link = "/archives/"
+  enable_minify_html = true
+
+[[author]]
+  name = "admin"
+  email = "admin@example.com"
+  website = ""
+  bio = "user bio"
+  avatar = ""
+  use_gravatar = true
+  slug = "/author/admin/"
+  [author.social]
+    github = "https://github.com/admin"
+
+[extension]
+  [extension.feed]
+    enabled = true
+    limit_nums = 10
+    link = "/atom.xml"
+  [extension.sitemap]
+    enabled = true
+    link = "/sitemap.xml"
+  [extension.analytics]
+    [extension.analytics.google_analytics]
+      enabled = false
+      uid = ""
+    [extension.analytics.plausible]
+      enabled = false
+      data_domain = ""
+    [extension.analytics.baidu]
+      enabled = false
+      hash = ""
+    [extension.analytics.v51la]
+      enabled = false
+      id = ""
+      ck = ""
+  [extension.comments]
+    enabled = true
+    [extension.comments.disqus]
+      enabled = false
+      shortname = ""
+    [extension.comments.valine]
+      enabled = false
+      app_id = ""
+      app_key = ""
+      server_url = ""
+      cdn = "https://unpkg.com/valine@latest/dist/Valine.min.js"
+    [extension.comments.twikoo]
+      enabled = false
+      eid = ""
+      cdn = "https://cdn.jsdelivr.net/npm/twikoo@1.5.9/dist/twikoo.all.min.js"

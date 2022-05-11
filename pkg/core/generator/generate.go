@@ -78,7 +78,7 @@ func Watch(opt *Option) {
 
 	var allDirs []string
 	baseDir := filepath.Base(opt.OutputDir)
-	for _, dir := range constants.InitDirectories() {
+	for _, dir := range constants.CommonDirs() {
 		if dir == baseDir {
 			continue
 		}
