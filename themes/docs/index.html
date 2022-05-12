@@ -6,34 +6,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PuGo - a Static Site Generator</title>
     <meta name="description" content="pugo is a static site generator.">
-    <link rel="preload" href="/static/fonts/lato-v14-latin-300.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/static/fonts/lato-v14-latin-700.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/open-sans.min.css">
     <link rel="stylesheet" href="/static/css/main.css" media="screen" />
+    <script>
+        const userMode = localStorage.getItem('color-theme');
+        const systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (userMode === 'dark' || (userMode !== 'light' && systemDarkMode)) {
+            document.documentElement.classList.toggle('dark', true);
+            localStorage.setItem("color-theme", "dark");
+        }
+    </script>
+    <script src="https://unpkg.com/flowbite@1.4.5/dist/flowbite.js"></script>
 </head>
 
-<body class="bg-zinc-50">
+<body>
     <header>
         <nav id="header">
-            <div id="header-container" class="max-w-6xl mx-auto">
-                <div id="header-top" class="py-6 flex items-center justify-between">
-                    <div class="flex items-center relative">
-                        <h3 class="text-2xl font-semibold"><a href="/">PuGo</a></h3>
-                        <nav id="header-nav" class="leading-10 text-zinc-700">
+            <div id="header-container">
+                <div id="header-top">
+                    <div id="header-nav-top">
+                        <div class="header-mobile-menu-toggle">
+                            <button class="outline-none mobile-menu-button" id="nav-mobile-button">
+                                <svg class="w-6 h-6 text-gray-500" x-show="!showMenu" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <h3 id="header-nav-title"><a href="/">PuGo</a></h3>
+                        <nav id="header-nav">
                             <ul class="flex">
                                 <li><a href="/">Guide</a></li>
                                 <li><a href="/news">News</a></li>
-                                <li> <a href="#">Github</a></li>
+                                <li> <a href="#"><svg id="header-github" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
                             </ul>
                         </nav>
                     </div>
                     <div class="flex">
-                        right
+                        <div id="language-btn-container">
+                            <button id="language-btn" data-dropdown-toggle="language-dropdown" type="button">Languages
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg></button>
+                            <!-- Dropdown menu -->
+                            <div id="language-dropdown" class="hidden">
+                                <ul aria-labelledby="dropdownDefault">
+                                    <li class="language-dropdown-item">
+                                        <a href="#">English</a>
+                                    </li>
+                                    <li class="language-dropdown-item">
+                                        <a href="#">简体中文</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button id="toggle-dark-button" class="toggle-dark-button" title="toggle dark mode"><svg
+                                class="hidden icon" id="theme-toggle-dark-icon" focusable="false" viewBox="0 0 32 32">
+                                <path
+                                    d="M16 12.005a4 4 0 1 1-4 4a4.005 4.005 0 0 1 4-4m0-2a6 6 0 1 0 6 6a6 6 0 0 0-6-6z"
+                                    fill="currentColor"></path>
+                                <path d="M5.394 6.813l1.414-1.415l3.506 3.506L8.9 10.318z" fill="currentColor">
+                                </path>
+                                <path d="M2 15.005h5v2H2z" fill="currentColor"></path>
+                                <path d="M5.394 25.197L8.9 21.691l1.414 1.415l-3.506 3.505z" fill="currentColor">
+                                </path>
+                                <path d="M15 25.005h2v5h-2z" fill="currentColor"></path>
+                                <path d="M21.687 23.106l1.414-1.415l3.506 3.506l-1.414 1.414z" fill="currentColor">
+                                </path>
+                                <path d="M25 15.005h5v2h-5z" fill="currentColor"></path>
+                                <path d="M21.687 8.904l3.506-3.506l1.414 1.415l-3.506 3.505z" fill="currentColor">
+                                </path>
+                                <path d="M15 2.005h2v5h-2z" fill="currentColor"></path>
+                            </svg><svg class="hidden icon" focusable="false" viewBox="0 0 32 32"
+                                id="theme-toggle-light-icon">
+                                <path
+                                    d="M13.502 5.414a15.075 15.075 0 0 0 11.594 18.194a11.113 11.113 0 0 1-7.975 3.39c-.138 0-.278.005-.418 0a11.094 11.094 0 0 1-3.2-21.584M14.98 3a1.002 1.002 0 0 0-.175.016a13.096 13.096 0 0 0 1.825 25.981c.164.006.328 0 .49 0a13.072 13.072 0 0 0 10.703-5.555a1.01 1.01 0 0 0-.783-1.565A13.08 13.08 0 0 1 15.89 4.38A1.015 1.015 0 0 0 14.98 3z"
+                                    fill="currentColor"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
-
+                <div class="hidden header-mobile-menu" id="nav-mobile-menu">
+                    <ul>
+                        {{range .menu}}<li class="mobile-nav-item"><a href="{{.Slug}}">{{.Title}}</a>
+                        </li>{{end}}
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
+    <main id="main">
+        <div id="main-container">
+            <div id="hero">
+                <h1 id="hero-title">PuGo</h1>
+                <p id="hero-desc">a Simple Static Site Generator</p>
+                <p><a href="/" id="hero-btn"> Get Started → </a></p>
+            </div>
+            <div id="features">
+                <div class="feature-card">
+                    <h5 class="card-title">All inside a fast</h5>
+                    <p class="card-text">Minimal setup with markdown-centered project
+                        structure helps you focus on writing.</p>
+                </div>
+                <div class="feature-card">
+                    <h5 class="card-title">Flexible, custom metadata</h5>
+                    <p class="card-text">Move from static assets to truly dynamic content by passing metadata into your
+                        views and pages. Using your favorite templating engine, variables and loops make writing Harp
+                        applications fun and powerful.</p>
+                </div>
+                <div class="feature-card">
+                    <h5 class="card-title">Performant</h5>
+                    <p class="card-text">VuePress generates pre-rendered static HTML for each page, and runs as an SPA
+                        once a page is loaded.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer id="footer">
+        <div id="footer-container">
+            MIT Licensed | Copyright © 2022 <a href="/">FuXiaohei</a>
+        </div>
+    </footer>
+    <script src="/static/js/main.js"></script>
 </body>
 
 </html>

@@ -2,12 +2,132 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-    html {
-   font-family:'Lato', 'Helvetica Neue',"Open Sans",Tahoma,Verdana,Segoe,sans-serif;
-  }
+body{
+    @apply bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-300
 }
 
 #header{
-    @apply w-full bg-zinc-100 border-b border-zinc-300
+    @apply w-full border-b border-zinc-300 dark:border-zinc-700;
+}
+
+#header-container{
+    @apply max-w-6xl mx-auto px-4 text-zinc-600 dark:text-zinc-300
+}
+
+#header-top{
+    @apply py-6 flex items-center justify-between
+}
+
+#header-nav-top{
+    @apply flex items-center relative
+}
+
+#header-nav-title{
+    @apply text-2xl font-semibold
+}
+
+#header-nav{
+    @apply leading-10 hidden md:flex
+}
+
+#header-nav li a{
+    @apply border-l border-slate-300 ml-6 pl-6 dark:border-zinc-700
+}
+
+#header-nav li a:hover{
+    @apply underline-offset-8 underline;
+    color: #5590cd;
+}
+
+#header-github{
+    @apply inline-block w-5 h-5 fill-zinc-700 dark:fill-zinc-100;
+}
+
+.dark #header-nav li a:hover{
+    color: #64a1e0;
+}
+
+.header-mobile-menu-toggle{
+    @apply md:hidden flex items-center mr-4
+}
+
+.header-mobile-menu .mobile-nav-item{
+    @apply block px-4 py-4 hover:bg-sky-800 border-t border-slate-200 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-sky-700 hover:text-gray-100
+}
+
+.toggle-dark-button .icon{
+    @apply w-5 h-5
+}
+
+#main{
+    @apply w-full bg-zinc-50 dark:bg-zinc-800
+}
+
+#main-container{
+    @apply max-w-6xl mx-auto px-4 py-8;
+}
+
+#footer{
+    @apply w-full border-t border-zinc-300 text-zinc-400 dark:border-zinc-700
+}
+
+#footer-container{
+    @apply max-w-6xl mx-auto px-4 py-8 text-center;
+}
+
+#hero{
+    @apply text-center mt-8 mb-14
+}
+
+#hero-title{
+    @apply text-6xl font-bold
+}
+
+#hero-desc{
+    @apply pt-8 pb-10 text-xl text-zinc-500
+}
+
+#hero-btn{
+    @apply px-8 py-3 font-medium rounded-md text-white text-lg;
+    background-color: #5590cd;
+}
+
+#hero-btn:hover{
+    background-color: #64a1e0;
+}
+
+#features{
+    @apply border-t border-zinc-200 text-zinc-500 pt-6 lg:flex dark:border-zinc-700
+}
+
+.feature-card{
+    @apply px-6 py-4 lg:w-1/3
+}
+
+.feature-card .card-title{
+    @apply mb-2 text-xl font-semibold text-gray-600 dark:text-white
+}
+
+.feature-card .card-text{
+    @apply mb-3 font-normal dark:text-gray-400
+}
+
+#language-btn-container{
+    @apply relative md:inline-block text-left hidden
+}
+
+#language-btn{
+    @apply font-medium px-4 py-2.5 text-center inline-flex items-center
+}
+
+#language-dropdown{
+    @apply z-10 bg-white divide-y divide-gray-100 rounded-md shadow w-32 dark:bg-zinc-700
+}
+
+#language-dropdown ul{
+    @apply py-1 text-sm text-zinc-700 dark:text-gray-200
+}
+
+.language-dropdown-item a{
+    @apply block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white
 }
