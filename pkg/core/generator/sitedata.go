@@ -3,6 +3,7 @@ package generator
 import (
 	"pugo/pkg/core/configs"
 	"pugo/pkg/core/constants"
+	"pugo/pkg/core/i18n"
 	"pugo/pkg/core/models"
 	"pugo/pkg/core/theme"
 	"pugo/pkg/utils/zlog"
@@ -21,6 +22,8 @@ type SiteData struct {
 	SiteConfig  *configs.Site
 
 	Render *theme.Render
+
+	I18n *i18n.I18n
 }
 
 // NewSiteData returns a new default sote data.
@@ -70,6 +73,19 @@ func CreateSiteData(item constants.ConfigFileItem, params *SiteDataParams) (*Sit
 	if siteData.Pages, err = models.LoadPages(params.WithDrafts); err != nil {
 		zlog.Warnf("load pages failed: %v", err)
 		return nil, err
+	}
+
+	// load i18n
+	if cfg.Language.Enabled {
+		siteData.I18n, err = i18n.Load(constants.ContentLanguagesDir, cfg.Language.Lang)
+		if err != nil {
+			zlog.Warnf("load i18n failed: %v", err)
+			return nil, err
+		}
+	} else {
+		// use empty instance to make sure all data is available
+		siteData.I18n = i18n.Empty()
+		zlog.Infof("load i18n disabled")
 	}
 
 	siteData.fullfill()

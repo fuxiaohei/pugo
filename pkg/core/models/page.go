@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"pugo/pkg/core/constants"
 	"pugo/pkg/utils/zlog"
+	"strings"
 )
 
 // Page is the page model.
@@ -22,7 +23,14 @@ func NewPageFromFile(path, contentDir string) (*Page, error) {
 
 	// fix slug empty
 	if p.Slug == "" {
+		ext := filepath.Ext(path)
 		p.Slug, _ = filepath.Rel(contentDir, path)
+		p.Slug = strings.TrimSuffix(p.Slug, ext)
+
+		// trim index.html
+		if strings.HasSuffix(p.Slug, "/index") {
+			p.Slug = strings.TrimSuffix(p.Slug, "/index")
+		}
 	}
 
 	// fix empty template

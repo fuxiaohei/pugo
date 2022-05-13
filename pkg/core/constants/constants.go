@@ -27,14 +27,19 @@ func ConfigFiles() []ConfigFileItem {
 }
 
 const (
+	// ContentPostsDir is the posts directory
 	ContentPostsDir = "content/posts"
+	// ContentPagesDir is the pages directory
 	ContentPagesDir = "content/pages"
+	// ContentLanguagesDir is the languages directory
+	ContentLanguagesDir = "content/languages"
 )
 
 var (
 	initDirectories = []string{
 		ContentPostsDir,
 		ContentPagesDir,
+		ContentLanguagesDir,
 		"build",
 		"assets",
 		"themes",

@@ -23,8 +23,12 @@ func renderArchives(params *renderArchivesParams) error {
 		"archives": archives,
 		"current": map[string]interface{}{
 			"Title":       params.SiteTitle,
+			"SubTitle":    params.SiteSubTitle,
 			"Description": params.SiteDescription,
+			"Link":        params.ArchivesLink,
+			"Slug":        params.ArchivesLink,
 		},
+		"i18n": params.I18n.Get(""),
 	}
 	tplData := params.Ctx.createTemplateData(extData)
 	if err := params.Render.Execute(buf, constants.ArchivesTemplate, tplData); err != nil {

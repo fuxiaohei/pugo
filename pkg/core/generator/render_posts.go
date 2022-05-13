@@ -53,8 +53,12 @@ func renderPosts(params *renderPostsParams) error {
 			"post": p,
 			"current": map[string]interface{}{
 				"Title":       p.Title + " - " + params.SiteTitle,
+				"SubTitle":    params.SiteSubTitle,
 				"Description": descGetter(p),
+				"Link":        p.Link,
+				"Slug":        p.Link,
 			},
+			"i18n": params.I18n.Get(p.Language),
 		}
 		tplData = params.Ctx.createTemplateData(extData)
 		if err = params.Render.Execute(buf, p.Template, tplData); err != nil {
@@ -88,8 +92,12 @@ func buildPostListTemplateData(params *renderPostListsParams, page int) (map[str
 		"pager": pageItem,
 		"current": map[string]interface{}{
 			"Title":       params.SiteTitle,
+			"SubTitle":    params.SiteSubTitle,
 			"Description": params.SiteDescription,
+			"Link":        pageItem.Link,
+			"Slug":        pageItem.Link,
 		},
+		"i18n": params.I18n.Get(""),
 	})
 	return tplData, pageItem
 }

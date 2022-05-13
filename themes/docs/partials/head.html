@@ -1,0 +1,17 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.current.Title}} - {{.current.SubTitle}}</title>
+    <meta name="description" content="{{.current.Description}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/open-sans.min.css">
+    <link rel="stylesheet" href="/static/css/main.css" media="screen" />
+    <script>
+        const userMode = localStorage.getItem('color-theme');
+        const systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (userMode === 'dark' || (userMode !== 'light' && systemDarkMode)) {
+            document.documentElement.classList.toggle('dark', true);
+            localStorage.setItem("color-theme", "dark");
+        }
+    </script>
+    <script src="https://unpkg.com/flowbite@1.4.5/dist/flowbite.js"></script>
+</head>

@@ -1,0 +1,18 @@
+i18n_label = "简体中文"
+i18n_url_prefix = "/cn"
+
+nav_guide = "指南"
+nav_news = "新闻"
+nav_languages = "语言"
+
+menu_home = "Home"
+menu_archive = "Archives"
+menu_about = "About"
+
+post_archive = "Archives"
+post_pager_prev = "Previous"
+post_pager_next = "Next"
+post_readmore = "Read More"
+
+comment_title = "You have {{.Value}} comment"
+comment_title_plural = "You have {{.Value}} comments"

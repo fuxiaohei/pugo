@@ -40,7 +40,10 @@ func renderTags(params *renderTagsParams) error {
 				"current": map[string]interface{}{
 					"Title":       tagData.Tag.Name + "-" + params.SiteTitle,
 					"Description": tagData.Tag.Name + " - " + params.SiteDescription,
+					"Link":        pageItem.Link,
+					"Slug":        pageItem.Link,
 				},
+				"i18n": params.I18n.Get(""),
 			})
 
 			if err := params.Render.Execute(buf, tplName, tplData); err != nil {

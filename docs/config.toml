@@ -1,6 +1,6 @@
 [site]
   title = "PuGo"
-  sub_title = "a simple static site generator"
+  sub_title = "a Simple Static Site Generator"
   base = "http://localhost:18080"
   description = "a simple static site generator with markdown support"
   keywords = ["site", "generator", "markdown"]

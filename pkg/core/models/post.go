@@ -28,6 +28,7 @@ type Post struct {
 	Draft        bool     `toml:"draft" yaml:"draft"`
 	Comment      bool     `toml:"comment" yaml:"comment"`
 	AuthorName   string   `toml:"author" yaml:"author"`
+	Language     string   `toml:"language" yaml:"language"`
 
 	Author   *Author    `toml:"-" yaml:"-"`
 	Link     string     `toml:"-" yaml:"-"`

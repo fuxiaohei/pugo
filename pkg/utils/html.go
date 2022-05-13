@@ -12,6 +12,9 @@ func FormatIndexHTML(slug string) string {
 	if strings.HasSuffix(slug, ".html") {
 		return slug
 	}
+	if strings.HasSuffix(slug, "/index") {
+		return slug + ".html"
+	}
 	return filepath.Join(slug, "index.html")
 }
 

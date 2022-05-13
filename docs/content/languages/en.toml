@@ -1,0 +1,17 @@
+i18n_label = "English"
+
+nav_guide = "Guide"
+nav_news = "News"
+nav_languages = "Languages"
+
+menu_home = "Home"
+menu_archive = "Archives"
+menu_about = "About"
+
+post_archive = "Archives"
+post_pager_prev = "Previous"
+post_pager_next = "Next"
+post_readmore = "Read More"
+
+comment_title = "You have %d comment"
+comment_title_plural = "You have %d comments"

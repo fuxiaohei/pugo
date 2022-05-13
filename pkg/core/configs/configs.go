@@ -15,6 +15,7 @@ type Config struct {
 	Build     *Build           `toml:"build"`
 	Author    []*models.Author `toml:"author"`
 	Extension *Extension       `toml:"extension"`
+	Language  *Language        `toml:"language"`
 }
 
 // GetAuthor gets the author by the given name
@@ -61,6 +62,7 @@ func DefaultConfig() *Config {
 		},
 		Build:     DefaultBuild(),
 		Extension: defaultExtension(),
+		Language:  defaultLanguage(),
 	}
 }
 

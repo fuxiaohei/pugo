@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"pugo/pkg/core/i18n"
 	"pugo/pkg/core/theme"
 	"pugo/pkg/ext/feed"
 	"pugo/pkg/ext/sitemap"
@@ -12,7 +13,9 @@ type renderBaseParams struct {
 	Render          *theme.Render
 	OutputDir       string
 	SiteTitle       string
+	SiteSubTitle    string
 	SiteDescription string
+	I18n            *i18n.I18n
 }
 
 func newRenderBaseParams(siteData *SiteData, context *Context, opt *Option) renderBaseParams {
@@ -21,7 +24,9 @@ func newRenderBaseParams(siteData *SiteData, context *Context, opt *Option) rend
 		Render:          siteData.Render,
 		OutputDir:       opt.OutputDir,
 		SiteTitle:       siteData.SiteConfig.Title,
+		SiteSubTitle:    siteData.SiteConfig.SubTitle,
 		SiteDescription: siteData.SiteConfig.Description,
+		I18n:            siteData.I18n,
 	}
 }
 

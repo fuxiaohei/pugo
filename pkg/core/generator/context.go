@@ -73,7 +73,8 @@ func NewContext(s *SiteData, opt *Option) *Context {
 		tagTemplateData = append(tagTemplateData, tagData.Tag)
 	}
 	ctx.templateData["tags"] = tagTemplateData
-	// add pugo data
+
+	// add pugo app data
 	ctx.templateData["pugo"] = map[string]interface{}{
 		"Name":    constants.AppName(),
 		"Version": constants.AppVersion(),
@@ -82,8 +83,14 @@ func NewContext(s *SiteData, opt *Option) *Context {
 	ctx.templateData["server"] = map[string]interface{}{
 		"Local": opt.IsLocalServer,
 	}
+
+	// extennsion
 	ctx.templateData["extension"] = s.Config.Extension
 
+	// language
+	ctx.templateData["languages"] = s.I18n.Languages()
+
+	// theme
 	themeConfig := s.Render.GetConfig()
 	ctx.templateData["theme"] = map[string]interface{}{
 		"EnableDarkMode":  themeConfig.EnableDarkMode,

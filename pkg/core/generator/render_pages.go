@@ -41,12 +41,17 @@ func renderPages(params *renderPagesParams) error {
 		}
 
 		buf = bytes.NewBuffer(nil)
+		in := params.I18n.Get(pg.Language)
 		extData := map[string]interface{}{
 			"page": pg,
 			"current": map[string]interface{}{
 				"Title":       pg.Title + " - " + params.SiteTitle,
+				"SubTitle":    params.SiteSubTitle,
 				"Description": descGetter(pg),
+				"Link":        pg.Link,
+				"Slug":        in.RawLink(pg.Link), // only page need to use raw link
 			},
+			"i18n": in,
 		}
 		tplData = params.Ctx.createTemplateData(extData)
 		if err = params.Render.Execute(buf, pg.Template, tplData); err != nil {

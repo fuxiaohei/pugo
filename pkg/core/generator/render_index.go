@@ -11,6 +11,10 @@ func renderIndex(params *renderPostListsParams) error {
 
 	// first page
 	tplData, _ := buildPostListTemplateData(params, 1)
+	if currentTplData, ok := tplData["current"].(map[string]interface{}); ok {
+		currentTplData["Link"] = "/"
+		currentTplData["Slug"] = "/"
+	}
 
 	buf := bytes.NewBuffer(nil)
 	if err := params.Render.Execute(buf, indexTpl, tplData); err != nil {
