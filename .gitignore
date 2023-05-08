@@ -31,3 +31,6 @@
 
 # goreleaser
 dist/
+
+
+/test_*.bat
