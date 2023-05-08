@@ -27,10 +27,6 @@
                     <section class="post-comment comment-{{.extension.Comments.Current}}">
                         {{template "partial/comments.html" .}}
                     </section>
-                    {{else}}
-                    <section class="post-comment">
-                        <div class="comment-closed"> Comment is closed</div>
-                    </section>
                     {{end}}
                 </article>
             </div>
