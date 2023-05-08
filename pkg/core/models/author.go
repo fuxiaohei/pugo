@@ -53,3 +53,7 @@ func (a *Author) HasSocial(key string) bool {
 func (a *Author) GetSocial(key string) string {
 	return a.Social[key]
 }
+
+func (a *Author) Valid() bool {
+	return a.Name != ""
+}

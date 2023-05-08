@@ -1,5 +1,6 @@
 <div class="main-sidebar">
     <div class="sidebar">
+        {{if .author.Valid}}
         <div class="sidebar-profile">
             <div class="profile-card mx-auto">
                 <img class="profile-avatar" src="{{.author.AvatarLink}}" alt="">
@@ -8,6 +9,7 @@
                 {{if .author.HasSocials}}{{template "partial/social.html" .}}{{end}}
             </div>
         </div>
+        {{end}}
         <div class="sidebar-tags">
             <h4 class="tags-title">Tags</h4>
             <div class="tags-list">
