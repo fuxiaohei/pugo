@@ -42,6 +42,11 @@ func NewContext(s *SiteData, opt *Option) *Context {
 		})
 	}
 
+	ctx.copingDirs = append(ctx.copingDirs, &models.CopyDir{
+		SrcDir:  "content/public",
+		DestDir: ".",
+	})
+
 	// build post slug template
 	tpl, err := template.New("post-slug").Parse(s.BuildConfig.PostLinkFormat)
 	if err != nil {

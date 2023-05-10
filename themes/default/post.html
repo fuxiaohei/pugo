@@ -11,8 +11,10 @@
                     <h3 class="post-title"><a href="{{.post.Link}}">{{.post.Title}}</a></h3>
                     <div class="post-meta ">
                         <span class="post-date">{{.post.Date.Format "2006-01-02"}}</span>
+                        {{if .post.Author.Valid}}
                         <span class="post-meta-gap">|</span>
                         <span class="post-author">{{.post.Author.Name}}</span>
+                        {{end}}
                         {{if .post.Draft}}
                         <span class="post-meta-gap">|</span>
                         <span class="post-draft">Draft</span>
@@ -24,10 +26,6 @@
                     {{if and .extension.Comments.Enabled .post.Comment}}
                     <section class="post-comment comment-{{.extension.Comments.Current}}">
                         {{template "partial/comments.html" .}}
-                    </section>
-                    {{else}}
-                    <section class="post-comment">
-                        <div class="comment-closed"> Comment is closed</div>
                     </section>
                     {{end}}
                 </article>

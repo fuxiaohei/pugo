@@ -14,8 +14,10 @@
                         <a href="{{.Link}}">{{.Title}}</a></h3>
                     <div class="post-meta">
                         <span class="post-date">{{.Date.Format "2006-01-02"}}</span>
+                        {{if .Author.Valid}}
                         <span class="post-meta-gap">|</span>
                         <span class="post-author">{{.Author.Name}}</span>
+                        {{end}}
                         {{if .Draft}}
                         <span class="post-meta-gap">|</span>
                         <span class="post-draft">Draft</span>

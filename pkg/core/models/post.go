@@ -69,6 +69,7 @@ func parseContentBase(path string) (*Post, error) {
 	}
 	// trim space lines
 	rawData = bytes.TrimSpace(rawData)
+	rawData = bytes.Replace(rawData, []byte("\r\n"), []byte("\n"), -1)
 	p := &Post{
 		Draft:   false,
 		Comment: true,

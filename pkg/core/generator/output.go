@@ -79,6 +79,9 @@ func outputFiles(s *SiteData, ctx *Context) error {
 
 func copyAssets(outputDir string, ctx *Context) error {
 	for _, dirData := range ctx.copingDirs {
+		if !utils.IsDirExist(dirData.SrcDir) {
+			continue
+		}
 		err := filepath.Walk(dirData.SrcDir, func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err

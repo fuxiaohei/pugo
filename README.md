@@ -19,7 +19,7 @@ $ pugo init
 build site:
 
 ```bash
-$ pugo build
+$ pugo build ./cmd/pugo
 ```
 
 site locally on 'http://localhost:18080/': 

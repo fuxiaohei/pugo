@@ -106,6 +106,7 @@ func initTheme() error {
 }
 
 func extractThemeDir(topDir, dir string) error {
+	dir = filepath.ToSlash(dir)
 	files, err := themes.DefaultAssets.ReadDir(dir)
 	if err != nil {
 		return err
@@ -122,6 +123,7 @@ func extractThemeDir(topDir, dir string) error {
 			continue
 		}
 		filePath := filepath.Join(dir, file.Name())
+		filePath = filepath.ToSlash(filePath)
 		data, err := themes.DefaultAssets.ReadFile(filePath)
 		if err != nil {
 			zlog.Warnf("failed to extract theme file: '%s', %s", filePath, err)
